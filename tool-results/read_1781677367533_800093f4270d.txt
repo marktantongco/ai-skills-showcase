@@ -1,0 +1,2002 @@
+     1→<!DOCTYPE html>
+     2→<html lang="en">
+     3→<head>
+     4→<meta charset="UTF-8">
+     5→<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6→<meta name="robots" content="index, follow">
+     7→<title>AI Skills Showcase — 58 Active Skills</title>
+     8→<meta name="description" content="Interactive showcase of 58 AI agent skills across 11 categories — Neo-Brutalist Gen Z Design with Dark Mode, Theme Marketplace, Stack Recommender. Built with GSAP, Web Components, JSON-LD.">
+     9→<link rel="canonical" href="https://agentskills.io/showcase">
+    10→<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    11→
+    12→<meta property="og:title" content="AI Skills Showcase — 58 Active Skills">
+    13→<meta property="og:description" content="Interactive showcase of 58 AI agent skills across 11 categories. Neo-brutalist ultramodern Gen Z design with dark mode, theme marketplace, and stack recommender.">
+    14→<meta property="og:type" content="website">
+    15→<meta property="og:url" content="https://agentskills.io/showcase">
+    16→<meta property="og:image" content="og-skills-showcase.png">
+    17→
+    18→<meta name="twitter:card" content="summary_large_image">
+    19→<meta name="twitter:title" content="AI Skills Showcase — 58 Active Skills">
+    20→<meta name="twitter:description" content="Interactive showcase of 58 AI agent skills across 11 categories with dark mode, theme marketplace, and stack recommender.">
+    21→<meta name="twitter:image" content="og-skills-showcase.png">
+    22→
+    23→<link rel="preconnect" href="https://fonts.googleapis.com">
+    24→<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    25→<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    26→<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    27→
+    28→<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    29→<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    30→<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    31→
+    32→<!-- JSON-LD: Machine-readable ItemList of ALL skills for search engine and AI agent discovery -->
+    33→<script type="application/ld+json" id="ld-skills-list">
+    34→{
+    35→  "@context": "https://schema.org",
+    36→  "@type": "ItemList",
+    37→  "name": "AI Agent Skills Collection",
+    38→  "description": "58 active AI agent skills across 11 categories",
+    39→  "numberOfItems": 58,
+    40→  "itemListElement": [
+    41→    {"@type":"ListItem","position":1,"item":{"@type":"SoftwareApplication","name":"ui-ux-pro-max-v7","applicationCategory":"AISkill","description":"AI design intelligence — 60 styles, 48 palettes, 36 fonts, 24 industry rules, production-grade components"}},
+    42→    {"@type":"ListItem","position":2,"item":{"@type":"SoftwareApplication","name":"anthropic-frontend-design","applicationCategory":"AISkill","description":"Bold aesthetics for AI-native interfaces, conversational UI, trust-forward design"}},
+    43→    {"@type":"ListItem","position":3,"item":{"@type":"SoftwareApplication","name":"gsap-animations","applicationCategory":"AISkill","description":"Production-grade GSAP animation patterns — 24 patterns, ScrollTrigger, Flip plugin, React integration"}},
+    44→    {"@type":"ListItem","position":4,"item":{"@type":"SoftwareApplication","name":"frontend-design","applicationCategory":"AISkill","description":"shadcn/ui + Tailwind + React component generation for production-ready UI"}},
+    45→    {"@type":"ListItem","position":5,"item":{"@type":"SoftwareApplication","name":"vercel-web-design-guidelines","applicationCategory":"AISkill","description":"Comprehensive accessibility-first UX rules and performance budgets"}},
+    46→    {"@type":"ListItem","position":6,"item":{"@type":"SoftwareApplication","name":"chain-of-thought","applicationCategory":"AISkill","description":"Step-by-step reasoning framework for complex problems"}},
+    47→    {"@type":"ListItem","position":7,"item":{"@type":"SoftwareApplication","name":"socratic-method","applicationCategory":"AISkill","description":"Strategic questioning to uncover assumptions and guide discovery"}},
+    48→    {"@type":"ListItem","position":8,"item":{"@type":"SoftwareApplication","name":"devils-advocate","applicationCategory":"AISkill","description":"Argue against premises to strengthen arguments and prevent confirmation bias"}},
+    49→    {"@type":"ListItem","position":9,"item":{"@type":"SoftwareApplication","name":"simulation-sandbox","applicationCategory":"AISkill","description":"Test scenarios in safe simulated environments without real-world consequences"}},
+    50→    {"@type":"ListItem","position":10,"item":{"@type":"SoftwareApplication","name":"mcp-builder","applicationCategory":"AISkill","description":"Build MCP servers with TypeScript + Python, full lifecycle planning"}},
+    51→    {"@type":"ListItem","position":11,"item":{"@type":"SoftwareApplication","name":"superpowers","applicationCategory":"AISkill","description":"Spec-first development with TDD and sub-agent delegation"}},
+    52→    {"@type":"ListItem","position":12,"item":{"@type":"SoftwareApplication","name":"deployment-manager","applicationCategory":"AISkill","description":"Deploy, monitor, update across GitHub Pages, Vercel, Netlify"}},
+    53→    {"@type":"ListItem","position":13,"item":{"@type":"SoftwareApplication","name":"browser-use","applicationCategory":"AISkill","description":"Headful browser automation with natural language control"}},
+    54→    {"@type":"ListItem","position":14,"item":{"@type":"SoftwareApplication","name":"web-artifacts-builder","applicationCategory":"AISkill","description":"Single-file HTML artifacts with React + Tailwind, zero dependencies"}},
+    55→    {"@type":"ListItem","position":15,"item":{"@type":"SoftwareApplication","name":"vercel-react-best-practices","applicationCategory":"AISkill","description":"Production-grade React architecture, hooks patterns, SSR/SSG strategies"}},
+    56→    {"@type":"ListItem","position":16,"item":{"@type":"SoftwareApplication","name":"explained-code","applicationCategory":"AISkill","description":"Beginner-friendly code explanation with analogies and diagrams"}},
+    57→    {"@type":"ListItem","position":17,"item":{"@type":"SoftwareApplication","name":"seo-content-writer","applicationCategory":"AISkill","description":"SEO-optimized content creation with GEO optimization for AI answer engines"}},
+    58→    {"@type":"ListItem","position":18,"item":{"@type":"SoftwareApplication","name":"humanizer","applicationCategory":"AISkill","description":"Strip AI writing patterns for human-like copy — anti-AI-detection rewriting"}},
+    59→    {"@type":"ListItem","position":19,"item":{"@type":"SoftwareApplication","name":"social-media-manager","applicationCategory":"AISkill","description":"Platform-appropriate post generation for 30 days across LinkedIn, Twitter, Instagram, TikTok"}},
+    60→    {"@type":"ListItem","position":20,"item":{"@type":"SoftwareApplication","name":"social-content-pillars","applicationCategory":"AISkill","description":"Monthly content calendar for multi-brand social media with 90-day editorial plan"}},
+    61→    {"@type":"ListItem","position":21,"item":{"@type":"SoftwareApplication","name":"jtbd-research","applicationCategory":"AISkill","description":"8-step Jobs to be Done product research methodology"}},
+    62→    {"@type":"ListItem","position":22,"item":{"@type":"SoftwareApplication","name":"gumroad-pipeline","applicationCategory":"AISkill","description":"Lead magnet to funnel to product launch workflow for digital products"}},
+    63→    {"@type":"ListItem","position":23,"item":{"@type":"SoftwareApplication","name":"feature-research","applicationCategory":"AISkill","description":"Research existing architecture before implementing a complex feature"}},
+    64→    {"@type":"ListItem","position":24,"item":{"@type":"SoftwareApplication","name":"skill-finder","applicationCategory":"AISkill","description":"Skill discovery, evaluation, and installation meta-skill with security vetting"}},
+    65→    {"@type":"ListItem","position":25,"item":{"@type":"SoftwareApplication","name":"persistent-memory","applicationCategory":"AISkill","description":"Structured memory system for agent context continuity"}},
+    66→    {"@type":"ListItem","position":26,"item":{"@type":"SoftwareApplication","name":"system-prompt-sync","applicationCategory":"AISkill","description":"Auto-sync AGENTS.md across all git repos on version tags"}},
+    67→    {"@type":"ListItem","position":27,"item":{"@type":"SoftwareApplication","name":"feedback-loop","applicationCategory":"AISkill","description":"Iterative improvement cycles from metrics to research"}},
+    68→    {"@type":"ListItem","position":28,"item":{"@type":"SoftwareApplication","name":"context-compressor","applicationCategory":"AISkill","description":"Compress long contexts preserving critical information"}},
+    69→    {"@type":"ListItem","position":29,"item":{"@type":"SoftwareApplication","name":"agent-roles","applicationCategory":"AISkill","description":"Unified multi-agent role system — Builder, Coder, Council, Orchestrator, Plan, Researcher, Reviewer, Scribe"}},
+    70→    {"@type":"ListItem","position":30,"item":{"@type":"SoftwareApplication","name":"sample-hello-skill","applicationCategory":"AISkill","description":"Hello-world demo skill for testing skill activation and validation"}},
+    71→    {"@type":"ListItem","position":31,"item":{"@type":"SoftwareApplication","name":"web-reader","applicationCategory":"AISkill","description":"Web page extraction with site crawling and spidering capabilities"}},
+    72→    {"@type":"ListItem","position":32,"item":{"@type":"SoftwareApplication","name":"audit-analyzer","applicationCategory":"AISkill","description":"Detect and prioritize audit issues — performance, accessibility, monitoring"}},
+    73→    {"@type":"ListItem","position":33,"item":{"@type":"SoftwareApplication","name":"web-design-guidelines","applicationCategory":"AISkill","description":"Quick self-audit checklist for design consistency — typography, color, spacing, accessibility"}},
+    74→    {"@type":"ListItem","position":34,"item":{"@type":"SoftwareApplication","name":"code-research","applicationCategory":"AISkill","description":"Research open-source repositories to understand how something is built"}},
+    75→    {"@type":"ListItem","position":35,"item":{"@type":"SoftwareApplication","name":"explore","applicationCategory":"AISkill","description":"Search a codebase using codebase_search tool — saves time and tokens over grep"}},
+    76→    {"@type":"ListItem","position":36,"item":{"@type":"SoftwareApplication","name":"photography-ai","applicationCategory":"AISkill","description":"Professional visual engineering framework with batch processing, prompt engineering, cinematic sequences"}},
+    77→    {"@type":"ListItem","position":37,"item":{"@type":"SoftwareApplication","name":"output-formatter","applicationCategory":"AISkill","description":"Strict formatting rules for all output types — JSON, tables, markdown"}},
+    78→    {"@type":"ListItem","position":38,"item":{"@type":"SoftwareApplication","name":"pictoflux-ai","applicationCategory":"AISkill","description":"AI-powered image generation and visual editing via MCP protocol — create, transform, and composite images through standardized tool calls"}},
+    79→    {"@type":"ListItem","position":39,"item":{"@type":"SoftwareApplication","name":"mcp-stack-curator","applicationCategory":"AISkill","description":"Recommends which 4 MCP servers to use together — solves the unsolved problem of server combination synergy with conflict detection"}},
+    80→    {"@type":"ListItem","position":40,"item":{"@type":"SoftwareApplication","name":"mcp-registry","applicationCategory":"AISkill","description":"Searchable directory of 105+ free MCP servers across 14 categories with deduplication and compatibility scoring"}},
+    81→    {"@type":"ListItem","position":41,"item":{"@type":"SoftwareApplication","name":"mcp-security-scanner","applicationCategory":"AISkill","description":"Audit MCP server configurations for security vulnerabilities, permission scopes, and trust verification"}},
+    82→    {"@type":"ListItem","position":42,"item":{"@type":"SoftwareApplication","name":"agent-rabbit","applicationCategory":"AISkill","description":"Multiply ideas — rapid ideation, brainstorming, and divergent thinking. Generates many options quickly, then clusters and prioritizes"}},
+    83→    {"@type":"ListItem","position":43,"item":{"@type":"SoftwareApplication","name":"agent-owl","applicationCategory":"AISkill","description":"Deep analysis — systematic decomposition, evidence evaluation, and convergent thinking. Finds what others miss"}},
+    84→    {"@type":"ListItem","position":44,"item":{"@type":"SoftwareApplication","name":"agent-ant","applicationCategory":"AISkill","description":"Break into steps — task decomposition, work breakdown structures, and sequential execution planning. Ships incrementally"}},
+    85→    {"@type":"ListItem","position":45,"item":{"@type":"SoftwareApplication","name":"agent-eagle","applicationCategory":"AISkill","description":"Big picture — strategic vision, cross-domain patterns, and second-order thinking. Sees the forest AND the trees"}},
+    86→    {"@type":"ListItem","position":46,"item":{"@type":"SoftwareApplication","name":"agent-dolphin","applicationCategory":"AISkill","description":"Creative solutions — lateral thinking, analogical reasoning, and innovative problem-solving. Finds elegant unconventional paths"}},
+    87→    {"@type":"ListItem","position":47,"item":{"@type":"SoftwareApplication","name":"agent-beaver","applicationCategory":"AISkill","description":"Build systems — architecture design, infrastructure planning, and system construction. Builds things that last"}},
+    88→    {"@type":"ListItem","position":48,"item":{"@type":"SoftwareApplication","name":"agent-elephant","applicationCategory":"AISkill","description":"Cross-field connections — knowledge synthesis, interdisciplinary bridging, and pattern transfer. Connects dots across domains"}},
+    89→    {"@type":"ListItem","position":49,"item":{"@type":"SoftwareApplication","name":"tdd-workflow","applicationCategory":"AISkill","description":"Test-driven development workflow — write tests first, watch them fail, write minimal code to pass, refactor with confidence"}},
+    90→    {"@type":"ListItem","position":50,"item":{"@type":"SoftwareApplication","name":"to-prd","applicationCategory":"AISkill","description":"Transform conversation context into a structured Product Requirements Document — synthesizes what you know into actionable specifications"}},
+    91→    {"@type":"ListItem","position":51,"item":{"@type":"SoftwareApplication","name":"brainstorming","applicationCategory":"AISkill","description":"Structured brainstorming framework with divergent and convergent phases — generates, clusters, prioritizes ideas"}},
+    92→    {"@type":"ListItem","position":52,"item":{"@type":"SoftwareApplication","name":"composition-patterns","applicationCategory":"AISkill","description":"Software composition patterns — dependency injection, strategy pattern, decorator chains, middleware pipelines, plugin architectures"}},
+    93→    {"@type":"ListItem","position":53,"item":{"@type":"SoftwareApplication","name":"9router-gateway","applicationCategory":"AISkill","description":"AI routing gateway with RTK compression, tier-based provider fallback, circuit breaker, and real-time dashboard — routes requests through free-tier providers first, paid only on fallback"}},
+    94→    {"@type":"ListItem","position":54,"item":{"@type":"SoftwareApplication","name":"owl-proxy-defense","applicationCategory":"AISkill","description":"Protocol-first proxy defense stack with 5-tier escalation — http/1.1 core, ja3/ws browser on demand — anti-bot resilience with per-provider routing and CI/CD enforcement"}},
+    95→    {"@type":"ListItem","position":55,"item":{"@type":"SoftwareApplication","name":"antigravity-proxy","applicationCategory":"AISkill","description":"MITM proxy bridge for free AI model access — intercepts IDE traffic to provide Claude/Gemini model access via multiple account rotation with staggered token refresh"}},
+    96→    {"@type":"ListItem","position":56,"item":{"@type":"SoftwareApplication","name":"4cli-unified","applicationCategory":"AISkill","description":"Unified meta-CLI wrapper for OpenCode + Claude Code + Codex + Gemini CLI — one command for four agents with 9Router tier routing and unified credential vault"}},
+    97→    {"@type":"ListItem","position":57,"item":{"@type":"SoftwareApplication","name":"triune-proxy-stack","applicationCategory":"AISkill","description":"Maximum redundancy proxy architecture — 9Router + OmniRoute + Orcaflow with token health dashboard, auto-failover, and distributed locking for zero-downtime AI access"}},
+    98→    {"@type":"ListItem","position":58,"item":{"@type":"SoftwareApplication","name":"secret-vault","applicationCategory":"AISkill","description":"Unified credential vault with age encryption — manages API keys, OAuth tokens, and proxy credentials for all AI providers with rotation reminders and breach detection"}}
+    99→  ]
+   100→}
+   101→</script>
+   102→
+   103→<style>
+   104→/* ===================================================================
+   105→   NEO-BRUTALIST ULTRAMODERN GEN Z DESIGN SYSTEM v7.0
+   106→   - Thick borders, hard offset shadows, high-sat colors
+   107→   - WCAG AA compliant contrast on all text
+   108→   - Monospace + display typography, sticker badges
+   109→   - Glitch effects, grain overlay, asymmetric layouts
+   110→   - Y2K chrome accents, anti-minimal maximalism
+   111→   - Dynamic ?palette= endpoint for live theme generation
+   112→   - MCP Stack Curator interactive panel
+   113→   =================================================================== */
+   114→
+   115→:root {
+   116→  --brand-primary: #BFFF00;    /* Electric lime */
+   117→  --brand-secondary: #FF2E63;  /* Hot pink */
+   118→  --brand-tertiary: #08F7FE;   /* Cyber blue */
+   119→  --site-title: 'AI Skills Showcase';
+   120→  --bg-base: #FFFFFF;
+   121→  --bg-surface: #F2F2ED;
+   122→  --bg-elevated: #F5F5F0;
+   123→  --border-thick: 3px solid #000000;
+   124→  --shadow-hard: 4px 4px 0px #000000;
+   125→  --shadow-hard-lg: 6px 6px 0px #000000;
+   126→  --shadow-accent: 4px 4px 0px #000000;
+   127→  --shadow-pink: 4px 4px 0px var(--brand-secondary);
+   128→  --text-primary: #000000;
+   129→  --text-secondary: #1F1F1F;   /* WCAG AA: 15.4:1 on white, 13.7:1 on elevated */
+   130→  --text-muted: #555555;       /* WCAG AA: 7.5:1 on white, 6.6:1 on elevated */
+   131→  --font-display: 'Archivo Black', 'Space Grotesk', sans-serif;
+   132→  --font-body: 'Space Grotesk', sans-serif;
+   133→  --font-mono: 'Space Mono', monospace;
+   134→  --radius-brutal: 4px;
+   135→  --radius-none: 0px;
+   136→
+   137→  --cat-design: #BFFF00;
+   138→  --cat-reasoning: #08F7FE;
+   139→  --cat-development: #00FF9D;
+   140→  --cat-content: #FF2E63;
+   141→  --cat-strategy: #FFE600;
+   142→  --cat-system: #A8B2D8;
+   143→  --cat-data: #64FFDA;
+   144→  --cat-creative: #FF9FF3;
+   145→  --cat-mcp: #FF6B35;
+   146→  --cat-agents: #C77DFF;
+   147→  --cat-infra: #FF8C00;
+   148→
+   149→  /* Theme transition */
+   150→  --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+   151→}
+   152→
+   153→/* ===== DARK MODE ===== */
+   154→[data-theme="dark"] {
+   155→  --bg-base: #0A0A0A;
+   156→  --bg-surface: #141414;
+   157→  --bg-elevated: #1E1E1E;
+   158→  --text-primary: #E8E8E8;
+   159→  --text-secondary: #C8C8C8;
+   160→  --text-muted: #888888;
+   161→  --border-thick: 3px solid #333333;
+   162→  --shadow-hard: 4px 4px 0px #333333;
+   163→  --shadow-hard-lg: 6px 6px 0px #333333;
+   164→  --shadow-accent: 4px 4px 0px #333333;
+   165→}
+   166→
+   167→[data-theme="dark"] body,
+   168→[data-theme="dark"] .hero {
+   169→  background: var(--bg-base);
+   170→}
+   171→
+   172→[data-theme="dark"] .hero-title {
+   173→  color: var(--text-primary);
+   174→  -webkit-text-stroke: 2px var(--text-primary);
+   175→}
+   176→
+   177→[data-theme="dark"] .hero-subtitle {
+   178→  background: var(--bg-surface);
+   179→  border-color: #444;
+   180→  color: var(--text-secondary);
+   181→}
+   182→
+   183→[data-theme="dark"] .hero-badge,
+   184→[data-theme="dark"] .hero-card,
+   185→[data-theme="dark"] .filter-section,
+   186→[data-theme="dark"] .marquee {
+   187→  border-color: #444;
+   188→}
+   189→
+   190→[data-theme="dark"] skill-card {
+   191→  background: var(--bg-elevated);
+   192→  border-color: #444;
+   193→  box-shadow: 5px 5px 0 #333;
+   194→}
+   195→
+   196→[data-theme="dark"] skill-card:hover {
+   197→  box-shadow: 8px 8px 0 var(--card-accent, var(--brand-primary));
+   198→}
+   199→
+   200→[data-theme="dark"] .card-name { color: var(--text-primary); }
+   201→[data-theme="dark"] .card-icon { background: var(--bg-surface); border-color: #444; }
+   202→[data-theme="dark"] .card-category { border-color: #444; }
+   203→[data-theme="dark"] .card-tag { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   204→[data-theme="dark"] .card-invoke { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   205→[data-theme="dark"] .card-invoke strong { color: var(--text-primary); }
+   206→[data-theme="dark"] .card-mcp-servers { background: var(--bg-surface); border-color: #444; }
+   207→[data-theme="dark"] .card-mcp-label { color: var(--text-primary); }
+   208→[data-theme="dark"] .card-jsonld-toggle { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   209→[data-theme="dark"] .card-jsonld { background: var(--bg-surface); border-color: #555; color: var(--text-secondary); }
+   210→
+   211→[data-theme="dark"] .filter-chip { background: var(--bg-elevated); border-color: #444; color: var(--text-primary); }
+   212→[data-theme="dark"] .filter-chip.active { color: #000; border-color: #444; }
+   213→[data-theme="dark"] .search-input { background: var(--bg-elevated); border-color: #444; color: var(--text-primary); }
+   214→[data-theme="dark"] .search-input::placeholder { color: #666; }
+   215→[data-theme="dark"] .sort-select { background: var(--bg-elevated); border-color: #444; color: var(--text-primary); }
+   216→
+   217→[data-theme="dark"] .mcp-stack-card { background: var(--bg-elevated); border-color: #444; box-shadow: 4px 4px 0 #333; }
+   218→[data-theme="dark"] .mcp-stack-name { color: var(--text-primary); }
+   219→[data-theme="dark"] .mcp-stack-emoji { background: var(--bg-surface); border-color: #444; }
+   220→[data-theme="dark"] .mcp-server-badge { background: var(--bg-surface); border-color: #444; color: var(--text-primary); }
+   221→[data-theme="dark"] .mcp-stack-detail-item { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   222→[data-theme="dark"] .mcp-stack-detail-item strong { color: var(--text-primary); }
+   223→[data-theme="dark"] .mcp-build-section { background: var(--bg-surface); border-color: #444; }
+   224→[data-theme="dark"] .mcp-build-select { background: var(--bg-elevated); border-color: #444; color: var(--text-primary); }
+   225→[data-theme="dark"] .mcp-build-result { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   226→[data-theme="dark"] .mcp-synergy-bar { background: #2A2A2A; border-color: #444; }
+   227→
+   228→[data-theme="dark"] .orbit-badge { background: var(--bg-elevated); border-color: #444; color: var(--text-primary); }
+   229→[data-theme="dark"] .hero-card { background: var(--bg-elevated); border-color: #444; }
+   230→[data-theme="dark"] .hero-card-name { color: var(--text-primary); }
+   231→[data-theme="dark"] .hero-card-tag { background: var(--bg-surface); border-color: #444; color: var(--text-secondary); }
+   232→
+   233→[data-theme="dark"] .no-results { background: var(--bg-surface); border-color: #444; }
+   234→[data-theme="dark"] .no-results-text { color: var(--text-primary); }
+   235→
+   236→[data-theme="dark"] body::before {
+   237→  background-image:
+   238→    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+   239→    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+   240→}
+   241→
+   242→[data-theme="dark"] .scroll-top-fab { border-color: #444; }
+   243→
+   244→/* Theme toggle button */
+   245→.theme-toggle {
+   246→  flex-shrink: 0;
+   247→  width: 40px; height: 40px;
+   248→  background: var(--bg-elevated);
+   249→  border: 2px solid #000;
+   250→  cursor: pointer;
+   251→  display: flex;
+   252→  align-items: center;
+   253→  justify-content: center;
+   254→  font-size: 1.1rem;
+   255→  transition: all 0.15s ease;
+   256→  padding: 0;
+   257→}
+   258→
+   259→[data-theme="dark"] .theme-toggle {
+   260→  border-color: #444;
+   261→  background: var(--bg-surface);
+   262→}
+   263→
+   264→.theme-toggle:hover {
+   265→  box-shadow: 3px 3px 0 var(--brand-primary);
+   266→  transform: rotate(-5deg);
+   267→}
+   268→
+   269→/* ===== STATS DASHBOARD ===== */
+   270→.stats-dashboard {
+   271→  background: var(--bg-surface);
+   272→  border-top: 3px solid #000;
+   273→  border-bottom: 3px solid #000;
+   274→  padding: 1.5rem 2rem;
+   275→}
+   276→
+   277→[data-theme="dark"] .stats-dashboard {
+   278→  border-color: #444;
+   279→}
+   280→
+   281→.stats-row {
+   282→  display: grid;
+   283→  grid-template-columns: repeat(2, 1fr);
+   284→  gap: 1rem;
+   285→  max-width: 1400px;
+   286→  margin: 0 auto;
+   287→}
+   288→
+   289→@media (min-width: 768px) {
+   290→  .stats-row { grid-template-columns: repeat(4, 1fr); }
+   291→}
+   292→
+   293→.stat-item {
+   294→  text-align: center;
+   295→  padding: 1rem;
+   296→  background: var(--bg-elevated);
+   297→  border: 2px solid #000;
+   298→  box-shadow: 3px 3px 0 #000;
+   299→  transition: transform 0.15s ease;
+   300→}
+   301→
+   302→[data-theme="dark"] .stat-item {
+   303→  border-color: #444;
+   304→  box-shadow: 3px 3px 0 #333;
+   305→}
+   306→
+   307→.stat-item:hover {
+   308→  transform: translate(-2px, -2px);
+   309→  box-shadow: 5px 5px 0 var(--brand-primary);
+   310→}
+   311→
+   312→.stat-number {
+   313→  font-family: var(--font-display);
+   314→  font-size: clamp(2rem, 5vw, 3rem);
+   315→  color: var(--brand-primary);
+   316→  -webkit-text-stroke: 0;
+   317→  text-shadow: none;
+   318→  line-height: 1;
+   319→  margin-bottom: 0.25rem;
+   320→}
+   321→
+   322→.stat-label {
+   323→  font-family: var(--font-mono);
+   324→  font-size: 0.7rem;
+   325→  font-weight: 700;
+   326→  text-transform: uppercase;
+   327→  letter-spacing: 0.1em;
+   328→  color: var(--text-muted);
+   329→}
+   330→
+   331→/* ===== AGENT MODES SPOTLIGHT ===== */
+   332→.agent-spotlight {
+   333→  max-width: 1400px;
+   334→  margin: 0 auto;
+   335→  padding: 3rem 2rem 2rem;
+   336→}
+   337→
+   338→.agent-spotlight-heading {
+   339→  text-align: center;
+   340→  margin-bottom: 2rem;
+   341→}
+   342→
+   343→.agent-spotlight-heading h2 {
+   344→  font-family: var(--font-display);
+   345→  font-size: clamp(1.5rem, 4vw, 2.5rem);
+   346→  text-transform: uppercase;
+   347→  letter-spacing: 0.02em;
+   348→  color: var(--text-primary);
+   349→  text-shadow: 2px 2px 0 var(--cat-agents);
+   350→  margin-bottom: 0.5rem;
+   351→}
+   352→
+   353→.agent-spotlight-heading p {
+   354→  font-family: var(--font-mono);
+   355→  color: var(--text-muted);
+   356→  font-size: 0.85rem;
+   357→}
+   358→
+   359→.agent-modes-row {
+   360→  display: grid;
+   361→  grid-template-columns: repeat(2, 1fr);
+   362→  gap: 1rem;
+   363→}
+   364→
+   365→@media (min-width: 768px) {
+   366→  .agent-modes-row { grid-template-columns: repeat(4, 1fr); }
+   367→}
+   368→
+   369→@media (min-width: 1024px) {
+   370→  .agent-modes-row { grid-template-columns: repeat(7, 1fr); }
+   371→}
+   372→
+   373→.agent-mode-card {
+   374→  background: var(--bg-elevated);
+   375→  border: 3px solid #000;
+   376→  box-shadow: 4px 4px 0 var(--cat-agents);
+   377→  padding: 1.25rem 1rem;
+   378→  text-align: center;
+   379→  cursor: pointer;
+   380→  transition: transform 0.15s ease, box-shadow 0.15s ease;
+   381→}
+   382→
+   383→[data-theme="dark"] .agent-mode-card {
+   384→  border-color: #444;
+   385→  box-shadow: 4px 4px 0 #333;
+   386→}
+   387→
+   388→.agent-mode-card:hover {
+   389→  transform: translate(-3px, -3px) rotate(-1deg);
+   390→  box-shadow: 6px 6px 0 var(--cat-agents);
+   391→}
+   392→
+   393→.agent-mode-emoji {
+   394→  font-size: 2.5rem;
+   395→  line-height: 1;
+   396→  margin-bottom: 0.5rem;
+   397→  display: block;
+   398→}
+   399→
+   400→.agent-mode-name {
+   401→  font-family: var(--font-display);
+   402→  font-size: 0.85rem;
+   403→  color: var(--text-primary);
+   404→  margin-bottom: 0.25rem;
+   405→  text-transform: uppercase;
+   406→}
+   407→
+   408→.agent-mode-power {
+   409→  font-family: var(--font-mono);
+   410→  font-size: 0.6rem;
+   411→  color: var(--text-muted);
+   412→  text-transform: uppercase;
+   413→  letter-spacing: 0.05em;
+   414→}
+   415→
+   416→/* Agent Mode MCP Stack Tooltip */
+   417→.agent-mode-card {
+   418→  position: relative;
+   419→}
+   420→
+   421→.agent-mode-tooltip {
+   422→  position: absolute;
+   423→  bottom: calc(100% + 8px);
+   424→  left: 50%;
+   425→  transform: translateX(-50%) scale(0.9);
+   426→  background: var(--bg-elevated);
+   427→  border: 3px solid #000;
+   428→  box-shadow: 4px 4px 0 var(--cat-agents);
+   429→  padding: 0.6rem 0.9rem;
+   430→  font-family: var(--font-mono);
+   431→  font-size: 0.65rem;
+   432→  font-weight: 700;
+   433→  color: var(--text-primary);
+   434→  white-space: nowrap;
+   435→  z-index: 300;
+   436→  opacity: 0;
+   437→  pointer-events: none;
+   438→  transition: opacity 0.2s ease, transform 0.2s ease;
+   439→  text-transform: uppercase;
+   440→  letter-spacing: 0.03em;
+   441→}
+   442→
+   443→.agent-mode-tooltip::after {
+   444→  content: '';
+   445→  position: absolute;
+   446→  top: 100%;
+   447→  left: 50%;
+   448→  transform: translateX(-50%);
+   449→  border: 6px solid transparent;
+   450→  border-top-color: #000;
+   451→}
+   452→
+   453→.agent-mode-tooltip .tooltip-stack {
+   454→  color: var(--brand-primary);
+   455→  background: #000;
+   456→  padding: 0.1rem 0.4rem;
+   457→  margin-left: 0.3rem;
+   458→}
+   459→
+   460→.agent-mode-tooltip .tooltip-servers {
+   461→  display: block;
+   462→  font-size: 0.55rem;
+   463→  color: var(--text-muted);
+   464→  margin-top: 0.25rem;
+   465→  font-weight: 400;
+   466→}
+   467→
+   468→[data-theme="dark"] .agent-mode-tooltip {
+   469→  border-color: #444;
+   470→  box-shadow: 4px 4px 0 #333;
+   471→}
+   472→
+   473→[data-theme="dark"] .agent-mode-tooltip::after {
+   474→  border-top-color: #444;
+   475→}
+   476→
+   477→.agent-mode-card:hover .agent-mode-tooltip {
+   478→  opacity: 1;
+   479→  transform: translateX(-50%) scale(1);
+   480→}
+   481→
+   482→*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+   483→
+   484→html {
+   485→  scroll-behavior: smooth;
+   486→  -webkit-font-smoothing: antialiased;
+   487→}
+   488→
+   489→body {
+   490→  font-family: var(--font-body);
+   491→  background: var(--bg-base);
+   492→  color: var(--text-primary);
+   493→  line-height: 1.6;
+   494→  overflow-x: hidden;
+   495→  min-height: 100vh;
+   496→  position: relative;
+   497→}
+   498→
+   499→/* ===== GRAIN OVERLAY ===== */
+   500→body::after {
+   501→  content: '';
+   502→  position: fixed;
+   503→  inset: 0;
+   504→  z-index: 9998;
+   505→  pointer-events: none;
+   506→  opacity: 0.015;
+   507→  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+   508→  background-repeat: repeat;
+   509→  background-size: 256px 256px;
+   510→}
+   511→
+   512→/* ===== GRID BACKGROUND ===== */
+   513→body::before {
+   514→  content: '';
+   515→  position: fixed;
+   516→  inset: 0;
+   517→  z-index: -1;
+   518→  pointer-events: none;
+   519→  background-image:
+   520→    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+   521→    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+   522→  background-size: 60px 60px;
+   523→}
+   524→
+   525→/* ===== SCROLL PROGRESS BAR ===== */
+   526→#progress-bar {
+   527→  position: fixed;
+   528→  top: 0;
+   529→  left: 0;
+   530→  width: 0%;
+   531→  height: 4px;
+   532→  background: var(--brand-primary);
+   533→  z-index: 9999;
+   534→  border-bottom: 2px solid #000;
+   535→}
+   536→
+   537→/* ===== HERO SECTION ===== */
+   538→.hero {
+   539→  position: relative;
+   540→  min-height: 100svh;
+   541→  display: flex;
+   542→  align-items: center;
+   543→  justify-content: center;
+   544→  overflow: hidden;
+   545→  padding: 2rem;
+   546→  background: var(--bg-base);
+   547→}
+   548→
+   549→/* Brutalist color blocks */
+   550→.hero-block-left {
+   551→  position: absolute;
+   552→  top: 0; left: 0;
+   553→  width: 40%; height: 100%;
+   554→  background: linear-gradient(135deg, rgba(0,0,0,0.03), transparent);
+   555→  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
+   556→  z-index: 0;
+   557→}
+   558→
+   559→.hero-block-right {
+   560→  position: absolute;
+   561→  top: 0; right: 0;
+   562→  width: 35%; height: 100%;
+   563→  background: linear-gradient(225deg, rgba(0,0,0,0.03), transparent);
+   564→  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+   565→  z-index: 0;
+   566→}
+   567→
+   568→/* Glitch scanlines */
+   569→.hero-scanlines {
+   570→  position: absolute;
+   571→  inset: 0;
+   572→  z-index: 1;
+   573→  pointer-events: none;
+   574→  background: repeating-linear-gradient(
+   575→    0deg,
+   576→    transparent,
+   577→    transparent 2px,
+   578→    rgba(0,0,0,0.02) 2px,
+   579→    rgba(0,0,0,0.02) 4px
+   580→  );
+   581→}
+   582→
+   583→.hero-content {
+   584→  position: relative;
+   585→  z-index: 3;
+   586→  text-align: center;
+   587→  max-width: 960px;
+   588→  width: 100%;
+   589→}
+   590→
+   591→/* Sticker badge */
+   592→.hero-badge {
+   593→  display: inline-flex;
+   594→  align-items: center;
+   595→  gap: 0.5rem;
+   596→  background: var(--brand-primary);
+   597→  color: #000;
+   598→  border: 3px solid #000;
+   599→  box-shadow: 4px 4px 0 #000;
+   600→  padding: 0.5rem 1.5rem;
+   601→  font-size: 0.8rem;
+   602→  font-weight: 700;
+   603→  letter-spacing: 0.12em;
+   604→  text-transform: uppercase;
+   605→  font-family: var(--font-mono);
+   606→  margin-bottom: 2rem;
+   607→  transform: rotate(-2deg);
+   608→}
+   609→
+   610→.hero-badge .dot {
+   611→  width: 8px; height: 8px;
+   612→  background: #000;
+   613→  border-radius: 50%;
+   614→  animation: blink-dot 1s steps(1) infinite;
+   615→}
+   616→
+   617→@keyframes blink-dot {
+   618→  0%, 100% { opacity: 1; }
+   619→  50% { opacity: 0; }
+   620→}
+   621→
+   622→/* Glitch title */
+   623→.hero-title {
+   624→  font-family: var(--font-display);
+   625→  font-size: clamp(3rem, 9vw, 7.5rem);
+   626→  font-weight: 900;
+   627→  line-height: 0.95;
+   628→  letter-spacing: -0.02em;
+   629→  margin-bottom: 1.5rem;
+   630→  color: #000000;
+   631→  text-shadow: 3px 3px 0 var(--brand-secondary);
+   632→  -webkit-text-stroke: 2px #000;
+   633→  paint-order: stroke fill;
+   634→  position: relative;
+   635→}
+   636→
+   637→.hero-title .char {
+   638→  display: inline-block;
+   639→  will-change: transform, opacity;
+   640→}
+   641→
+   642→.hero-title .char:hover {
+   643→  color: var(--brand-secondary);
+   644→  text-shadow: 3px 3px 0 var(--brand-primary);
+   645→}
+   646→
+   647→/* Glitch effect pseudo-elements */
+   648→.hero-title::before,
+   649→.hero-title::after {
+   650→  content: attr(data-text);
+   651→  position: absolute;
+   652→  top: 0; left: 0;
+   653→  width: 100%;
+   654→  height: 100%;
+   655→  font-family: inherit;
+   656→  font-size: inherit;
+   657→  line-height: inherit;
+   658→  letter-spacing: inherit;
+   659→  -webkit-text-stroke: inherit;
+   660→  paint-order: inherit;
+   661→  overflow: hidden;
+   662→}
+   663→
+   664→.hero-title::before {
+   665→  color: var(--brand-tertiary);
+   666→  text-shadow: none;
+   667→  -webkit-text-stroke: 0;
+   668→  clip-path: inset(0 0 65% 0);
+   669→  animation: glitch-top 3s steps(1) infinite;
+   670→}
+   671→
+   672→.hero-title::after {
+   673→  color: var(--brand-secondary);
+   674→  text-shadow: none;
+   675→  -webkit-text-stroke: 0;
+   676→  clip-path: inset(65% 0 0 0);
+   677→  animation: glitch-bottom 2.5s steps(1) infinite;
+   678→}
+   679→
+   680→@keyframes glitch-top {
+   681→  0%, 92% { transform: translate(0); }
+   682→  93% { transform: translate(-4px, -2px); }
+   683→  94% { transform: translate(3px, 1px); }
+   684→  95% { transform: translate(-2px, -1px); }
+   685→  96%, 100% { transform: translate(0); }
+   686→}
+   687→
+   688→@keyframes glitch-bottom {
+   689→  0%, 90% { transform: translate(0); }
+   690→  91% { transform: translate(3px, 2px); }
+   691→  92% { transform: translate(-4px, -1px); }
+   692→  93% { transform: translate(2px, 1px); }
+   693→  94%, 100% { transform: translate(0); }
+   694→}
+   695→
+   696→.hero-subtitle {
+   697→  font-family: var(--font-mono);
+   698→  font-size: clamp(0.9rem, 2vw, 1.15rem);
+   699→  color: var(--text-secondary);
+   700→  font-weight: 400;
+   701→  max-width: 600px;
+   702→  margin: 0 auto 2.5rem;
+   703→  line-height: 1.8;
+   704→  background: var(--bg-surface);
+   705→  border: 2px solid #000;
+   706→  padding: 1rem 1.5rem;
+   707→  text-align: left;
+   708→  position: relative;
+   709→}
+   710→
+   711→.hero-subtitle::before {
+   712→  content: '>';
+   713→  color: #000;
+   714→  font-weight: 700;
+   715→  margin-right: 0.5rem;
+   716→  animation: cursor-blink 1s steps(1) infinite;
+   717→}
+   718→
+   719→@keyframes cursor-blink {
+   720→  0%, 50% { opacity: 1; }
+   721→  51%, 100% { opacity: 0; }
+   722→}
+   723→
+   724→/* Brutalist CTA */
+   725→.hero-cta {
+   726→  display: inline-flex;
+   727→  align-items: center;
+   728→  gap: 0.75rem;
+   729→  background: var(--brand-secondary);
+   730→  color: #000;
+   731→  border: 3px solid #000;
+   732→  box-shadow: 5px 5px 0 #000;
+   733→  padding: 1rem 2.5rem;
+   734→  font-size: 1.1rem;
+   735→  font-weight: 700;
+   736→  font-family: var(--font-display);
+   737→  text-transform: uppercase;
+   738→  letter-spacing: 0.05em;
+   739→  cursor: pointer;
+   740→  text-decoration: none;
+   741→  transition: transform 0.15s ease, box-shadow 0.15s ease;
+   742→  transform: rotate(1deg);
+   743→}
+   744→
+   745→.hero-cta:hover {
+   746→  transform: rotate(-1deg) translate(-2px, -2px);
+   747→  box-shadow: 7px 7px 0 #000;
+   748→}
+   749→
+   750→.hero-cta:active {
+   751→  transform: rotate(1deg) translate(2px, 2px);
+   752→  box-shadow: 2px 2px 0 #000;
+   753→}
+   754→
+   755→.hero-cta svg {
+   756→  width: 18px; height: 18px;
+   757→}
+   758→
+   759→/* Hero featured card — brutalist panel */
+   760→.hero-card {
+   761→  position: relative;
+   762→  margin-top: 3rem;
+   763→  background: var(--bg-elevated);
+   764→  border: 3px solid #000;
+   765→  box-shadow: 6px 6px 0 var(--brand-primary);
+   766→  padding: 2rem;
+   767→  text-align: left;
+   768→  max-width: 560px;
+   769→  margin-left: auto;
+   770→  margin-right: auto;
+   771→  transform: rotate(-1deg);
+   772→}
+   773→
+   774→.hero-card-icon {
+   775→  font-size: 3rem;
+   776→  margin-bottom: 1rem;
+   777→  display: inline-block;
+   778→  background: var(--brand-primary);
+   779→  border: 3px solid #000;
+   780→  padding: 0.5rem;
+   781→  box-shadow: 3px 3px 0 #000;
+   782→}
+   783→
+   784→.hero-card-name {
+   785→  font-family: var(--font-display);
+   786→  font-size: 1.6rem;
+   787→  margin-bottom: 0.5rem;
+   788→  color: #000;
+   789→  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+   790→}
+   791→
+   792→.hero-card-desc {
+   793→  font-family: var(--font-body);
+   794→  font-size: 0.9rem;
+   795→  color: var(--text-secondary);
+   796→  margin-bottom: 1rem;
+   797→  line-height: 1.8;
+   798→}
+   799→
+   800→.hero-card-tags {
+   801→  display: flex;
+   802→  flex-wrap: wrap;
+   803→  gap: 0.5rem;
+   804→}
+   805→
+   806→.hero-card-tag {
+   807→  font-family: var(--font-mono);
+   808→  font-size: 0.65rem;
+   809→  font-weight: 700;
+   810→  padding: 0.3rem 0.7rem;
+   811→  background: #fff;
+   812→  border: 2px solid #000;
+   813→  color: #000;
+   814→  text-transform: uppercase;
+   815→  letter-spacing: 0.05em;
+   816→}
+   817→
+   818→/* Orbit stickers */
+   819→.hero-orbit {
+   820→  position: absolute;
+   821→  top: 50%; left: 50%;
+   822→  width: 500px; height: 500px;
+   823→  transform: translate(-50%, -50%);
+   824→  pointer-events: none;
+   825→  z-index: 1;
+   826→}
+   827→
+   828→.orbit-badge {
+   829→  position: absolute;
+   830→  display: flex;
+   831→  align-items: center;
+   832→  gap: 0.4rem;
+   833→  background: var(--bg-elevated);
+   834→  border: 2px solid #000;
+   835→  box-shadow: 3px 3px 0 var(--brand-secondary);
+   836→  padding: 0.4rem 1rem;
+   837→  font-size: 0.7rem;
+   838→  font-weight: 700;
+   839→  font-family: var(--font-mono);
+   840→  color: #000;
+   841→  white-space: nowrap;
+   842→  text-transform: uppercase;
+   843→}
+   844→
+   845→.orbit-badge:nth-child(2) { transform: rotate(3deg); }
+   846→.orbit-badge:nth-child(3) { transform: rotate(-2deg); }
+   847→
+   848→/* ===== MARQUEE TICKER — WCAG AA COMPLIANT ===== */
+   849→.marquee {
+   850→  background: #000000;
+   851→  border-top: 3px solid var(--brand-primary);
+   852→  border-bottom: 3px solid var(--brand-primary);
+   853→  padding: 0.6rem 0;
+   854→  overflow: hidden;
+   855→  white-space: nowrap;
+   856→}
+   857→
+   858→.marquee-inner {
+   859→  display: inline-flex;
+   860→  animation: marquee-scroll 30s linear infinite;
+   861→}
+   862→
+   863→.marquee-inner span {
+   864→  font-family: var(--font-display);
+   865→  font-size: 0.9rem;
+   866→  color: var(--brand-primary);
+   867→  padding: 0 2rem;
+   868→  text-transform: uppercase;
+   869→  letter-spacing: 0.1em;
+   870→}
+   871→
+   872→@keyframes marquee-scroll {
+   873→  0% { transform: translateX(0); }
+   874→  100% { transform: translateX(-50%); }
+   875→}
+   876→
+   877→/* ===== FILTER BAR ===== */
+   878→.filter-section {
+   879→  position: sticky;
+   880→  top: 0;
+   881→  z-index: 100;
+   882→  background: var(--bg-base);
+   883→  border-bottom: 3px solid #000;
+   884→  padding: 0.75rem 2rem;
+   885→}
+   886→
+   887→.filter-row {
+   888→  display: flex;
+   889→  align-items: center;
+   890→  gap: 0.75rem;
+   891→  max-width: 1400px;
+   892→  margin: 0 auto;
+   893→  flex-wrap: wrap;
+   894→}
+   895→
+   896→.filter-chips {
+   897→  display: flex;
+   898→  gap: 0.4rem;
+   899→  overflow-x: auto;
+   900→  scrollbar-width: none;
+   901→  -ms-overflow-style: none;
+   902→  flex: 1;
+   903→  padding: 0.25rem 0;
+   904→}
+   905→
+   906→.filter-chips::-webkit-scrollbar { display: none; }
+   907→
+   908→.filter-chip {
+   909→  flex-shrink: 0;
+   910→  padding: 0.4rem 1rem;
+   911→  font-size: 0.75rem;
+   912→  font-weight: 700;
+   913→  font-family: var(--font-mono);
+   914→  border: 2px solid #000;
+   915→  background: #fff;
+   916→  color: #000;
+   917→  cursor: pointer;
+   918→  text-transform: uppercase;
+   919→  letter-spacing: 0.05em;
+   920→  transition: all 0.15s ease;
+   921→  white-space: nowrap;
+   922→}
+   923→
+   924→.filter-chip:hover {
+   925→  background: var(--chip-color, var(--brand-primary));
+   926→  color: #000;
+   927→}
+   928→
+   929→.filter-chip.active {
+   930→  background: var(--chip-color, var(--brand-primary));
+   931→  color: #000;
+   932→  border-color: #000;
+   933→  box-shadow: 3px 3px 0 #000;
+   934→  transform: rotate(-1deg);
+   935→}
+   936→
+   937→.search-wrapper {
+   938→  position: relative;
+   939→  flex-shrink: 0;
+   940→}
+   941→
+   942→.search-icon {
+   943→  position: absolute;
+   944→  left: 0.75rem;
+   945→  top: 50%;
+   946→  transform: translateY(-50%);
+   947→  width: 14px; height: 14px;
+   948→  color: #444;
+   949→  pointer-events: none;
+   950→}
+   951→
+   952→.search-input {
+   953→  width: 200px;
+   954→  padding: 0.5rem 1rem;
+   955→  padding-left: 2.2rem;
+   956→  border: 2px solid #000;
+   957→  background: #fff;
+   958→  color: #000;
+   959→  font-size: 0.85rem;
+   960→  font-family: var(--font-mono);
+   961→  outline: none;
+   962→  transition: box-shadow 0.15s ease;
+   963→}
+   964→
+   965→.search-input:focus {
+   966→  box-shadow: 3px 3px 0 var(--brand-primary);
+   967→}
+   968→
+   969→.search-input::placeholder {
+   970→  color: #444;
+   971→}
+   972→
+   973→.sort-select {
+   974→  flex-shrink: 0;
+   975→  padding: 0.5rem 2rem 0.5rem 1rem;
+   976→  border: 2px solid #000;
+   977→  background: #fff;
+   978→  color: #000;
+   979→  font-size: 0.85rem;
+   980→  font-family: var(--font-mono);
+   981→  outline: none;
+   982→  cursor: pointer;
+   983→  appearance: none;
+   984→  -webkit-appearance: none;
+   985→  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+   986→  background-repeat: no-repeat;
+   987→  background-position: right 0.75rem center;
+   988→}
+   989→
+   990→.sort-select:focus {
+   991→  box-shadow: 3px 3px 0 var(--brand-primary);
+   992→}
+   993→
+   994→/* ===== SKILLS GRID ===== */
+   995→.skills-section {
+   996→  padding: 3rem 2rem 6rem;
+   997→  max-width: 1400px;
+   998→  margin: 0 auto;
+   999→}
+  1000→
+  1001→.skills-grid {
+  1002→  display: grid;
+  1003→  grid-template-columns: 1fr;
+  1004→  gap: 1rem;
+  1005→}
+  1006→
+  1007→@media (min-width: 640px) {
+  1008→  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  1009→}
+  1010→
+  1011→@media (min-width: 1024px) {
+  1012→  .skills-grid { grid-template-columns: repeat(3, 1fr); }
+  1013→}
+  1014→
+  1015→@media (min-width: 1280px) {
+  1016→  .skills-grid { grid-template-columns: repeat(4, 1fr); }
+  1017→}
+  1018→
+  1019→/* ===== SKILL CARD — NEO-BRUTALIST ===== */
+  1020→skill-card {
+  1021→  display: block;
+  1022→  background: var(--bg-elevated);
+  1023→  border: 3px solid #000;
+  1024→  box-shadow: 5px 5px 0 #000;
+  1025→  padding: 1.25rem;
+  1026→  cursor: pointer;
+  1027→  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  1028→  min-height: 120px;
+  1029→  position: relative;
+  1030→  overflow: hidden;
+  1031→  will-change: transform;
+  1032→}
+  1033→
+  1034→skill-card:hover {
+  1035→  transform: translate(-3px, -3px);
+  1036→  box-shadow: 8px 8px 0 var(--card-accent, var(--brand-primary));
+  1037→}
+  1038→
+  1039→skill-card.expanded {
+  1040→  box-shadow: 6px 6px 0 var(--card-accent, var(--brand-primary));
+  1041→}
+  1042→
+  1043→/* Top accent bar */
+  1044→skill-card::after {
+  1045→  content: '';
+  1046→  position: absolute;
+  1047→  top: 0; left: 0;
+  1048→  width: 100%;
+  1049→  height: 4px;
+  1050→  background: var(--card-accent, var(--brand-primary));
+  1051→}
+  1052→
+  1053→.card-header {
+  1054→  display: flex;
+  1055→  align-items: flex-start;
+  1056→  gap: 0.75rem;
+  1057→}
+  1058→
+  1059→.card-icon {
+  1060→  font-size: 1.75rem;
+  1061→  line-height: 1;
+  1062→  flex-shrink: 0;
+  1063→  background: #fff;
+  1064→  border: 2px solid #000;
+  1065→  padding: 0.3rem;
+  1066→}
+  1067→
+  1068→.card-info {
+  1069→  flex: 1;
+  1070→  min-width: 0;
+  1071→}
+  1072→
+  1073→.card-name {
+  1074→  font-family: var(--font-display);
+  1075→  font-size: 0.95rem;
+  1076→  margin-bottom: 0.4rem;
+  1077→  white-space: nowrap;
+  1078→  overflow: hidden;
+  1079→  text-overflow: ellipsis;
+  1080→  color: #000;
+  1081→}
+  1082→
+  1083→.card-category {
+  1084→  display: inline-block;
+  1085→  font-family: var(--font-mono);
+  1086→  font-size: 0.65rem;
+  1087→  font-weight: 700;
+  1088→  letter-spacing: 0.08em;
+  1089→  text-transform: uppercase;
+  1090→  padding: 0.2rem 0.6rem;
+  1091→  background: var(--card-accent, var(--brand-primary));
+  1092→  color: #000;
+  1093→  border: 2px solid #000;
+  1094→  transform: rotate(-1deg);
+  1095→}
+  1096→
+  1097→.card-description {
+  1098→  font-family: var(--font-mono);
+  1099→  font-size: 0.85rem;
+  1100→  color: var(--text-secondary);
+  1101→  line-height: 1.8;
+  1102→  margin-top: 0.75rem;
+  1103→  opacity: 0;
+  1104→  max-height: 0;
+  1105→  overflow: hidden;
+  1106→  transition: opacity 0.4s ease, max-height 0.5s ease;
+  1107→}
+  1108→
+  1109→skill-card.expanded .card-description,
+  1110→skill-card:hover .card-description {
+  1111→  opacity: 1;
+  1112→  max-height: 200px;
+  1113→}
+  1114→
+  1115→.card-details {
+  1116→  margin-top: 0.75rem;
+  1117→  opacity: 0;
+  1118→  max-height: 0;
+  1119→  overflow: hidden;
+  1120→  transition: opacity 0.4s ease 0.1s, max-height 0.5s ease;
+  1121→}
+  1122→
+  1123→skill-card.expanded .card-details {
+  1124→  opacity: 1;
+  1125→  max-height: 600px;
+  1126→}
+  1127→
+  1128→.card-tags {
+  1129→  display: flex;
+  1130→  flex-wrap: wrap;
+  1131→  gap: 0.35rem;
+  1132→  margin-bottom: 0.75rem;
+  1133→}
+  1134→
+  1135→.card-tag {
+  1136→  font-family: var(--font-mono);
+  1137→  font-size: 0.65rem;
+  1138→  font-weight: 700;
+  1139→  padding: 0.15rem 0.5rem;
+  1140→  background: #fff;
+  1141→  border: 1px solid #000;
+  1142→  color: #1A1A1A;
+  1143→  text-transform: uppercase;
+  1144→  letter-spacing: 0.03em;
+  1145→}
+  1146→
+  1147→.card-invoke {
+  1148→  font-family: var(--font-body);
+  1149→  font-size: 0.82rem;
+  1150→  color: var(--text-secondary);
+  1151→  margin-bottom: 0.75rem;
+  1152→  padding: 0.5rem 0.75rem;
+  1153→  background: #F0F0EC;
+  1154→  border: 1px solid #bbb;
+  1155→  border-left: 4px solid var(--card-accent, var(--brand-primary));
+  1156→  line-height: 1.6;
+  1157→}
+  1158→
+  1159→.card-invoke strong {
+  1160→  color: #000;
+  1161→}
+  1162→
+  1163→.card-mcp-servers {
+  1164→  margin-bottom: 0.75rem;
+  1165→  padding: 0.5rem 0.75rem;
+  1166→  background: #F0F0EC;
+  1167→  border: 1px solid #bbb;
+  1168→  border-left: 4px solid var(--cat-mcp);
+  1169→  line-height: 1.6;
+  1170→}
+  1171→
+  1172→.card-mcp-label {
+  1173→  font-family: var(--font-mono);
+  1174→  font-size: 0.65rem;
+  1175→  font-weight: 700;
+  1176→  color: #000;
+  1177→  text-transform: uppercase;
+  1178→  letter-spacing: 0.05em;
+  1179→  margin-bottom: 0.35rem;
+  1180→}
+  1181→
+  1182→.card-mcp-badges {
+  1183→  display: flex;
+  1184→  flex-wrap: wrap;
+  1185→  gap: 0.3rem;
+  1186→}
+  1187→
+  1188→.mcp-badge {
+  1189→  font-family: var(--font-mono);
+  1190→  font-size: 0.6rem;
+  1191→  font-weight: 700;
+  1192→  padding: 0.15rem 0.45rem;
+  1193→  background: var(--cat-mcp);
+  1194→  color: #000;
+  1195→  border: 1px solid #000;
+  1196→  text-transform: uppercase;
+  1197→  letter-spacing: 0.03em;
+  1198→}
+  1199→
+  1200→.card-jsonld-toggle {
+  1201→  display: inline-flex;
+  1202→  align-items: center;
+  1203→  gap: 0.4rem;
+  1204→  font-family: var(--font-mono);
+  1205→  font-size: 0.65rem;
+  1206→  font-weight: 700;
+  1207→  color: #1A1A1A;
+  1208→  background: #fff;
+  1209→  border: 2px solid #000;
+  1210→  padding: 0.3rem 0.7rem;
+  1211→  cursor: pointer;
+  1212→  text-transform: uppercase;
+  1213→  letter-spacing: 0.05em;
+  1214→  transition: all 0.15s ease;
+  1215→}
+  1216→
+  1217→.card-jsonld-toggle:hover {
+  1218→  color: #000;
+  1219→  border-color: #000;
+  1220→  box-shadow: 2px 2px 0 var(--brand-primary);
+  1221→}
+  1222→
+  1223→.card-jsonld {
+  1224→  margin-top: 0.75rem;
+  1225→  font-size: 0.68rem;
+  1226→  font-family: var(--font-mono);
+  1227→  color: #1A1A1A;
+  1228→  background: #FFFFFF;
+  1229→  border: 2px solid #999;
+  1230→  padding: 0.75rem;
+  1231→  white-space: pre-wrap;
+  1232→  word-break: break-all;
+  1233→  max-height: 0;
+  1234→  overflow: hidden;
+  1235→  opacity: 0;
+  1236→  transition: max-height 0.4s ease, opacity 0.3s ease;
+  1237→}
+  1238→
+  1239→skill-card.expanded .card-jsonld.visible {
+  1240→  max-height: 500px;
+  1241→  opacity: 1;
+  1242→}
+  1243→
+  1244→.card-expand-indicator {
+  1245→  position: absolute;
+  1246→  bottom: 0.75rem;
+  1247→  right: 0.75rem;
+  1248→  width: 20px; height: 20px;
+  1249→  color: #444;
+  1250→  transition: transform 0.2s ease;
+  1251→}
+  1252→
+  1253→skill-card.expanded .card-expand-indicator {
+  1254→  transform: rotate(180deg);
+  1255→  color: var(--brand-primary);
+  1256→}
+  1257→
+  1258→/* ===== NO RESULTS ===== */
+  1259→.no-results {
+  1260→  grid-column: 1 / -1;
+  1261→  text-align: center;
+  1262→  padding: 4rem 2rem;
+  1263→  color: var(--text-muted);
+  1264→  background: var(--bg-surface);
+  1265→  border: 3px dashed #000;
+  1266→}
+  1267→
+  1268→.no-results-icon { font-size: 3rem; margin-bottom: 1rem; }
+  1269→.no-results-text { font-family: var(--font-display); font-size: 1.1rem; color: var(--text-primary); }
+  1270→
+  1271→/* ===== MCP STACK CURATOR ===== */
+  1272→.mcp-curator-section {
+  1273→  max-width: 1400px;
+  1274→  margin: 0 auto;
+  1275→  padding: 3rem 2rem 2rem;
+  1276→}
+  1277→
+  1278→.mcp-curator-heading {
+  1279→  text-align: center;
+  1280→  margin-bottom: 2rem;
+  1281→}
+  1282→
+  1283→.mcp-curator-heading h2 {
+  1284→  font-family: var(--font-display);
+  1285→  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  1286→  text-transform: uppercase;
+  1287→  letter-spacing: 0.02em;
+  1288→  color: #000;
+  1289→  text-shadow: 2px 2px 0 var(--cat-mcp);
+  1290→  margin-bottom: 0.5rem;
+  1291→}
+  1292→
+  1293→.mcp-curator-heading p {
+  1294→  font-family: var(--font-mono);
+  1295→  color: var(--text-muted);
+  1296→  font-size: 0.85rem;
+  1297→}
+  1298→
+  1299→.mcp-stacks-grid {
+  1300→  display: grid;
+  1301→  grid-template-columns: 1fr;
+  1302→  gap: 1rem;
+  1303→  margin-bottom: 2.5rem;
+  1304→}
+  1305→
+  1306→@media (min-width: 640px) {
+  1307→  .mcp-stacks-grid { grid-template-columns: repeat(2, 1fr); }
+  1308→}
+  1309→
+  1310→@media (min-width: 1024px) {
+  1311→  .mcp-stacks-grid { grid-template-columns: repeat(4, 1fr); }
+  1312→}
+  1313→
+  1314→.mcp-stack-card {
+  1315→  background: var(--bg-elevated);
+  1316→  border: 3px solid #000;
+  1317→  box-shadow: 4px 4px 0 #000;
+  1318→  padding: 1.25rem;
+  1319→  cursor: pointer;
+  1320→  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  1321→  position: relative;
+  1322→}
+  1323→
+  1324→.mcp-stack-card:hover {
+  1325→  transform: translate(-2px, -2px);
+  1326→  box-shadow: 6px 6px 0 var(--cat-mcp);
+  1327→}
+  1328→
+  1329→.mcp-stack-card.expanded {
+  1330→  box-shadow: 6px 6px 0 var(--cat-mcp);
+  1331→}
+  1332→
+  1333→.mcp-stack-header {
+  1334→  display: flex;
+  1335→  align-items: center;
+  1336→  gap: 0.75rem;
+  1337→  margin-bottom: 0.75rem;
+  1338→}
+  1339→
+  1340→.mcp-stack-emoji {
+  1341→  font-size: 1.75rem;
+  1342→  line-height: 1;
+  1343→  flex-shrink: 0;
+  1344→  background: #fff;
+  1345→  border: 2px solid #000;
+  1346→  padding: 0.3rem;
+  1347→}
+  1348→
+  1349→.mcp-stack-info {
+  1350→  flex: 1;
+  1351→  min-width: 0;
+  1352→}
+  1353→
+  1354→.mcp-stack-name {
+  1355→  font-family: var(--font-display);
+  1356→  font-size: 0.95rem;
+  1357→  color: #000;
+  1358→  margin-bottom: 0.2rem;
+  1359→}
+  1360→
+  1361→.mcp-stack-desc {
+  1362→  font-family: var(--font-mono);
+  1363→  font-size: 0.7rem;
+  1364→  color: var(--text-secondary);
+  1365→  line-height: 1.6;
+  1366→}
+  1367→
+  1368→.mcp-stack-badges {
+  1369→  display: flex;
+  1370→  flex-wrap: wrap;
+  1371→  gap: 0.3rem;
+  1372→  margin-bottom: 0.75rem;
+  1373→}
+  1374→
+  1375→.mcp-server-badge {
+  1376→  font-family: var(--font-mono);
+  1377→  font-size: 0.6rem;
+  1378→  font-weight: 700;
+  1379→  padding: 0.2rem 0.5rem;
+  1380→  background: #fff;
+  1381→  border: 2px solid #000;
+  1382→  color: #000;
+  1383→  text-transform: uppercase;
+  1384→  letter-spacing: 0.03em;
+  1385→  border-radius: 999px;
+  1386→}
+  1387→
+  1388→.mcp-synergy-bar {
+  1389→  height: 8px;
+  1390→  background: #E0E0DC;
+  1391→  border: 1px solid #000;
+  1392→  position: relative;
+  1393→  overflow: hidden;
+  1394→}
+  1395→
+  1396→.mcp-synergy-fill {
+  1397→  height: 100%;
+  1398→  transition: width 0.5s ease;
+  1399→}
+  1400→
+  1401→.mcp-synergy-fill.synergy-red { background: #FF4444; }
+  1402→.mcp-synergy-fill.synergy-yellow { background: #FFD700; }
+  1403→.mcp-synergy-fill.synergy-green { background: #00CC66; }
+  1404→
+  1405→.mcp-synergy-label {
+  1406→  font-family: var(--font-mono);
+  1407→  font-size: 0.65rem;
+  1408→  font-weight: 700;
+  1409→  color: var(--text-muted);
+  1410→  margin-top: 0.3rem;
+  1411→  text-align: right;
+  1412→}
+  1413→
+  1414→.mcp-stack-details {
+  1415→  margin-top: 0.75rem;
+  1416→  opacity: 0;
+  1417→  max-height: 0;
+  1418→  overflow: hidden;
+  1419→  transition: opacity 0.4s ease, max-height 0.5s ease;
+  1420→}
+  1421→
+  1422→.mcp-stack-card.expanded .mcp-stack-details {
+  1423→  opacity: 1;
+  1424→  max-height: 500px;
+  1425→}
+  1426→
+  1427→.mcp-stack-detail-item {
+  1428→  font-family: var(--font-mono);
+  1429→  font-size: 0.7rem;
+  1430→  color: var(--text-secondary);
+  1431→  line-height: 1.7;
+  1432→  padding: 0.5rem 0.75rem;
+  1433→  background: #F0F0EC;
+  1434→  border: 1px solid #ccc;
+  1435→  border-left: 3px solid var(--cat-mcp);
+  1436→  margin-bottom: 0.5rem;
+  1437→}
+  1438→
+  1439→.mcp-stack-detail-item strong {
+  1440→  color: #000;
+  1441→  font-weight: 700;
+  1442→}
+  1443→
+  1444→.mcp-stack-detail-item.warning {
+  1445→  border-left-color: #FF4444;
+  1446→  background: #FFF0F0;
+  1447→}
+  1448→
+  1449→.mcp-stack-expand-indicator {
+  1450→  position: absolute;
+  1451→  top: 0.75rem;
+  1452→  right: 0.75rem;
+  1453→  width: 16px; height: 16px;
+  1454→  color: #444;
+  1455→  transition: transform 0.2s ease;
+  1456→}
+  1457→
+  1458→.mcp-stack-card.expanded .mcp-stack-expand-indicator {
+  1459→  transform: rotate(180deg);
+  1460→  color: var(--cat-mcp);
+  1461→}
+  1462→
+  1463→/* Build Your Own section */
+  1464→.mcp-build-section {
+  1465→  background: var(--bg-surface);
+  1466→  border: 3px solid #000;
+  1467→  box-shadow: 4px 4px 0 var(--cat-mcp);
+  1468→  padding: 1.5rem;
+  1469→  margin-top: 1rem;
+  1470→}
+  1471→
+  1472→.mcp-build-heading {
+  1473→  font-family: var(--font-display);
+  1474→  font-size: 1.1rem;
+  1475→  text-transform: uppercase;
+  1476→  color: #000;
+  1477→  margin-bottom: 1rem;
+  1478→}
+  1479→
+  1480→.mcp-build-controls {
+  1481→  display: flex;
+  1482→  flex-wrap: wrap;
+  1483→  gap: 0.75rem;
+  1484→  align-items: center;
+  1485→  margin-bottom: 1rem;
+  1486→}
+  1487→
+  1488→.mcp-build-select {
+  1489→  padding: 0.5rem 1rem;
+  1490→  border: 2px solid #000;
+  1491→  background: #fff;
+  1492→  color: #000;
+  1493→  font-size: 0.85rem;
+  1494→  font-family: var(--font-mono);
+  1495→  outline: none;
+  1496→  cursor: pointer;
+  1497→  min-width: 160px;
+  1498→}
+  1499→
+  1500→.mcp-build-select:focus {
+  1501→  box-shadow: 3px 3px 0 var(--cat-mcp);
+  1502→}
+  1503→
+  1504→.mcp-build-add-btn {
+  1505→  padding: 0.5rem 1.25rem;
+  1506→  border: 2px solid #000;
+  1507→  background: var(--cat-mcp);
+  1508→  color: #000;
+  1509→  font-size: 0.85rem;
+  1510→  font-weight: 700;
+  1511→  font-family: var(--font-mono);
+  1512→  cursor: pointer;
+  1513→  text-transform: uppercase;
+  1514→  transition: all 0.15s ease;
+  1515→}
+  1516→
+  1517→.mcp-build-add-btn:hover {
+  1518→  box-shadow: 3px 3px 0 #000;
+  1519→  transform: translate(-1px, -1px);
+  1520→}
+  1521→
+  1522→.mcp-build-selected {
+  1523→  display: flex;
+  1524→  flex-wrap: wrap;
+  1525→  gap: 0.4rem;
+  1526→  min-height: 2rem;
+  1527→  margin-bottom: 1rem;
+  1528→}
+  1529→
+  1530→.mcp-build-chip {
+  1531→  font-family: var(--font-mono);
+  1532→  font-size: 0.7rem;
+  1533→  font-weight: 700;
+  1534→  padding: 0.3rem 0.6rem;
+  1535→  background: var(--cat-mcp);
+  1536→  color: #000;
+  1537→  border: 2px solid #000;
+  1538→  cursor: pointer;
+  1539→  text-transform: uppercase;
+  1540→}
+  1541→
+  1542→.mcp-build-chip:hover {
+  1543→  background: #FF4444;
+  1544→  color: #fff;
+  1545→}
+  1546→
+  1547→.mcp-build-result {
+  1548→  font-family: var(--font-mono);
+  1549→  font-size: 0.85rem;
+  1550→  color: var(--text-secondary);
+  1551→  padding: 0.75rem;
+  1552→  background: #F0F0EC;
+  1553→  border: 1px solid #bbb;
+  1554→  border-left: 4px solid var(--cat-mcp);
+  1555→}
+  1556→
+  1557→.mcp-build-synergy {
+  1558→  margin-top: 0.75rem;
+  1559→}
+  1560→
+  1561→.mcp-build-synergy .mcp-synergy-bar {
+  1562→  height: 12px;
+  1563→}
+  1564→
+  1565→/* ===== SCROLL-TO-TOP FAB ===== */
+  1566→.scroll-top-fab {
+  1567→  position: fixed;
+  1568→  bottom: 2rem;
+  1569→  right: 2rem;
+  1570→  width: 52px; height: 52px;
+  1571→  background: var(--brand-primary);
+  1572→  color: #000;
+  1573→  border: 3px solid #000;
+  1574→  box-shadow: 4px 4px 0 #000;
+  1575→  cursor: pointer;
+  1576→  display: flex;
+  1577→  align-items: center;
+  1578→  justify-content: center;
+  1579→  font-size: 1.25rem;
+  1580→  opacity: 0;
+  1581→  transform: translateY(20px) rotate(3deg);
+  1582→  transition: opacity 0.3s ease, transform 0.3s ease;
+  1583→  z-index: 200;
+  1584→  font-weight: 900;
+  1585→}
+  1586→
+  1587→.scroll-top-fab.visible {
+  1588→  opacity: 1;
+  1589→  transform: translateY(0) rotate(3deg);
+  1590→}
+  1591→
+  1592→.scroll-top-fab:hover {
+  1593→  transform: translateY(-3px) rotate(-2deg);
+  1594→  box-shadow: 6px 6px 0 #000;
+  1595→}
+  1596→
+  1597→/* ===== SECTION HEADING ===== */
+  1598→.section-heading {
+  1599→  text-align: center;
+  1600→  margin-bottom: 2.5rem;
+  1601→}
+  1602→
+  1603→.section-heading h2 {
+  1604→  font-family: var(--font-display);
+  1605→  font-size: clamp(1.8rem, 5vw, 3rem);
+  1606→  margin-bottom: 0.5rem;
+  1607→  text-transform: uppercase;
+  1608→  letter-spacing: 0.02em;
+  1609→}
+  1610→
+  1611→.skill-count {
+  1612→  color: #000;
+  1613→  -webkit-text-stroke: 0;
+  1614→  text-shadow: 2px 2px 0 var(--brand-secondary);
+  1615→}
+  1616→
+  1617→.section-heading p {
+  1618→  font-family: var(--font-mono);
+  1619→  color: var(--text-muted);
+  1620→  font-size: 0.85rem;
+  1621→}
+  1622→
+  1623→/* ===== API NOTICE ===== */
+  1624→.api-notice {
+  1625→  max-width: 1400px;
+  1626→  margin: 0 auto;
+  1627→  padding: 1.5rem 2rem;
+  1628→  background: var(--bg-surface);
+  1629→  border: 2px solid #000;
+  1630→  border-left: 5px solid var(--brand-tertiary);
+  1631→  font-family: var(--font-body);
+  1632→  font-size: 0.8rem;
+  1633→  color: var(--text-muted);
+  1634→  line-height: 1.9;
+  1635→}
+  1636→
+  1637→.api-notice strong { color: var(--text-primary); }
+  1638→.api-notice code {
+  1639→  background: #FFFFFF;
+  1640→  border: 1px solid #000;
+  1641→  padding: 0.1rem 0.4rem;
+  1642→  color: #000;
+  1643→  font-family: var(--font-mono);
+  1644→  font-size: 0.72rem;
+  1645→  font-weight: 700;
+  1646→}
+  1647→
+  1648→/* ===== FOOTER ===== */
+  1649→.footer {
+  1650→  text-align: center;
+  1651→  padding: 3rem 2rem;
+  1652→  border-top: 3px solid #000;
+  1653→  font-family: var(--font-mono);
+  1654→  font-size: 0.8rem;
+  1655→  color: var(--text-muted);
+  1656→}
+  1657→
+  1658→.footer span { color: var(--brand-secondary); font-weight: 700; }
+  1659→.footer .brand-lime { color: var(--brand-primary); background: #000; padding: 0.1rem 0.4rem; font-weight: 700; }
+  1660→
+  1661→/* ===== EMBED MODE (?embed=true) ===== */
+  1662→body.embed-mode .hero,
+  1663→body.embed-mode .marquee,
+  1664→body.embed-mode .hero-orbit,
+  1665→body.embed-mode .scroll-top-fab,
+  1666→body.embed-mode #progress-bar,
+  1667→body.embed-mode .mcp-curator-section,
+  1668→body.embed-mode .agent-spotlight,
+  1669→body.embed-mode .stats-dashboard,
+  1670→body.embed-mode .stack-recommender,
+  1671→body.embed-mode .featured-theme-banner {
+  1672→  display: none !important;
+  1673→}
+  1674→
+  1675→body.embed-mode .filter-section {
+  1676→  position: relative;
+  1677→  border-top: 3px solid #000;
+  1678→}
+  1679→
+  1680→body.embed-mode .skills-section {
+  1681→  padding-top: 1.5rem;
+  1682→}
+  1683→
+  1684→/* ===== MOBILE OVERRIDES ===== */
+  1685→@media (max-width: 639px) {
+  1686→  .hero { padding: 1.5rem 1rem; }
+  1687→  .hero-card { transform: rotate(0deg); padding: 1.5rem; }
+  1688→  .hero-cta { transform: rotate(0deg); }
+  1689→  .filter-section { padding: 0.5rem 1rem; }
+  1690→  .filter-row { gap: 0.4rem; }
+  1691→  .search-input { width: 100%; }
+  1692→  .search-wrapper { width: 100%; }
+  1693→  .skills-section { padding: 2rem 1rem 4rem; }
+  1694→  .hero-orbit { display: none; }
+  1695→  .hero-title { -webkit-text-stroke: 1px #000; }
+  1696→  .hero-badge { transform: rotate(0deg); }
+  1697→  .api-notice { margin: 0 1rem; padding: 1rem; }
+  1698→  .mcp-curator-section { padding: 2rem 1rem; }
+  1699→  skill-card { cursor: pointer; }
+  1700→}
+  1701→
+  1702→/* ===== UTILITY ===== */
+  1703→.sr-only {
+  1704→  position: absolute;
+  1705→  width: 1px; height: 1px;
+  1706→  padding: 0; margin: -1px;
+  1707→  overflow: hidden;
+  1708→  clip: rect(0,0,0,0);
+  1709→  white-space: nowrap;
+  1710→  border-width: 0;
+  1711→}
+  1712→
+  1713→/* ===== THEME MARKETPLACE ===== */
+  1714→.theme-switcher {
+  1715→  flex-shrink: 0;
+  1716→  padding: 0.4rem 0.6rem;
+  1717→  border: 2px solid #000;
+  1718→  background: #fff;
+  1719→  color: #000;
+  1720→  font-size: 0.75rem;
+  1721→  font-family: var(--font-mono);
+  1722→  font-weight: 700;
+  1723→  outline: none;
+  1724→  cursor: pointer;
+  1725→  text-transform: uppercase;
+  1726→  appearance: none;
+  1727→  -webkit-appearance: none;
+  1728→  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  1729→  background-repeat: no-repeat;
+  1730→  background-position: right 0.5rem center;
+  1731→  padding-right: 1.5rem;
+  1732→}
+  1733→
+  1734→[data-theme="dark"] .theme-switcher {
+  1735→  background: var(--bg-elevated);
+  1736→  border-color: #444;
+  1737→  color: var(--text-primary);
+  1738→  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  1739→}
+  1740→
+  1741→.theme-switcher:focus {
+  1742→  box-shadow: 3px 3px 0 var(--brand-primary);
+  1743→}
+  1744→
+  1745→.share-theme-btn {
+  1746→  flex-shrink: 0;
+  1747→  padding: 0.4rem 0.8rem;
+  1748→  border: 2px solid #000;
+  1749→  background: var(--brand-tertiary);
+  1750→  color: #000;
+  1751→  font-size: 0.7rem;
+  1752→  font-weight: 700;
+  1753→  font-family: var(--font-mono);
+  1754→  cursor: pointer;
+  1755→  text-transform: uppercase;
+  1756→  letter-spacing: 0.03em;
+  1757→  transition: all 0.15s ease;
+  1758→}
+  1759→
+  1760→.share-theme-btn:hover {
+  1761→  box-shadow: 3px 3px 0 #000;
+  1762→  transform: translate(-1px, -1px);
+  1763→}
+  1764→
+  1765→[data-theme="dark"] .share-theme-btn {
+  1766→  border-color: #444;
+  1767→}
+  1768→
+  1769→/* Featured Theme Banner */
+  1770→.featured-theme-banner {
+  1771→  position: absolute;
+  1772→  top: 1rem;
+  1773→  right: 1rem;
+  1774→  background: var(--bg-elevated);
+  1775→  border: 3px solid #000;
+  1776→  box-shadow: 4px 4px 0 var(--brand-secondary);
+  1777→  padding: 0.5rem 1rem;
+  1778→  font-family: var(--font-mono);
+  1779→  font-size: 0.65rem;
+  1780→  font-weight: 700;
+  1781→  color: var(--text-primary);
+  1782→  text-transform: uppercase;
+  1783→  letter-spacing: 0.05em;
+  1784→  z-index: 10;
+  1785→  transform: rotate(2deg);
+  1786→  animation: banner-pulse 4s ease-in-out infinite;
+  1787→}
+  1788→
+  1789→[data-theme="dark"] .featured-theme-banner {
+  1790→  border-color: #444;
+  1791→  box-shadow: 4px 4px 0 #333;
+  1792→}
+  1793→
+  1794→.featured-theme-banner .theme-dot {
+  1795→  display: inline-block;
+  1796→  width: 8px; height: 8px;
+  1797→  border-radius: 50%;
+  1798→  margin-right: 0.3rem;
+  1799→  vertical-align: middle;
+  1800→}
+  1801→
+  1802→@keyframes banner-pulse {
+  1803→  0%, 100% { transform: rotate(2deg) scale(1); }
+  1804→  50% { transform: rotate(1deg) scale(1.02); }
+  1805→}
+  1806→
+  1807→/* ===== YOUR STACK RECOMMENDER ===== */
+  1808→.stack-recommender {
+  1809→  max-width: 1400px;
+  1810→  margin: 0 auto;
+  1811→  padding: 3rem 2rem 2rem;
+  1812→}
+  1813→
+  1814→.stack-recommender-heading {
+  1815→  text-align: center;
+  1816→  margin-bottom: 2rem;
+  1817→}
+  1818→
+  1819→.stack-recommender-heading h2 {
+  1820→  font-family: var(--font-display);
+  1821→  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  1822→  text-transform: uppercase;
+  1823→  letter-spacing: 0.02em;
+  1824→  color: var(--text-primary);
+  1825→  text-shadow: 2px 2px 0 var(--brand-tertiary);
+  1826→  margin-bottom: 0.5rem;
+  1827→}
+  1828→
+  1829→.stack-recommender-heading p {
+  1830→  font-family: var(--font-mono);
+  1831→  color: var(--text-muted);
+  1832→  font-size: 0.85rem;
+  1833→}
+  1834→
+  1835→.recommender-panel {
+  1836→  background: var(--bg-surface);
+  1837→  border: 3px solid #000;
+  1838→  box-shadow: 6px 6px 0 var(--brand-tertiary);
+  1839→  padding: 2rem;
+  1840→  position: relative;
+  1841→}
+  1842→
+  1843→[data-theme="dark"] .recommender-panel {
+  1844→  border-color: #444;
+  1845→  box-shadow: 6px 6px 0 #333;
+  1846→}
+  1847→
+  1848→.recommender-step {
+  1849→  margin-bottom: 1.5rem;
+  1850→}
+  1851→
+  1852→.recommender-step-label {
+  1853→  font-family: var(--font-display);
+  1854→  font-size: 0.9rem;
+  1855→  text-transform: uppercase;
+  1856→  color: var(--text-primary);
+  1857→  margin-bottom: 0.75rem;
+  1858→}
+  1859→
+  1860→.recommender-skills-grid {
+  1861→  display: flex;
+  1862→  flex-wrap: wrap;
+  1863→  gap: 0.4rem;
+  1864→  margin-bottom: 1rem;
+  1865→}
+  1866→
+  1867→.recommender-skill-chip {
+  1868→  font-family: var(--font-mono);
+  1869→  font-size: 0.65rem;
+  1870→  font-weight: 700;
+  1871→  padding: 0.3rem 0.6rem;
+  1872→  border: 2px solid #000;
+  1873→  background: #fff;
+  1874→  color: #000;
+  1875→  cursor: pointer;
+  1876→  text-transform: uppercase;
+  1877→  letter-spacing: 0.03em;
+  1878→  transition: all 0.15s ease;
+  1879→}
+  1880→
+  1881→.recommender-skill-chip:hover {
+  1882→  box-shadow: 2px 2px 0 #000;
+  1883→}
+  1884→
+  1885→.recommender-skill-chip.selected {
+  1886→  background: var(--brand-tertiary);
+  1887→  color: #000;
+  1888→  box-shadow: 3px 3px 0 #000;
+  1889→  transform: rotate(-1deg);
+  1890→}
+  1891→
+  1892→[data-theme="dark"] .recommender-skill-chip {
+  1893→  background: var(--bg-elevated);
+  1894→  border-color: #444;
+  1895→  color: var(--text-primary);
+  1896→}
+  1897→
+  1898→[data-theme="dark"] .recommender-skill-chip.selected {
+  1899→  background: var(--brand-tertiary);
+  1900→  color: #000;
+  1901→  border-color: #444;
+  1902→}
+  1903→
+  1904→.recommender-selected {
+  1905→  display: flex;
+  1906→  flex-wrap: wrap;
+  1907→  gap: 0.4rem;
+  1908→  min-height: 2rem;
+  1909→  margin-bottom: 1rem;
+  1910→}
+  1911→
+  1912→.recommender-selected-chip {
+  1913→  font-family: var(--font-mono);
+  1914→  font-size: 0.65rem;
+  1915→  font-weight: 700;
+  1916→  padding: 0.3rem 0.6rem;
+  1917→  border: 2px solid #000;
+  1918→  background: var(--brand-primary);
+  1919→  color: #000;
+  1920→  cursor: pointer;
+  1921→  text-transform: uppercase;
+  1922→}
+  1923→
+  1924→.recommender-selected-chip:hover {
+  1925→  background: #FF4444;
+  1926→  color: #fff;
+  1927→}
+  1928→
+  1929→.recommender-result {
+  1930→  background: var(--bg-elevated);
+  1931→  border: 2px solid #000;
+  1932→  box-shadow: 4px 4px 0 var(--brand-primary);
+  1933→  padding: 1.5rem;
+  1934→  margin-top: 1rem;
+  1935→}
+  1936→
+  1937→[data-theme="dark"] .recommender-result {
+  1938→  border-color: #444;
+  1939→  box-shadow: 4px 4px 0 #333;
+  1940→}
+  1941→
+  1942→.recommender-result-title {
+  1943→  font-family: var(--font-display);
+  1944→  font-size: 1.1rem;
+  1945→  text-transform: uppercase;
+  1946→  color: var(--text-primary);
+  1947→  margin-bottom: 0.75rem;
+  1948→}
+  1949→
+  1950→.recommender-result-item {
+  1951→  font-family: var(--font-mono);
+  1952→  font-size: 0.8rem;
+  1953→  color: var(--text-secondary);
+  1954→  line-height: 1.8;
+  1955→  padding: 0.5rem 0.75rem;
+  1956→  background: var(--bg-surface);
+  1957→  border: 1px solid #ccc;
+  1958→  border-left: 4px solid var(--brand-tertiary);
+  1959→  margin-bottom: 0.5rem;
+  1960→}
+  1961→
+  1962→[data-theme="dark"] .recommender-result-item {
+  1963→  background: var(--bg-surface);
+  1964→  border-color: #444;
+  1965→  color: var(--text-secondary);
+  1966→}
+  1967→
+  1968→.recommender-result-item strong {
+  1969→  color: var(--text-primary);
+  1970→}
+  1971→
+  1972→.recommender-result-item .result-badge {
+  1973→  display: inline-block;
+  1974→  font-size: 0.6rem;
+  1975→  padding: 0.15rem 0.4rem;
+  1976→  background: var(--brand-tertiary);
+  1977→  color: #000;
+  1978→  border: 1px solid #000;
+  1979→  margin-left: 0.3rem;
+  1980→  text-transform: uppercase;
+  1981→  font-weight: 700;
+  1982→}
+  1983→
+  1984→.recommender-calculate-btn {
+  1985→  padding: 0.6rem 1.5rem;
+  1986→  border: 3px solid #000;
+  1987→  background: var(--brand-secondary);
+  1988→  color: #000;
+  1989→  font-size: 0.85rem;
+  1990→  font-weight: 700;
+  1991→  font-family: var(--font-display);
+  1992→  cursor: pointer;
+  1993→  text-transform: uppercase;
+  1994→  letter-spacing: 0.05em;
+  1995→  transition: all 0.15s ease;
+  1996→  box-shadow: 4px 4px 0 #000;
+  1997→}
+  1998→
+  1999→.recommender-calculate-btn:hover {
+  2000→  transform: translate(-2px, -2px);
+
+[showing lines 1-2000 of 4022; use offset=2001 with limit to continue reading]

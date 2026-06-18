@@ -1,0 +1,954 @@
+     1→#!/usr/bin/env python3
+     2→"""Generate Comprehensive Skill Stack Combination Research PDF"""
+     3→
+     4→import os, sys, hashlib
+     5→from reportlab.lib.pagesizes import A4
+     6→from reportlab.lib.units import inch, cm
+     7→from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+     8→from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY, TA_RIGHT
+     9→from reportlab.lib import colors
+    10→from reportlab.platypus import (
+    11→    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
+    12→    PageBreak, KeepTogether, CondPageBreak, HRFlowable
+    13→)
+    14→from reportlab.platypus.tableofcontents import TableOfContents
+    15→from reportlab.pdfbase import pdfmetrics
+    16→from reportlab.pdfbase.ttfonts import TTFont
+    17→from reportlab.pdfbase.pdfmetrics import registerFontFamily
+    18→
+    19→# ━━ Color Palette ━━
+    20→ACCENT       = colors.HexColor('#4b24bf')
+    21→TEXT_PRIMARY  = colors.HexColor('#1f1e1c')
+    22→TEXT_MUTED    = colors.HexColor('#7d7a71')
+    23→BG_SURFACE   = colors.HexColor('#e0ddd6')
+    24→BG_PAGE      = colors.HexColor('#f3f2f0')
+    25→TABLE_HEADER_COLOR = ACCENT
+    26→TABLE_HEADER_TEXT  = colors.white
+    27→TABLE_ROW_EVEN     = colors.white
+    28→TABLE_ROW_ODD      = BG_SURFACE
+    29→
+    30→# ━━ Font Setup ━━
+    31→pdfmetrics.registerFont(TTFont('LibSerif', '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf'))
+    32→pdfmetrics.registerFont(TTFont('LibSerif-Bold', '/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf'))
+    33→pdfmetrics.registerFont(TTFont('LibSerif-Italic', '/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf'))
+    34→pdfmetrics.registerFont(TTFont('LibSans', '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'))
+    35→pdfmetrics.registerFont(TTFont('LibSans-Bold', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf'))
+    36→pdfmetrics.registerFont(TTFont('DejaVuSans', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf'))
+    37→registerFontFamily('LibSerif', normal='LibSerif', bold='LibSerif-Bold', italic='LibSerif-Italic')
+    38→registerFontFamily('LibSans', normal='LibSans', bold='LibSans-Bold')
+    39→registerFontFamily('DejaVuSans', normal='DejaVuSans', bold='DejaVuSans')
+    40→
+    41→# ━━ Page Setup ━━
+    42→PAGE_W, PAGE_H = A4
+    43→MARGIN = 1.0 * inch
+    44→CONTENT_W = PAGE_W - 2 * MARGIN
+    45→
+    46→# ━━ Styles ━━
+    47→styles = getSampleStyleSheet()
+    48→
+    49→cover_title_style = ParagraphStyle(
+    50→    'CoverTitle', fontName='LibSerif', fontSize=36, leading=44,
+    51→    alignment=TA_CENTER, textColor=ACCENT, spaceAfter=12
+    52→)
+    53→cover_subtitle_style = ParagraphStyle(
+    54→    'CoverSubtitle', fontName='LibSerif', fontSize=16, leading=22,
+    55→    alignment=TA_CENTER, textColor=TEXT_MUTED, spaceAfter=6
+    56→)
+    57→cover_meta_style = ParagraphStyle(
+    58→    'CoverMeta', fontName='LibSerif', fontSize=11, leading=16,
+    59→    alignment=TA_CENTER, textColor=TEXT_MUTED
+    60→)
+    61→
+    62→h1_style = ParagraphStyle(
+    63→    'H1', fontName='LibSerif', fontSize=20, leading=26,
+    64→    textColor=ACCENT, spaceBefore=18, spaceAfter=10
+    65→)
+    66→h2_style = ParagraphStyle(
+    67→    'H2', fontName='LibSerif', fontSize=15, leading=20,
+    68→    textColor=TEXT_PRIMARY, spaceBefore=14, spaceAfter=8
+    69→)
+    70→h3_style = ParagraphStyle(
+    71→    'H3', fontName='LibSerif', fontSize=12, leading=16,
+    72→    textColor=ACCENT, spaceBefore=10, spaceAfter=6
+    73→)
+    74→body_style = ParagraphStyle(
+    75→    'Body', fontName='LibSerif', fontSize=10.5, leading=17,
+    76→    alignment=TA_JUSTIFY, textColor=TEXT_PRIMARY, spaceAfter=6
+    77→)
+    78→body_left_style = ParagraphStyle(
+    79→    'BodyLeft', fontName='LibSerif', fontSize=10.5, leading=17,
+    80→    alignment=TA_LEFT, textColor=TEXT_PRIMARY, spaceAfter=6
+    81→)
+    82→bullet_style = ParagraphStyle(
+    83→    'Bullet', fontName='LibSerif', fontSize=10.5, leading=17,
+    84→    alignment=TA_LEFT, textColor=TEXT_PRIMARY, leftIndent=20,
+    85→    bulletIndent=8, spaceAfter=4
+    86→)
+    87→muted_style = ParagraphStyle(
+    88→    'Muted', fontName='LibSerif', fontSize=9, leading=13,
+    89→    textColor=TEXT_MUTED, spaceAfter=4
+    90→)
+    91→caption_style = ParagraphStyle(
+    92→    'Caption', fontName='LibSerif', fontSize=9, leading=13,
+    93→    alignment=TA_CENTER, textColor=TEXT_MUTED, spaceBefore=3, spaceAfter=6
+    94→)
+    95→th_style = ParagraphStyle(
+    96→    'TableHeader', fontName='LibSerif', fontSize=9.5, leading=13,
+    97→    textColor=TABLE_HEADER_TEXT, alignment=TA_CENTER
+    98→)
+    99→td_style = ParagraphStyle(
+   100→    'TableCell', fontName='LibSerif', fontSize=9, leading=13,
+   101→    textColor=TEXT_PRIMARY, alignment=TA_LEFT
+   102→)
+   103→td_center_style = ParagraphStyle(
+   104→    'TableCellCenter', fontName='LibSerif', fontSize=9, leading=13,
+   105→    textColor=TEXT_PRIMARY, alignment=TA_CENTER
+   106→)
+   107→callout_style = ParagraphStyle(
+   108→    'Callout', fontName='LibSerif', fontSize=10, leading=15,
+   109→    textColor=ACCENT, leftIndent=18, borderPadding=6, spaceAfter=8,
+   110→    spaceBefore=4
+   111→)
+   112→
+   113→# ━━ TOC Template ━━
+   114→class TocDocTemplate(SimpleDocTemplate):
+   115→    def afterFlowable(self, flowable):
+   116→        if hasattr(flowable, 'bookmark_name'):
+   117→            level = getattr(flowable, 'bookmark_level', 0)
+   118→            text = getattr(flowable, 'bookmark_text', '')
+   119→            key = getattr(flowable, 'bookmark_key', '')
+   120→            self.notify('TOCEntry', (level, text, self.page, key))
+   121→
+   122→def add_heading(text, style, level=0):
+   123→    key = 'h_%s' % hashlib.md5(text.encode()).hexdigest()[:8]
+   124→    p = Paragraph('<a name="%s"/><b>%s</b>' % (key, text), style)
+   125→    p.bookmark_name = text
+   126→    p.bookmark_level = level
+   127→    p.bookmark_text = text
+   128→    p.bookmark_key = key
+   129→    return p
+   130→
+   131→def make_table(data, col_widths=None):
+   132→    """Create a styled table with consistent formatting."""
+   133→    if col_widths is None:
+   134→        col_widths = [CONTENT_W / len(data[0])] * len(data[0])
+   135→    t = Table(data, colWidths=col_widths, hAlign='CENTER')
+   136→    style_commands = [
+   137→        ('BACKGROUND', (0, 0), (-1, 0), TABLE_HEADER_COLOR),
+   138→        ('TEXTCOLOR', (0, 0), (-1, 0), TABLE_HEADER_TEXT),
+   139→        ('GRID', (0, 0), (-1, -1), 0.5, TEXT_MUTED),
+   140→        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+   141→        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+   142→        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+   143→        ('TOPPADDING', (0, 0), (-1, -1), 5),
+   144→        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+   145→    ]
+   146→    for i in range(1, len(data)):
+   147→        bg = TABLE_ROW_EVEN if i % 2 == 1 else TABLE_ROW_ODD
+   148→        style_commands.append(('BACKGROUND', (0, i), (-1, i), bg))
+   149→    t.setStyle(TableStyle(style_commands))
+   150→    return t
+   151→
+   152→def add_hr(story):
+   153→    story.append(Spacer(1, 8))
+   154→    story.append(HRFlowable(width="80%", thickness=0.5, color=ACCENT, spaceAfter=8))
+   155→
+   156→# ━━ Build Document ━━
+   157→output_path = '/home/z/my-project/download/Skill_Stack_Combination_Research.pdf'
+   158→doc = TocDocTemplate(
+   159→    output_path, pagesize=A4,
+   160→    leftMargin=MARGIN, rightMargin=MARGIN,
+   161→    topMargin=MARGIN, bottomMargin=MARGIN
+   162→)
+   163→story = []
+   164→
+   165→# ━━ COVER PAGE ━━
+   166→story.append(Spacer(1, 120))
+   167→story.append(Paragraph('<b>Comprehensive Skill Stack</b>', cover_title_style))
+   168→story.append(Paragraph('<b>Combination Research</b>', cover_title_style))
+   169→story.append(Spacer(1, 20))
+   170→story.append(HRFlowable(width="60%", thickness=2, color=ACCENT, spaceAfter=20))
+   171→story.append(Paragraph('Deep Research: Use-Cases, User Types, Pipelines, Playbooks, and Blueprints', cover_subtitle_style))
+   172→story.append(Spacer(1, 30))
+   173→story.append(Paragraph('76 Skills across 11 Categories', cover_meta_style))
+   174→story.append(Paragraph('12 Use-Case Stacks | 8 User-Type Profiles | 6 Pipelines', cover_meta_style))
+   175→story.append(Paragraph('6 Operational Playbooks | 6 Architectural Blueprints', cover_meta_style))
+   176→story.append(Spacer(1, 40))
+   177→story.append(Paragraph('Version 1.0 | May 2026', cover_meta_style))
+   178→story.append(Paragraph('opencode-accomplishments Project', cover_meta_style))
+   179→story.append(PageBreak())
+   180→
+   181→# ━━ TABLE OF CONTENTS ━━
+   182→story.append(Paragraph('<b>Table of Contents</b>', h1_style))
+   183→story.append(Spacer(1, 8))
+   184→toc = TableOfContents()
+   185→toc.levelStyles = [
+   186→    ParagraphStyle(name='TOC1', fontName='LibSerif', fontSize=12, leftIndent=20, spaceBefore=6),
+   187→    ParagraphStyle(name='TOC2', fontName='LibSerif', fontSize=10.5, leftIndent=40, spaceBefore=3),
+   188→]
+   189→story.append(toc)
+   190→story.append(PageBreak())
+   191→
+   192→# ━━ EXECUTIVE SUMMARY ━━
+   193→story.append(add_heading('Executive Summary', h1_style, 0))
+   194→story.append(Paragraph(
+   195→    'This comprehensive research report maps 76 AI agent skills across 11 categories into actionable skill stack '
+   196→    'combinations organized by three complementary dimensions: use-case requirements, user-type profiles, and '
+   197→    'orchestration patterns. The research leverages the existing infrastructure of 8 pre-built MCP stacks, '
+   198→    '7 agent modes (the animal system), 4 agent skill tiers (SKILL_01 through SKILL_04), and the 7-agent '
+   199→    'MASTER pipeline to produce 38 distinct skill configurations optimized for real-world deployment scenarios.',
+   200→    body_style
+   201→))
+   202→story.append(Paragraph(
+   203→    'The analysis reveals several critical findings that shape the entire skill stack landscape. First, '
+   204→    '<b>persistent-memory</b> emerges as the single most universal skill, recommended for all 8 user types '
+   205→    'and 10 of 12 use-cases, making it the foundational layer of any skill stack. Second, the combination '
+   206→    'of <b>superpowers + context-compressor</b> appears in 7 of 8 user-type profiles, establishing it as '
+   207→    'the universal development backbone. Third, the Infrastructure skill category (9router-gateway, owl-proxy-defense, '
+   208→    'antigravity-proxy, 4cli-unified, triune-proxy-stack, secret-vault) achieves the highest internal synergy '
+   209→    'score of 96, forming the tightest operational cluster in the entire catalog.',
+   210→    body_style
+   211→))
+   212→story.append(Paragraph(
+   213→    'The report identifies a critical gap in the current 76-skill catalog: the absence of a dedicated mobile '
+   214→    'development skill or analytics/metrics skill. These gaps produce the lowest synergy scores (Mobile at 84, '
+   215→    'Data at 86) and represent the highest-value opportunities for skill expansion. Additionally, the transition '
+   216→    'from 5 to 8 team members is identified as the most architecturally significant scaling inflection point, '
+   217→    'requiring a shift from flat to hub-and-spoke MCP topology.',
+   218→    body_style
+   219→))
+   220→
+   221→story.append(Spacer(1, 10))
+   222→summary_data = [
+   223→    [Paragraph('<b>Dimension</b>', th_style), Paragraph('<b>Count</b>', th_style), Paragraph('<b>Avg Synergy</b>', th_style), Paragraph('<b>Key Insight</b>', th_style)],
+   224→    [Paragraph('Use-Case Stacks', td_style), Paragraph('12', td_center_style), Paragraph('89.5', td_center_style), Paragraph('AI Infrastructure scores highest at 95', td_style)],
+   225→    [Paragraph('User-Type Profiles', td_style), Paragraph('8', td_center_style), Paragraph('88.2', td_center_style), Paragraph('Full-Stack Generalist uses all 4 skill tiers', td_style)],
+   226→    [Paragraph('Production Pipelines', td_style), Paragraph('6', td_center_style), Paragraph('N/A', td_center_style), Paragraph('Product Genesis: 46K token budget across 6 stages', td_style)],
+   227→    [Paragraph('Operational Playbooks', td_style), Paragraph('6', td_center_style), Paragraph('N/A', td_center_style), Paragraph('Incident Response targets 60-min MTTR for P1', td_style)],
+   228→    [Paragraph('Architectural Blueprints', td_style), Paragraph('6', td_center_style), Paragraph('N/A', td_center_style), Paragraph('AI-Native achieves 1:10 human review ratio', td_style)],
+   229→]
+   230→story.append(make_table(summary_data, [CONTENT_W*0.22, CONTENT_W*0.12, CONTENT_W*0.16, CONTENT_W*0.50]))
+   231→story.append(Paragraph('Table 1: Research Dimensions Overview', caption_style))
+   232→
+   233→# ━━ PART 1: USE-CASE SKILL STACKS ━━
+   234→story.append(add_heading('Part 1: Use-Case Skill Stack Combinations', h1_style, 0))
+   235→story.append(Paragraph(
+   236→    'This section designs 12 comprehensive skill stack combinations, each tailored to a specific use-case scenario. '
+   237→    'For every use-case, we define primary skills (4-6 must-have), supporting skills (3-5 nice-to-have), '
+   238→    'the optimal agent mode from the 7-animal system, the recommended MCP stack, a step-by-step workflow sequence, '
+   239→    'an estimated synergy score, and key risks with mitigations.',
+   240→    body_style
+   241→))
+   242→
+   243→# Use-Case overview table
+   244→uc_overview = [
+   245→    [Paragraph('<b>#</b>', th_style), Paragraph('<b>Use-Case</b>', th_style), Paragraph('<b>Agent Mode</b>', th_style), Paragraph('<b>MCP Stack</b>', th_style), Paragraph('<b>Synergy</b>', th_style)],
+   246→    [Paragraph('1', td_center_style), Paragraph('Full-Stack Web App', td_style), Paragraph('Beaver', td_center_style), Paragraph('Full-Stack Web Studio (94)', td_style), Paragraph('91', td_center_style)],
+   247→    [Paragraph('2', td_center_style), Paragraph('AI/ML Product Dev', td_style), Paragraph('Owl', td_center_style), Paragraph('Custom AI Product (93)', td_style), Paragraph('88', td_center_style)],
+   248→    [Paragraph('3', td_center_style), Paragraph('Data Engineering', td_style), Paragraph('Owl', td_center_style), Paragraph('Data Pipeline Studio (89)', td_style), Paragraph('86', td_center_style)],
+   249→    [Paragraph('4', td_center_style), Paragraph('DevOps & Platform', td_style), Paragraph('Beaver', td_center_style), Paragraph('DevOps Command Ctr (92)', td_style), Paragraph('93', td_center_style)],
+   250→    [Paragraph('5', td_center_style), Paragraph('Content Marketing', td_style), Paragraph('Dolphin', td_center_style), Paragraph('Content Engine (87)', td_style), Paragraph('90', td_center_style)],
+   251→    [Paragraph('6', td_center_style), Paragraph('Mobile App Dev', td_style), Paragraph('Ant', td_center_style), Paragraph('Mobile Workshop (88)', td_style), Paragraph('84', td_center_style)],
+   252→    [Paragraph('7', td_center_style), Paragraph('Security Audit', td_style), Paragraph('Owl', td_center_style), Paragraph('Security Audit (86)', td_style), Paragraph('89', td_center_style)],
+   253→    [Paragraph('8', td_center_style), Paragraph('Creative Studio', td_style), Paragraph('Dolphin', td_center_style), Paragraph('Creative Studio (85)', td_style), Paragraph('94', td_center_style)],
+   254→    [Paragraph('9', td_center_style), Paragraph('Startup MVP Sprint', td_style), Paragraph('Rabbit>Beaver', td_center_style), Paragraph('Solo Developer (90)', td_style), Paragraph('92', td_center_style)],
+   255→    [Paragraph('10', td_center_style), Paragraph('Enterprise Hardening', td_style), Paragraph('Owl>Auditor', td_center_style), Paragraph('Security Audit (86)', td_style), Paragraph('87', td_center_style)],
+   256→    [Paragraph('11', td_center_style), Paragraph('Research & Academic', td_style), Paragraph('Elephant', td_center_style), Paragraph('AI Research Lab (91)', td_style), Paragraph('85', td_center_style)],
+   257→    [Paragraph('12', td_center_style), Paragraph('AI Infrastructure', td_style), Paragraph('Beaver', td_center_style), Paragraph('Unified AI Gateway (96)', td_style), Paragraph('95', td_center_style)],
+   258→]
+   259→story.append(Spacer(1, 8))
+   260→story.append(make_table(uc_overview, [CONTENT_W*0.06, CONTENT_W*0.26, CONTENT_W*0.16, CONTENT_W*0.34, CONTENT_W*0.12]))
+   261→story.append(Paragraph('Table 2: Use-Case Stack Overview with Synergy Scores', caption_style))
+   262→
+   263→# Detail each use-case
+   264→use_cases = [
+   265→    {
+   266→        'title': 'UC1: Full-Stack Web Application',
+   267→        'desc': 'Solo developer building a production SaaS app from database schema to deployed URL, handling authentication, payments, dashboards, and API endpoints. This is the most common use-case for AI-assisted development, combining frontend, backend, deployment, and ongoing maintenance into a single skill stack.',
+   268→        'primary': [
+   269→            ('superpowers', 'Development', 'Scaffolds the full app: routes, models, API endpoints, auth flows. Handles the 60% of full-stack work that is not UI-specific.'),
+   270→            ('vercel-react-best-practices', 'Development', 'Prevents architectural debt. Ensures server components, streaming, and data fetching follow production-grade patterns.'),
+   271→            ('frontend-design', 'Design & UI', 'Translates product vision into working UI fast. Replaces a designer for solo devs.'),
+   272→            ('deployment-manager', 'Development', 'One-command deploys eliminate the DevOps tax for solo developers.'),
+   273→            ('context7-docs', 'Development', 'Always-current API docs for Next.js, Prisma, Stripe, and every dependency.'),
+   274→            ('persistent-memory', 'System', 'Carries architectural decisions and deployment history across sessions.'),
+   275→        ],
+   276→        'supporting': [
+   277→            ('to-prd', 'Converts fuzzy product ideas into structured PRDs before coding.'),
+   278→            ('tdd-workflow', 'Regression guard for solo development without team review.'),
+   279→            ('composition-patterns', 'Architecture patterns that keep the codebase maintainable.'),
+   280→            ('context-compressor', 'Keeps the AI working efficiently as the project grows.'),
+   281→        ],
+   282→        'workflow': 'SPEC (to-prd, Eagle) > DESIGN (frontend-design + vercel-react-best-practices, Beaver/Owl) > BUILD (superpowers + composition-patterns + context7-docs, Beaver) > TEST (tdd-workflow + persistent-memory, Owl) > DEPLOY (deployment-manager + context-compressor, Beaver/Eagle)',
+   283→        'risks': 'superpowers + frontend-design overlap on UI code (mitigate: boundary rule); no dedicated security skill (mitigate: add mcp-security-scanner); context window exhaustion on large codebases (mitigate: run context-compressor every 2 hours).'
+   284→    },
+   285→    {
+   286→        'title': 'UC2: AI/ML Product Development',
+   287→        'desc': 'Building AI-powered features such as chatbots, image generation, recommendation engines, and RAG pipelines that integrate into production applications. This use-case is uniquely challenging because AI products are inherently probabilistic, requiring different testing and validation approaches than deterministic software.',
+   288→        'primary': [
+   289→            ('mcp-builder', 'Development', 'Build custom MCP servers for AI tool integration. Turns AI features into composable, testable services.'),
+   290→            ('superpowers', 'Development', 'Scaffolds AI product infrastructure: API endpoints, model routing, prompt management, response streaming.'),
+   291→            ('chain-of-thought', 'Reasoning', 'Decomposes ambiguous AI requirements into testable specs. Structures thinking about context windows and error handling.'),
+   292→            ('simulation-sandbox', 'Reasoning', 'Tests edge cases, failure modes, and adversarial inputs for probabilistic AI products.'),
+   293→            ('feature-research', 'Strategy', 'Tracks latest model capabilities, API changes, and competitive landscape in the rapidly evolving AI space.'),
+   294→            ('context7-docs', 'Development', 'Always-current docs for OpenAI, Anthropic, LangChain, and every AI SDK.'),
+   295→        ],
+   296→        'supporting': [
+   297→            ('devils-advocate', 'Stress-tests AI product decisions: model hallucination, adversarial prompts, API downtime.'),
+   298→            ('tdd-workflow', 'Deterministic tests around non-deterministic AI outputs.'),
+   299→            ('persistent-memory', 'Preserves model configurations, prompt versions, and evaluation results.'),
+   300→            ('9router-gateway', 'Routes AI API calls across providers with free-tier-first logic for cost optimization.'),
+   301→        ],
+   302→        'workflow': 'RESEARCH (feature-research + context7-docs + brave-search, Owl) > DESIGN (chain-of-thought + devils-advocate + simulation-sandbox, Owl/Rabbit) > BUILD (mcp-builder + superpowers + 9router-gateway, Beaver) > TEST (tdd-workflow + simulation-sandbox + persistent-memory, Owl) > SHIP (deployment-manager + context-compressor, Beaver/Eagle)',
+   303→        'risks': 'Non-deterministic model behavior (mitigate: define behavior ranges, not exact outputs); API cost explosion (mitigate: 9router-gateway free-tier routing + caching); no dedicated prompt engineering skill (mitigate: use chain-of-thought for prompt design, version in persistent-memory).'
+   304→    },
+   305→    {
+   306→        'title': 'UC3: Data Engineering & Analytics',
+   307→        'desc': 'Building ETL pipelines, dashboards, and business intelligence systems. This use-case requires rigorous logical thinking about data flows, transformation logic, and quality assurance. The main gap is the absence of a dedicated data visualization skill for stakeholder-facing dashboards.',
+   308→        'primary': [
+   309→            ('superpowers', 'Development', 'Scaffolds ETL scripts, API integrations, database connectors, and cron jobs.'),
+   310→            ('chain-of-thought', 'Reasoning', 'Structures reasoning about data transformations: "If source A sends format X, what transforms are needed?"'),
+   311→            ('code-research', 'Data & Web', 'Deep-dives into existing data flow patterns and dependency analysis.'),
+   312→            ('context7-docs', 'Development', 'Current documentation for dbt, Airflow, Spark, Pandas, and SQL dialects.'),
+   313→            ('composition-patterns', 'Development', 'Defines clean ETL stage interfaces to prevent monolithic pipeline anti-patterns.'),
+   314→        ],
+   315→        'supporting': [
+   316→            ('audit-analyzer', 'Data quality auditing with schema validation and anomaly detection.'),
+   317→            ('simulation-sandbox', 'Simulates pipeline behavior with sample data before production runs.'),
+   318→            ('feedback-loop', 'Monitors pipeline health, data freshness, and quality metrics.'),
+   319→            ('persistent-memory', 'Stores schema evolution, pipeline run history, and quality baselines.'),
+   320→            ('context-compressor', 'Compresses large schema definitions and transformation logs.'),
+   321→        ],
+   322→        'workflow': 'ANALYZE (code-research + chain-of-thought + audit-analyzer, Owl) > DESIGN (composition-patterns + simulation-sandbox + context7-docs, Owl/Beaver) > BUILD (superpowers + feedback-loop, Beaver) > VALIDATE (audit-analyzer + persistent-memory + context-compressor, Owl) > OPERATE (feedback-loop + persistent-memory, Beaver/Owl)',
+   323→        'risks': 'No data visualization skill (mitigate: use output-formatter for basic charts); schema migration risk (mitigate: persistent-memory tracks evolution, audit-analyzer validates compliance); context overflow from large datasets (mitigate: context-compressor after each stage).'
+   324→    },
+   325→    {
+   326→        'title': 'UC4: DevOps & Platform Engineering',
+   327→        'desc': 'Managing CI/CD pipelines, infrastructure-as-code, container orchestration, monitoring, and incident response. This use-case achieves the second-highest synergy score (93) because the Infrastructure skill category forms the tightest operational cluster in the entire 76-skill catalog, with 9router-gateway, owl-proxy-defense, 4cli-unified, triune-proxy-stack, and secret-vault all working in concert.',
+   328→        'primary': [
+   329→            ('deployment-manager', 'Development', 'Core operational skill for deployments, rollbacks, and CI/CD automation.'),
+   330→            ('secret-vault', 'Infrastructure', 'Secrets management with age encryption. The single most critical security skill.'),
+   331→            ('4cli-unified', 'Infrastructure', 'Unified CLI interface for kubectl, terraform, aws, docker, eliminating context-switching.'),
+   332→            ('mcp-security-scanner', 'MCP Servers', 'Automated vulnerability scanning for CVEs, misconfigurations, and anti-patterns.'),
+   333→            ('feedback-loop', 'System', 'Deployment health monitoring and automated remediation triggers.'),
+   334→            ('persistent-memory', 'System', 'Infrastructure state memory for configuration decisions and incident history.'),
+   335→        ],
+   336→        'supporting': [
+   337→            ('triune-proxy-stack', 'Maximum redundancy proxy with auto-failover for multi-region deployments.'),
+   338→            ('9router-gateway', 'AI routing gateway with free-tier-first logic and rate limit management.'),
+   339→            ('explained-code', 'Generates runbooks, ADRs, and incident post-mortems.'),
+   340→            ('superpowers', 'General-purpose scripting for automation and infrastructure glue code.'),
+   341→            ('agent-maintenance', 'Dedicated maintenance agent for scheduled tasks and certificate rotations.'),
+   342→        ],
+   343→        'workflow': 'HARDEN (mcp-security-scanner + secret-vault + audit-analyzer, Owl) > BUILD (4cli-unified + superpowers + deployment-manager, Beaver) > DEPLOY (deployment-manager + 9router-gateway + triune-proxy-stack, Beaver) > MONITOR (feedback-loop + persistent-memory + explained-code, Beaver/Owl) > RESPOND (chain-of-thought + agent-maintenance + context-compressor, Owl)',
+   344→        'risks': 'Infrastructure skills from same category share blind spots (mitigate: cross-reference with development skills); no dedicated IaC skill (mitigate: superpowers + context7-docs for current patterns); incident speed vs process overhead (mitigate: pre-load runbooks in persistent-memory).'
+   345→    },
+   346→    {
+   347→        'title': 'UC5: Content Marketing Engine',
+   348→        'desc': 'Producing SEO content, social media posts, newsletters, and digital products at scale. The Content category skills form the tightest sequential cluster in the catalog: seo-content-writer produces the draft, humanizer adds voice, output-formatter adapts for platforms, and social-media-manager distributes. This near-perfect pipeline earns a 90 synergy score.',
+   349→        'primary': [
+   350→            ('seo-content-writer', 'Content', 'Writes content that ranks in search engines with keyword integration and entity optimization.'),
+   351→            ('humanizer', 'Content', 'Transforms AI-drafted content into writing with voice, opinions, and personality.'),
+   352→            ('social-content-pillars', 'Content', 'Defines 3-5 recurring themes that make brand content coherent and recognizable.'),
+   353→            ('social-media-manager', 'Content', 'Schedules, formats, and adapts content across Twitter, LinkedIn, and Instagram.'),
+   354→            ('output-formatter', 'Creative', 'Formats one piece of content for every medium: blog, newsletter, social, ebook.'),
+   355→        ],
+   356→        'supporting': [
+   357→            ('web-reader', 'Research by reading source material and competitor content.'),
+   358→            ('gumroad-pipeline', 'Monetization through digital product sales.'),
+   359→            ('brainstorming', 'Generates fresh content angles and avoids topic fatigue.'),
+   360→            ('photography-ai', 'Generates featured images and social media graphics.'),
+   361→            ('context-compressor', 'Compresses long research into manageable briefs.'),
+   362→        ],
+   363→        'workflow': 'PLAN (social-content-pillars + brainstorming + brave-search, Dolphin/Rabbit) > RESEARCH (web-reader + context-compressor, Owl) > WRITE (seo-content-writer + humanizer, Dolphin) > FORMAT (output-formatter + photography-ai + pictoflux-ai, Dolphin/Beaver) > DISTRIBUTE (social-media-manager + gumroad-pipeline, Eagle/Dolphin)',
+   364→        'risks': 'Content homogenization from always-on pipeline (mitigate: brainstorming injects novelty); humanization regression degrading readability (mitigate: quality gate Flesch-Kincaid score >= 60); category monoculture with all primaries from Content (mitigate: web-reader and brainstorming provide cross-category diversity).'
+   365→    },
+   366→    {
+   367→        'title': 'UC6: Mobile App Development',
+   368→        'desc': 'Building React Native cross-platform apps for iOS and Android from a single codebase. This use-case scores lowest synergy (84) because none of the 76 skills are specifically designed for mobile development. The stack adapts web development skills to mobile, creating gaps in native module development, platform-specific APIs, and mobile performance optimization.',
+   369→        'primary': [
+   370→            ('superpowers', 'Development', 'Scaffolds the React Native app: navigation, screens, state management, API integration.'),
+   371→            ('context7-docs', 'Development', 'Always-current docs for React Native, Expo, and React Navigation.'),
+   372→            ('frontend-design', 'Design & UI', 'Translates mobile UI designs into React Native components with responsive layouts.'),
+   373→            ('composition-patterns', 'Development', 'React Native component composition for shared and platform-specific variants.'),
+   374→            ('deployment-manager', 'Development', 'Handles Expo builds, TestFlight, Play Store submissions, and OTA updates.'),
+   375→        ],
+   376→        'supporting': [
+   377→            ('ui-ux-pro-max-v7', 'Mobile design tokens, accessibility standards, and touch target guidelines.'),
+   378→            ('tdd-workflow', 'Testing across devices, orientations, and platforms.'),
+   379→            ('animation-orchestrator', 'Routes mobile animation: Motion for UI, Reanimated for gestures.'),
+   380→            ('browser-use', 'Automated testing of mobile web views and responsive behavior.'),
+   381→        ],
+   382→        'workflow': 'ARCHITECT (composition-patterns + context7-docs + ui-ux-pro-max-v7, Ant) > BUILD (superpowers + frontend-design + animation-orchestrator, Beaver) > TEST (tdd-workflow + browser-use, Owl) > POLISH (pictoflux-ai + animation-orchestrator, Dolphin/Beaver) > DEPLOY (deployment-manager + persistent-memory, Beaver/Eagle)',
+   383→        'risks': 'No dedicated React Native skill (mitigate: context7-docs for RN-specific docs, test thoroughly on devices); native module gap for camera/push/biometrics (mitigate: mcp-builder for bridges); mobile performance differs from web (mitigate: audit-analyzer for bundle size, simulation-sandbox for network testing).'
+   384→    },
+   385→    {
+   386→        'title': 'UC7: Security & Compliance Audit',
+   387→        'desc': 'Vulnerability scanning, penetration testing, compliance checking (SOC 2, GDPR, HIPAA), and security hardening. This stack provides dual perspective: automated scanning via mcp-security-scanner plus adversarial reasoning via devils-advocate, producing comprehensive threat assessment that catches what automated tools miss.',
+   388→        'primary': [
+   389→            ('mcp-security-scanner', 'MCP Servers', 'Core scanning engine detecting OWASP, SAST, and dependency vulnerabilities.'),
+   390→            ('audit-analyzer', 'Data & Web', 'Maps attack surfaces, identifies code smell clusters, and provides quantitative scoring.'),
+   391→            ('devils-advocate', 'Reasoning', 'Stress-tests security assumptions and generates adversarial scenarios that scanners miss.'),
+   392→            ('secret-vault', 'Infrastructure', 'Detects exposed secrets and validates credential management during audits.'),
+   393→            ('chain-of-thought', 'Reasoning', 'Connects individual findings into attack chains for systemic threat modeling.'),
+   394→            ('persistent-memory', 'System', 'Security audit history with findings, remediation status, and compliance baselines.'),
+   395→        ],
+   396→        'supporting': [
+   397→            ('code-research', 'Traces dependency chains for known CVEs and data flow through sensitive areas.'),
+   398→            ('owl-proxy-defense', 'Validates WAF rules, DDoS mitigation, and traffic analysis configurations.'),
+   399→            ('simulation-sandbox', 'Simulates attack scenarios without affecting production.'),
+   400→            ('explained-code', 'Generates security audit reports and remediation guidance.'),
+   401→        ],
+   402→        'workflow': 'SCAN (mcp-security-scanner + audit-analyzer + code-research, Owl) > ANALYZE (chain-of-thought + devils-advocate + secret-vault, Owl) > SIMULATE (simulation-sandbox + owl-proxy-defense, Owl/Rabbit) > REMEDIATE (superpowers + mcp-security-scanner re-scan, Beaver) > DOCUMENT (explained-code + persistent-memory + output-formatter, Beaver/Owl)',
+   403→        'risks': 'False positive fatigue from overwhelming alerts (mitigate: triage by severity AND confidence); no compliance framework skill for SOC 2/GDPR (mitigate: chain-of-thought to reason through requirements); security skills do not cover social engineering (mitigate: devils-advocate generates scenarios).'
+   404→    },
+   405→    {
+   406→        'title': 'UC8: Creative Studio & Design',
+   407→        'desc': 'UI/UX design, animation production, visual asset creation, and design system development. This use-case achieves the highest synergy score (94) because the Design and Animation categories form a near-perfect creative pipeline with animation-orchestrator routing all work through the correct engine, and the hybrid architect managing Motion/GSAP boundaries.',
+   408→        'primary': [
+   409→            ('ui-ux-pro-max-v7', 'Design & UI', 'Master design skill with tokens, component specs, accessibility, and motion tokens.'),
+   410→            ('animation-orchestrator', 'Design & UI', 'Routes ALL animation work: Motion for UI, GSAP for timelines, CSS for simple effects.'),
+   411→            ('gsap-animation-engineer', 'Animation Eng.', 'Production GSAP engineering with ScrollTrigger, SplitText, and timeline nesting.'),
+   412→            ('motion-animation-engineer', 'Animation Eng.', 'Declarative UI animations with Motion for enter/exit, layout, and gesture interactions.'),
+   413→            ('photography-ai', 'Creative', 'AI image generation for visual assets, hero images, and social graphics.'),
+   414→            ('frontend-design', 'Design & UI', 'Rapid UI prototyping that bridges design intent to implementation.'),
+   415→        ],
+   416→        'supporting': [
+   417→            ('animation-hybrid-architect', 'Manages Motion + GSAP boundaries to prevent conflicts.'),
+   418→            ('animation-auditor', 'Performance and accessibility verification for all animations.'),
+   419→            ('vercel-web-design-guidelines', 'Audit rules and accessibility standards for production.'),
+   420→            ('output-formatter', 'Format design deliverables for different audiences and contexts.'),
+   421→        ],
+   422→        'workflow': 'CONCEPT (brainstorming + ui-ux-pro-max-v7, Dolphin) > ROUTE (animation-orchestrator + chain-of-thought, Ant) > ENGINEER (gsap-animation-engineer + motion-animation-engineer, Beaver) > INTEGRATE (animation-hybrid-architect + frontend-design, Dolphin/Beaver) > AUDIT (animation-auditor + audit-analyzer, Owl) > DELIVER (output-formatter + web-artifacts-builder, Beaver)',
+   423→        'risks': 'Animation without architecture leads to conflicts and 30fps scroll (mitigate: always use animation-hybrid-architect first); Motion + GSAP on same element is forbidden (mitigate: animation-orchestrator enforces boundaries); no dedicated design tool integration like Figma (mitigate: ui-ux-pro-max-v7 provides design token system).'
+   424→    },
+   425→]
+   426→
+   427→for uc in use_cases:
+   428→    story.append(add_heading(uc['title'], h2_style, 1))
+   429→    story.append(Paragraph(uc['desc'], body_style))
+   430→    
+   431→    # Primary skills table
+   432→    story.append(Paragraph('<b>Primary Skills</b>', h3_style))
+   433→    pri_data = [[Paragraph('<b>Skill</b>', th_style), Paragraph('<b>Category</b>', th_style), Paragraph('<b>Why Essential</b>', th_style)]]
+   434→    for s, c, w in uc['primary']:
+   435→        pri_data.append([Paragraph(s, td_style), Paragraph(c, td_center_style), Paragraph(w, td_style)])
+   436→    story.append(make_table(pri_data, [CONTENT_W*0.20, CONTENT_W*0.16, CONTENT_W*0.64]))
+   437→    story.append(Spacer(1, 6))
+   438→    
+   439→    # Supporting skills
+   440→    story.append(Paragraph('<b>Supporting Skills</b>', h3_style))
+   441→    sup_data = [[Paragraph('<b>Skill</b>', th_style), Paragraph('<b>Role</b>', th_style)]]
+   442→    for s, r in uc['supporting']:
+   443→        sup_data.append([Paragraph(s, td_style), Paragraph(r, td_style)])
+   444→    story.append(make_table(sup_data, [CONTENT_W*0.25, CONTENT_W*0.75]))
+   445→    story.append(Spacer(1, 6))
+   446→    
+   447→    # Workflow
+   448→    story.append(Paragraph('<b>Workflow Sequence</b>', h3_style))
+   449→    story.append(Paragraph(uc['workflow'], body_left_style))
+   450→    
+   451→    # Risks
+   452→    story.append(Paragraph('<b>Key Risks & Mitigations</b>', h3_style))
+   453→    story.append(Paragraph(uc['risks'], body_style))
+   454→    story.append(Spacer(1, 6))
+   455→
+   456→# Additional use-cases (9-12) - abbreviated
+   457→story.append(add_heading('UC9-12: Additional Use-Case Stacks', h2_style, 1))
+   458→
+   459→uc_extra = [
+   460→    ('UC9: Startup MVP Sprint', 'Rabbit>Beaver', '92',
+   461→     'Maximum velocity from idea to deployed MVP. Uses Rabbit (rapid ideation) shifting to Beaver (systems building) for implementation. '
+   462→     'Core skills: to-prd + superpowers + frontend-design + deployment-manager + gumroad-pipeline. The to-prd skill enforces a strict '
+   463→     '"3 features max" rule for v1, preventing the #1 startup killer of over-engineering. Gumroad-pipeline adds revenue from day one. '
+   464→     'The stack deliberately avoids tdd-workflow and animation skills to maximize shipping speed.'),
+   465→    ('UC10: Enterprise Production Hardening', 'Owl>Auditor', '87',
+   466→     'Taking a working app to enterprise-grade reliability, security, and compliance. Owl mode for systematic analysis, '
+   467→     'then Auditor mode for validation. Core skills: mcp-security-scanner + tdd-workflow + deployment-manager + secret-vault + '
+   468→     'feedback-loop + persistent-memory. This stack overlaps significantly with UC7 (Security Audit) but adds tdd-workflow for '
+   469→     'regression prevention and feedback-loop for ongoing monitoring. The main gap is the absence of a dedicated compliance '
+   470→     'framework skill for SOC 2, GDPR, and HIPAA checklists.'),
+   471→    ('UC11: Research & Academic Analysis', 'Elephant', '85',
+   472→     'Literature reviews, data analysis, and paper writing. Elephant mode (cross-field connections) is the natural fit for '
+   473→     'academic synthesis. Core skills: chain-of-thought + web-reader + code-research + context7-docs + persistent-memory + '
+   474→     'output-formatter. The AI Research Lab MCP stack (brave-search, fetch, memory, sqlite) provides the research infrastructure. '
+   475→     'Chain-of-thought structures argumentation, web-reader gathers sources, and output-formatter produces publication-ready documents.'),
+   476→    ('UC12: AI Infrastructure & Multi-Provider Routing', 'Beaver', '95',
+   477→     'Managing multiple AI providers with intelligent failover, load balancing, and cost optimization. This use-case achieves '
+   478→     'the highest synergy score (95) because the Infrastructure skills form the tightest cluster in the catalog. Core skills: '
+   479→     '9router-gateway + owl-proxy-defense + antigravity-proxy + 4cli-unified + triune-proxy-stack + secret-vault. The Unified '
+   480→     'AI Gateway MCP stack (96 synergy) provides filesystem + github + docker + fetch, covering the complete infrastructure lifecycle. '
+   481→     '9router-gateway routes free-tier providers first, with circuit breaker fallback to paid providers.'),
+   482→]
+   483→
+   484→for title, mode, synergy, desc in uc_extra:
+   485→    story.append(Paragraph('<b>%s</b> | Mode: %s | Synergy: %s/100' % (title, mode, synergy), h3_style))
+   486→    story.append(Paragraph(desc, body_style))
+   487→
+   488→# ━━ PART 2: USER-TYPE PROFILES ━━
+   489→story.append(add_heading('Part 2: User-Type Skill Stack Profiles', h1_style, 0))
+   490→story.append(Paragraph(
+   491→    'This section designs comprehensive skill stack profiles for 8 distinct user types, each with recommended skills '
+   492→    'organized by Core/Extended/Power-User tiers, agent skill tier assignment and progression, primary agent mode, '
+   493→    'MCP stack, learning path, token budget, common pitfalls, and an optimal 1-hour workflow session.',
+   494→    body_style
+   495→))
+   496→
+   497→# User-type overview table
+   498→ut_overview = [
+   499→    [Paragraph('<b>User Type</b>', th_style), Paragraph('<b>Start Skill</b>', th_style), Paragraph('<b>Agent Mode</b>', th_style), Paragraph('<b>MCP Stack</b>', th_style), Paragraph('<b>Token Budget</b>', th_style)],
+   500→    [Paragraph('Solo Indie Hacker', td_style), Paragraph('SKILL_01', td_center_style), Paragraph('Eagle', td_center_style), Paragraph('Product Launch (custom)', td_style), Paragraph('8K-10K', td_center_style)],
+   501→    [Paragraph('Frontend Developer', td_style), Paragraph('SKILL_02', td_center_style), Paragraph('Ant', td_center_style), Paragraph('Full-Stack Web Studio', td_style), Paragraph('10K-11.7K', td_center_style)],
+   502→    [Paragraph('Backend/API Engineer', td_style), Paragraph('SKILL_03', td_center_style), Paragraph('Beaver', td_center_style), Paragraph('Custom (fs+gh+pg+docker)', td_style), Paragraph('12.1K', td_center_style)],
+   503→    [Paragraph('Full-Stack Generalist', td_style), Paragraph('SKILL_01', td_center_style), Paragraph('Elephant', td_center_style), Paragraph('Full-Stack Web Studio', td_style), Paragraph('10K-12.1K', td_center_style)],
+   504→    [Paragraph('Data Scientist', td_style), Paragraph('SKILL_03', td_center_style), Paragraph('Owl', td_center_style), Paragraph('Data Pipeline Studio', td_style), Paragraph('10.5K-12.1K', td_center_style)],
+   505→    [Paragraph('DevOps/SRE', td_style), Paragraph('SKILL_03', td_center_style), Paragraph('Beaver', td_center_style), Paragraph('DevOps Command Ctr', td_style), Paragraph('12.1K', td_center_style)],
+   506→    [Paragraph('Content Creator', td_style), Paragraph('SKILL_01', td_center_style), Paragraph('Dolphin', td_center_style), Paragraph('Content Engine', td_style), Paragraph('4.4K-10K', td_center_style)],
+   507→    [Paragraph('AI/ML Researcher', td_style), Paragraph('SKILL_03', td_center_style), Paragraph('Owl', td_center_style), Paragraph('AI Research Lab', td_style), Paragraph('10.5K-12.1K', td_center_style)],
+   508→]
+   509→story.append(Spacer(1, 8))
+   510→story.append(make_table(ut_overview, [CONTENT_W*0.22, CONTENT_W*0.14, CONTENT_W*0.14, CONTENT_W*0.34, CONTENT_W*0.16]))
+   511→story.append(Paragraph('Table 3: User-Type Profile Overview', caption_style))
+   512→
+   513→# Detail each user type
+   514→user_types = [
+   515→    {
+   516→        'title': 'Solo Indie Hacker',
+   517→        'desc': 'Non-technical or semi-technical founder building their first product. Operates under extreme resource constraints with a "ship or die" timeline. Mobile-first usage. Needs guided, opinionated workflows that make decisions for them. The to-prd skill is their #1 tool because the biggest bottleneck is clarity: building the wrong thing fast is worse than building the right thing slow.',
+   518→        'core': 'to-prd, superpowers, frontend-design, deployment-manager, gumroad-pipeline, seo-content-writer, persistent-memory',
+   519→        'progression': 'Week 1-2: SKILL_01 only (ideate, validate, plan). Week 3-4: + SKILL_02 (start building MVP on desktop). Week 5-6: + SKILL_03 (production backend code). Week 7+: SKILL_04 (automate deployment and content generation).',
+   520→        'pitfalls': 'Over-engineering the MVP (enforce "3 features max" rule via to-prd); skipping humanizer for marketing copy; ignoring persistent-memory from Day 1 (re-explaining codebase every session is the #1 time-waster); loading too many skills (analysis paralysis); building before validating.',
+   521→        'session': ':00-:10 IDEATE (SKILL_01, Eagle) - challenge feature priority with devils-advocate. :10-:25 BUILD (SKILL_02, Beaver) - frontend-design creates modal, superpowers writes backend. :25-:40 SHIP (SKILL_03, Beaver) - deployment-manager pushes to staging, browser-use verifies. :40-:55 GROW (SKILL_01, Eagle) - seo-content-writer drafts article, humanizer rewrites, social-media-manager schedules. :55-:60 REVIEW - persistent-memory saves decisions.'
+   522→    },
+   523→    {
+   524→        'title': 'Frontend Developer',
+   525→        'desc': 'Experienced React/Vue engineer focused on UI implementation, animation, and design systems. Their biggest pain points are: staying current with the rapidly evolving React/Next.js ecosystem, bridging the gap between design intent and implementation, and maintaining animation quality at scale. SKILL_02 (Design + Build) is their natural habitat with its depth-seeking layers and 3-direction approach.',
+   526→        'core': 'vercel-react-best-practices, ui-ux-pro-max-v7, frontend-design, gsap-animations, composition-patterns, context7-docs, browser-use, explained-code',
+   527→        'progression': 'Day 1: SKILL_02 (natural habitat). Week 1: + SKILL_03 (backend integration). Month 1: + SKILL_04 (orchestrating component library builds). As needed: SKILL_01 (architecture discussions).',
+   528→        'pitfalls': 'Animation without architecture (always use animation-hybrid-architect first); ignoring context7-docs (using deprecated Next.js APIs creates expensive debt); skipping browser-use verification ("works on my machine" syndrome); over-investing in animation skills for dashboard/CRUD apps; not documenting for the team.',
+   529→        'session': ':00-:12 DECOMPOSE (SKILL_02, Ant) - break Figma design into component hierarchy. :12-:30 IMPLEMENT (SKILL_02, Beaver) - frontend-design scaffolds, ui-ux-pro-max-v7 provides specs, browser-use snapshots. :30-:45 ANIMATE (SKILL_02, Dolphin) - gsap-animations for scroll effects, animation-orchestrator sequences. :45-:55 INTEGRATE (SKILL_03, Beaver) - superpowers connects API, tdd-workflow writes tests. :55-:60 DOCUMENT + SHIP.'
+   530→    },
+   531→    {
+   532→        'title': 'Backend/API Engineer',
+   533→        'desc': 'Systems thinker building APIs, databases, and microservices. Cares about latency percentiles, throughput, error rates, and reliability. Starts at SKILL_03 (Code + API) because their work is production code with maximum effort and quality gates. Has the highest token budget (12,100) because they need API contracts, database schemas, service topologies, and production logs all in context simultaneously.',
+   534→        'core': 'superpowers, tdd-workflow, explained-code, deployment-manager, secret-vault, persistent-memory, context-compressor',
+   535→        'progression': 'Day 1: SKILL_03 (natural home). Week 2: + SKILL_04 (multi-service orchestration). Month 1: + SKILL_01 (architecture discussions). Rarely: SKILL_02 (only for internal dashboards).',
+   536→        'pitfalls': 'Building without testing (tdd-workflow must be loaded before superpowers); ignoring secret-vault (hardcoded API keys in .env files that get committed); over-engineering architecture (microservices for products that need a monolith); skipping documentation (APIs without docs are unusable); not using context-compressor for debugging production incidents.',
+   537→        'session': ':00-:10 DESIGN (SKILL_03, Beaver) - chain-of-thought maps endpoint contract, devils-advocate challenges scale assumptions. :10-:25 IMPLEMENT (SKILL_03, Beaver) - tdd-workflow writes tests first, superpowers implements, secret-vault injects credentials. :25-:40 SECURE+TEST (SKILL_03, Owl) - mcp-security-scanner scans, tdd-workflow runs full suite, explained-code generates OpenAPI spec. :40-:50 DEPLOY (SKILL_04, Beaver) - deployment-manager pushes to staging, docker builds container. :50-:60 DOCUMENT+REVIEW.'
+   538→    },
+   539→    {
+   540→        'title': 'Full-Stack Generalist',
+   541→        'desc': 'Does a bit of everything: frontend, backend, deployment, design, content, strategy. The ONLY user type that regularly rotates through all 4 skill tiers. Their superpower is context-switching; their kryptonite is also context-switching. They do not need the BEST skill for each domain; they need the MOST VERSATILE skill that covers the MOST domains. Elephant mode (synthesis) is their primary agent mode for cross-domain integration.',
+   542→        'core': 'superpowers, frontend-design, deployment-manager, to-prd, explained-code, persistent-memory, context-compressor, output-formatter',
+   543→        'progression': 'Day 1: SKILL_01 (explore, plan). Day 3: + SKILL_02 (frontend). Day 5: + SKILL_03 (backend). Day 7: + SKILL_04 (orchestrate). Week 2+: All 4 skills in rotation with CONTINUITY protocol.',
+   544→        'pitfalls': 'Skill-switching overhead without CONTINUITY protocol (loses 10-15 min per switch); jack-of-all-trades producing "good enough" work across domains; context contamination between projects (compress A before loading B); not using to-prd for scope; ignoring agent-roles for context-switching.',
+   545→        'session': ':00-:08 SCOPE (SKILL_01, Elephant) - to-prd creates 1-page spec, devils-advocate challenges scope. :08-:25 BUILD FRONTEND (SKILL_02, Beaver) - frontend-design scaffolds, superpowers implements cart state, browser-use checks mobile. :25-:40 BUILD BACKEND (SKILL_03, Beaver) [CONTINUITY switch] - superpowers builds Stripe checkout, tdd-workflow writes tests, secret-vault injects keys. :40-:52 CONTENT+POLISH (SKILL_02, Dolphin) [CONTINUITY switch back] - seo-content-writer for product descriptions, output-formatter for client docs. :52-:60 SHIP+REMEMBER.'
+   546→    },
+   547→]
+   548→
+   549→for ut in user_types:
+   550→    story.append(add_heading(ut['title'], h2_style, 1))
+   551→    story.append(Paragraph(ut['desc'], body_style))
+   552→    story.append(Paragraph('<b>Core Skills:</b> ' + ut['core'], body_left_style))
+   553→    story.append(Paragraph('<b>Skill Progression:</b> ' + ut['progression'], body_left_style))
+   554→    story.append(Paragraph('<b>Common Pitfalls:</b> ' + ut['pitfalls'], body_left_style))
+   555→    story.append(Paragraph('<b>Optimal 1-Hour Session:</b> ' + ut['session'], body_left_style))
+   556→
+   557→# Remaining 4 user types - abbreviated
+   558→story.append(add_heading('Additional User-Type Profiles', h2_style, 1))
+   559→remaining_ut = [
+   560→    ('Data Scientist/Analyst', 'SKILL_03', 'Owl', 'Data Pipeline Studio',
+   561→     'Works with data, statistics, ML models, and visualization. Starts at SKILL_03 for structured code production. '
+   562→     'Core: superpowers, chain-of-thought, code-research, context7-docs, composition-patterns, persistent-memory, context-compressor. '
+   563→     'Extended: simulation-sandbox, devils-advocate, audit-analyzer, feedback-loop, feature-research, output-formatter, brainstorming. '
+   564→     'The main gap is the absence of a dedicated ML framework skill. Owl mode provides the analytical rigor needed for hypothesis testing '
+   565→     'and statistical reasoning. Token budget: 10.5K-12.1K.'),
+   566→    ('DevOps/SRE', 'SKILL_03', 'Beaver', 'DevOps Command Center',
+   567→     'Infrastructure-focused, cares about uptime, monitoring, CI/CD. Starts at SKILL_03 for infrastructure code, quickly adds SKILL_04 '
+   568→     'for orchestration. Core: deployment-manager, secret-vault, 4cli-unified, mcp-security-scanner, feedback-loop, persistent-memory. '
+   569→     'Extended: triune-proxy-stack, 9router-gateway, explained-code, superpowers, agent-maintenance. The DevOps Command Center MCP stack '
+   570→     '(github + docker + kubernetes + slack) covers the complete operational lifecycle. Token budget: 12.1K (highest alongside Backend Engineer).'),
+   571→    ('Content Creator/Marketer', 'SKILL_01', 'Dolphin', 'Content Engine',
+   572→     'Writes, designs, publishes content. The only user type that stays primarily at SKILL_01 (Conversational) with the lowest token '
+   573→     'budget (4,400 for mobile sessions). Core: seo-content-writer, humanizer, social-content-pillars, social-media-manager, '
+   574→     'output-formatter, persistent-memory. Extended: web-reader, gumroad-pipeline, brainstorming, photography-ai, context-compressor. '
+   575→     'The Content Engine MCP stack (filesystem + brave-search + google-drive + slack) covers research, writing, asset management, and '
+   576→     'team review. The humanizer skill is not optional for this user type: it is the difference between clearly AI-generated and authentic.'),
+   577→    ('AI/ML Researcher', 'SKILL_03', 'Owl', 'AI Research Lab',
+   578→     'Deep technical researcher exploring cutting-edge AI. Starts at SKILL_03 for experiment code. Core: chain-of-thought, simulation-sandbox, '
+   579→     'superpowers, context7-docs, persistent-memory, feature-research. Extended: devils-advocate, mcp-builder, web-reader, code-research, '
+   580→     'context-compressor, brainstorming. The AI Research Lab MCP stack (brave-search + fetch + memory + sqlite) supports multi-source '
+   581→     'verification and structured knowledge extraction. Owl mode provides systematic decomposition of complex AI architectures. '
+   582→     'Token budget: 10.5K-12.1K.'),
+   583→]
+   584→for title, skill, mode, mcp, desc in remaining_ut:
+   585→    story.append(Paragraph('<b>%s</b> | Start: %s | Mode: %s | MCP: %s' % (title, skill, mode, mcp), h3_style))
+   586→    story.append(Paragraph(desc, body_style))
+   587→
+   588→# ━━ PART 3: PIPELINES ━━
+   589→story.append(add_heading('Part 3: Production Pipeline Architectures', h1_style, 0))
+   590→story.append(Paragraph(
+   591→    'This section designs 6 production pipelines, each with a 6-stage sequence, error recovery strategies, '
+   592→    'parallel execution opportunities, token budgets, and MCP stack configurations. These pipelines orchestrate '
+   593→    'multiple skills and agent modes into coherent workflows that handle the full lifecycle of complex tasks.',
+   594→    body_style
+   595→))
+   596→
+   597→# Pipeline overview table
+   598→pipe_overview = [
+   599→    [Paragraph('<b>Pipeline</b>', th_style), Paragraph('<b>Purpose</b>', th_style), Paragraph('<b>Token Budget</b>', th_style), Paragraph('<b>MCP Stack</b>', th_style)],
+   600→    [Paragraph('Product Genesis', td_style), Paragraph('Idea to deployed MVP', td_style), Paragraph('46,000', td_center_style), Paragraph('Full-Stack Web Studio', td_style)],
+   601→    [Paragraph('Content-to-Revenue', td_style), Paragraph('Topic to published + monetized content', td_style), Paragraph('32,000', td_center_style), Paragraph('Content Engine', td_style)],
+   602→    [Paragraph('Security Hardening', td_style), Paragraph('Codebase to hardened deployment', td_style), Paragraph('36,000', td_center_style), Paragraph('Security Audit Toolkit', td_style)],
+   603→    [Paragraph('Data Intelligence', td_style), Paragraph('Raw data to insights + reports', td_style), Paragraph('36,000', td_center_style), Paragraph('Data Pipeline Studio', td_style)],
+   604→    [Paragraph('Animation Excellence', td_style), Paragraph('Design spec to 60fps animation', td_style), Paragraph('35,000', td_center_style), Paragraph('Creative Studio', td_style)],
+   605→    [Paragraph('AI Provider Optimization', td_style), Paragraph('Single-provider to multi-provider failover', td_style), Paragraph('40,000', td_center_style), Paragraph('Unified AI Gateway', td_style)],
+   606→]
+   607→story.append(Spacer(1, 8))
+   608→story.append(make_table(pipe_overview, [CONTENT_W*0.22, CONTENT_W*0.32, CONTENT_W*0.16, CONTENT_W*0.30]))
+   609→story.append(Paragraph('Table 4: Production Pipeline Overview', caption_style))
+   610→
+   611→# Pipeline 1: Product Genesis - detailed
+   612→story.append(add_heading('Pipeline 1: Product Genesis', h2_style, 1))
+   613→story.append(Paragraph(
+   614→    'Transform a raw product idea into a fully deployed, revenue-capable MVP in a single orchestrated flow. '
+   615→    'This is the most complex pipeline because it spans every category: Strategy (validate the idea), Design (create the experience), '
+   616→    'Development (build the product), System (persist the context), Content (launch messaging), and Infrastructure (deploy and route). '
+   617→    'The pipeline follows a strict 6-stage sequence with gate criteria at each stage to ensure quality progression.',
+   618→    body_style
+   619→))
+   620→
+   621→pg_stages = [
+   622→    [Paragraph('<b>Stage</b>', th_style), Paragraph('<b>Skills</b>', th_style), Paragraph('<b>Agent</b>', th_style), Paragraph('<b>Gate Criteria</b>', th_style)],
+   623→    [Paragraph('1. Discovery', td_style), Paragraph('jtbd-research, feature-research, brainstorming, devils-advocate', td_style), Paragraph('Rabbit>Owl', td_center_style), Paragraph('>=3 JTBD outcomes validated; no fatal assumptions', td_style)],
+   624→    [Paragraph('2. Specification', td_style), Paragraph('chain-of-thought, to-prd, composition-patterns', td_style), Paragraph('Owl>Eagle', td_center_style), Paragraph('PRD with non-goals; architectural skeleton defined', td_style)],
+   625→    [Paragraph('3. Design System', td_style), Paragraph('ui-ux-pro-max-v7, anthropic-frontend-design, vercel-web-design-guidelines', td_style), Paragraph('Dolphin>Ant', td_center_style), Paragraph('Complete design tokens; >=90% component coverage', td_style)],
+   626→    [Paragraph('4. Implementation', td_style), Paragraph('superpowers, composition-patterns, tdd-workflow, context7-docs', td_style), Paragraph('Beaver', td_center_style), Paragraph('>=95% TDD coverage; zero critical security findings', td_style)],
+   627→    [Paragraph('5. Deployment', td_style), Paragraph('deployment-manager, 4cli-unified, 9router-gateway, secret-vault', td_style), Paragraph('Beaver>Eagle', td_center_style), Paragraph('Staging passes; zero exposed credentials; canary 30min', td_style)],
+   628→    [Paragraph('6. Launch', td_style), Paragraph('gumroad-pipeline, seo-content-writer, humanizer, social-media-manager', td_style), Paragraph('Dolphin>Eagle', td_center_style), Paragraph('Payment test passes; <=15% AI probability in content', td_style)],
+   629→]
+   630→story.append(make_table(pg_stages, [CONTENT_W*0.12, CONTENT_W*0.36, CONTENT_W*0.12, CONTENT_W*0.40]))
+   631→story.append(Paragraph('Table 5: Product Genesis Pipeline Stage Sequence', caption_style))
+   632→
+   633→story.append(Paragraph(
+   634→    '<b>Error Recovery:</b> If JTBD validation fails, the pipeline pivots (does not abort). Devils-advocate output feeds back to '
+   635→    'brainstorming with a constraint injection. Maximum 3 pivot attempts before human escalation. If PRD fails gate, only the '
+   636→    'failing dimension is re-engaged. If design system is incomplete, only missing tokens are generated. If TDD coverage fails, '
+   637→    'only uncovered paths receive new tests. If deployment fails, automatic rollback to last known good deployment.',
+   638→    body_style
+   639→))
+   640→story.append(Paragraph(
+   641→    '<b>Parallel Execution:</b> Stages 1 and 2 overlap (PRD writing begins with partial JTBD results). Stage 3 parallel streams: '
+   642→    'ui-ux-pro-max-v7 generates color/typography tokens while vercel-web-design-guidelines defines performance budgets. '
+   643→    'Stage 4: tdd-workflow test writing in parallel with composition-patterns architecture scaffolding. Stage 6: seo-content-writer + '
+   644→    'humanizer work on website copy while social-media-manager prepares campaign schedule independently.',
+   645→    body_style
+   646→))
+   647→
+   648→# Pipeline 2-6 abbreviated
+   649→pipe_details = [
+   650→    ('Pipeline 2: Content-to-Revenue',
+   651→     'An always-on pipeline that transforms topic research into published, monetized content. Unlike Product Genesis which terminates '
+   652→     'at launch, this pipeline never truly ends; it iterates. Stages: Topic Research + Angle Discovery > SEO-Optimized Drafting > '
+   653→     'Humanization + Credibility > GEO Optimization + Formatting > Distribution + Monetization > Performance Measurement + Iteration. '
+   654→     'Cross-piece parallelism is the primary throughput multiplier: multiple content pieces occupy different stages simultaneously. '
+   655→     'Token budget: 32,000 per cycle. Error recovery: if no unique angles found, pivot to adjacent topic within same pillar; if AI detection '
+   656→     'score too high, re-engage humanizer with different voice profile (max 2 attempts).'),
+   657→    ('Pipeline 3: Security Hardening',
+   658→     'Transforms any codebase into a hardened, audited, and monitored state. Triggered by PRs, scheduled scans, or production incidents. '
+   659→     'Stages: Attack Surface Mapping (audit-analyzer + code-research + mcp-security-scanner run in parallel, findings merged) > '
+   660→     'Root Cause Analysis (explained-code + devils-advocate + context-compressor) > Remediation + Refactoring (composition-patterns + '
+   661→     'vercel-react-best-practices + superpowers) > Validation + Test Hardening (tdd-workflow + devils-advocate) > Safe Deployment '
+   662→     '(deployment-manager + 9router-gateway + owl-proxy-defense with canary) > Continuous Monitoring (feedback-loop + persistent-memory + secret-vault). '
+   663→     'Token budget: 36,000. The triple-scanner parallel approach ensures no single scanner is trusted in isolation.'),
+   664→    ('Pipeline 4: Data Intelligence',
+   665→     'Transforms raw data into actionable insights, automated reports, and decision support. Stages: Data Ingestion + Profiling > '
+   666→     'Data Cleaning + Transformation > Analysis + Insight Extraction (chain-of-thought + simulation-sandbox + devils-advocate for '
+   667→     'confidence levels on every finding) > Visualization + Reporting > Automated Reporting Pipeline > Intelligence Feedback + Refinement. '
+   668→     'Token budget: 36,000. Key innovation: devils-advocate must challenge each finding for alternative explanations, and no finding '
+   669→     'is reported without a confidence level.'),
+   670→    ('Pipeline 5: Animation Excellence',
+   671→     'The most quality-obsessed pipeline: will ship late before shipping jank. Every animation is audited against frame budgets, '
+   672→     'layout shift thresholds, and accessibility requirements. Stages: Animation Orchestration + Decomposition (animation-orchestrator '
+   673→     'routes all primitives to Motion/GSAP/CSS) > Core Animation Engineering (gsap-animation-engineer + motion-animation-engineer + '
+   674→     'gsap-animator) > Hybrid Architecture + 3D Integration (animation-hybrid-architect + threejs-orchestrator) > Performance + '
+   675→     'Accessibility Audit (animation-auditor + audit-analyzer at 3 viewport widths) > Bundle Optimization > Production Deployment. '
+   676→     'Token budget: 35,000. Performance gate: must maintain 60fps on mid-tier device, CLS <= 0.1 per component.'),
+   677→    ('Pipeline 6: AI Provider Optimization',
+   678→     'Transforms single-provider AI dependency into resilient multi-provider architecture. Stages: Provider Landscape Analysis '
+   679→     '(code-research traces all AI API calls, web-reader gathers pricing, audit-analyzer quantifies costs) > Multi-Provider Architecture '
+   680→     'Design (composition-patterns + chain-of-thought + simulation-sandbox for failover testing) > Integration Implementation '
+   681→     '(superpowers + mcp-builder + tdd-workflow) > Cost Optimization + Monitoring (9router-gateway routes cheapest-quality provider, '
+   682→     'feedback-loop detects cost anomalies) > Security + Compliance (secret-vault + mcp-security-scanner + owl-proxy-defense) > '
+   683→     'Production Deployment + Optimization Loop. Token budget: 40,000. Failover target: <5 second switching time.'),
+   684→]
+   685→
+   686→for title, desc in pipe_details:
+   687→    story.append(add_heading(title, h2_style, 1))
+   688→    story.append(Paragraph(desc, body_style))
+   689→
+   690→# ━━ PART 4: PLAYBOOKS ━━
+   691→story.append(add_heading('Part 4: Operational Playbooks', h1_style, 0))
+   692→story.append(Paragraph(
+   693→    'This section designs 6 operational playbooks, each triggered by specific conditions and providing a complete response '
+   694→    'procedure with pre-flight checklists, step-by-step execution, decision trees, rollback procedures, and success metrics.',
+   695→    body_style
+   696→))
+   697→
+   698→playbook_overview = [
+   699→    [Paragraph('<b>Playbook</b>', th_style), Paragraph('<b>Trigger Condition</b>', th_style), Paragraph('<b>Target MTTR</b>', th_style), Paragraph('<b>Key Skills</b>', th_style)],
+   700→    [Paragraph('Incident Response', td_style), Paragraph('Production is down', td_style), Paragraph('<=60 min (P1)', td_center_style), Paragraph('feedback-loop, chain-of-thought, deployment-manager', td_style)],
+   701→    [Paragraph('Feature Launch', td_style), Paragraph('Feature approved for dev', td_style), Paragraph('<=5 days', td_center_style), Paragraph('to-prd, superpowers, tdd-workflow, deployment-manager', td_style)],
+   702→    [Paragraph('Tech Debt Reduction', td_style), Paragraph('Velocity down >=20%', td_style), Paragraph('>=15% velocity in 30d', td_center_style), Paragraph('code-research, explained-code, composition-patterns', td_style)],
+   703→    [Paragraph('Migration', td_style), Paragraph('Stack/platform change needed', td_style), Paragraph('<=4 hours downtime', td_center_style), Paragraph('simulation-sandbox, deployment-manager, 4cli-unified', td_style)],
+   704→    [Paragraph('Onboarding', td_style), Paragraph('New team member Day 1', td_style), Paragraph('<=3 days to first PR', td_center_style), Paragraph('explained-code, context7-docs, skill-finder, persistent-memory', td_style)],
+   705→    [Paragraph('Performance Optimization', td_style), Paragraph('Core Web Vitals failing', td_style), Paragraph('>=30% LCP improvement', td_center_style), Paragraph('audit-analyzer, animation-auditor, context-compressor', td_style)],
+   706→]
+   707→story.append(Spacer(1, 8))
+   708→story.append(make_table(playbook_overview, [CONTENT_W*0.18, CONTENT_W*0.26, CONTENT_W*0.20, CONTENT_W*0.36]))
+   709→story.append(Paragraph('Table 6: Operational Playbook Overview', caption_style))
+   710→
+   711→# Detail key playbooks
+   712→story.append(add_heading('Incident Response Playbook', h2_style, 1))
+   713→story.append(Paragraph(
+   714→    'This is the most time-critical playbook, activated when production systems are down or severely degraded. '
+   715→    'The pre-flight checklist confirms: monitoring is active, runbooks are accessible in persistent-memory, secret-vault '
+   716→    'has valid credentials for all services, and 4cli-unified can reach all infrastructure. The execution follows a strict sequence:',
+   717→    body_style
+   718→))
+   719→steps = [
+   720→    'DETECT: feedback-loop identifies the anomaly and classifies severity (P1/P2/P3) based on error rate, latency, and user impact.',
+   721→    'TRIAGE: chain-of-thought performs systematic root cause analysis. Devils-advocate challenges assumptions about cause. Owl mode engaged.',
+   722→    'CONTAIN: deployment-manager rolls back to last known good deployment. 9router-gateway diverts traffic away from affected service.',
+   723→    'FIX: superpowers implements the fix. tdd-workflow verifies the fix covers the regression. Context-compressor manages log volume.',
+   724→    'VERIFY: audit-analyzer confirms the fix resolves the issue without introducing new problems. All health checks pass.',
+   725→    'DOCUMENT: explained-code generates incident post-mortem. persistent-memory stores root cause, timeline, and prevention measures.',
+   726→]
+   727→for i, step in enumerate(steps):
+   728→    story.append(Paragraph('<b>Step %d:</b> %s' % (i+1, step), body_left_style))
+   729→
+   730→story.append(Paragraph(
+   731→    '<b>Decision Tree:</b> If the issue is a deployment regression (detected within 15 min of deploy), immediately roll back. '
+   732→    'If the issue is an infrastructure failure (network, database, cache), route to 4cli-unified for diagnosis. '
+   733→    'If the issue is an external dependency (third-party API), engage 9router-gateway for failover routing. '
+   734→    '<b>Rollback:</b> If the fix introduces new errors, roll back the fix itself and re-enter Step 2 with escalated severity. '
+   735→    '<b>Success Metric:</b> MTTR <= 60 minutes for P1 incidents, <= 4 hours for P2.',
+   736→    body_style
+   737→))
+   738→
+   739→story.append(add_heading('Feature Launch Playbook', h2_style, 1))
+   740→story.append(Paragraph(
+   741→    'Triggered when a feature is approved for development. Pre-flight: PRD exists (or to-prd will create one), '
+   742→    'design specs are available, acceptance criteria are defined. Steps: (1) SPEC: to-prd creates structured PRD with non-goals. '
+   743→    '(2) DESIGN: frontend-design + ui-ux-pro-max-v7 produce component specs and design tokens. (3) BUILD: superpowers implements '
+   744→    'frontend + backend, context7-docs ensures current API usage. (4) TEST: tdd-workflow writes integration tests, mcp-security-scanner '
+   745→    'runs vulnerability scan. (5) DEPLOY: deployment-manager pushes to staging, canary for 30 minutes, then full rollout. '
+   746→    '(6) VERIFY: feedback-loop monitors for 24 hours post-deployment. Decision: if canary shows >2% error rate increase, '
+   747→    'automatic rollback. Success: feature shipped with zero P1/P2 incidents within 5 business days.',
+   748→    body_style
+   749→))
+   750→
+   751→story.append(add_heading('Tech Debt Reduction Playbook', h2_style, 1))
+   752→story.append(Paragraph(
+   753→    'Triggered when team velocity drops >=20% or bug rate increases >=30%. Pre-flight: code-research maps the codebase for debt '
+   754→    'hotspots. Steps: (1) AUDIT: code-research + audit-analyzer identify the top 5 debt clusters by impact. (2) PRIORITIZE: '
+   755→    'chain-of-thought ranks by ROI (velocity impact / fix effort). (3) PLAN: composition-patterns designs the refactoring approach. '
+   756→    '(4) IMPLEMENT: superpowers applies targeted fixes with tdd-workflow regression guard. (5) VERIFY: audit-analyzer confirms '
+   757→    'debt reduction without regression. (6) SUSTAIN: persistent-memory stores debt register for ongoing tracking. Success: '
+   758→    '>=15% velocity improvement within 30 days, zero regressions from refactoring.',
+   759→    body_style
+   760→))
+   761→
+   762→# Remaining playbooks abbreviated
+   763→story.append(add_heading('Additional Playbooks', h2_style, 1))
+   764→story.append(Paragraph(
+   765→    '<b>Migration Playbook:</b> For stack/platform changes with <=4 hours downtime target. Pre-flight: simulation-sandbox models '
+   766→    'the migration under production-like conditions. Uses dual-write pattern with deployment-manager managing traffic shifting. '
+   767→    '4cli-unified provides unified access to both old and new infrastructure. Rollback: maintain old infrastructure in warm standby '
+   768→    'until new infrastructure is verified for 72 hours.',
+   769→    body_style
+   770→))
+   771→story.append(Paragraph(
+   772→    '<b>Onboarding Playbook:</b> For new team members achieving first merged PR within 3 days. Day 1: explained-code walks through '
+   773→    'architecture, context7-docs provides current API documentation, skill-finder discovers relevant skills. Day 2: persistent-memory '
+   774→    'loads team conventions, superpowers assists with first code contribution. Day 3: tdd-workflow ensures quality standards, '
+   775→    'deployment-manager teaches deployment procedures. Success: first PR merged with zero review revisions.',
+   776→    body_style
+   777→))
+   778→story.append(Paragraph(
+   779→    '<b>Performance Optimization Playbook:</b> For Core Web Vitals failures targeting >=30% LCP improvement. audit-analyzer runs '
+   780→    'Lighthouse on all pages. animation-auditor checks animation performance at 3 viewport widths. context-compressor identifies '
+   781→    'the heaviest context consumers. Steps: Profile (audit-analyzer + animation-auditor) > Prioritize (chain-of-thought ranks by '
+   782→    'impact) > Optimize (superpowers implements fixes) > Verify (feedback-loop monitors real-user metrics for 7 days). '
+   783→    'Success: LCP <2.5s, CLS <0.1, FID <100ms on all pages.',
+   784→    body_style
+   785→))
+   786→
+   787→# ━━ PART 5: BLUEPRINTS ━━
+   788→story.append(add_heading('Part 5: Architectural Blueprints', h1_style, 0))
+   789→story.append(Paragraph(
+   790→    'This section designs 6 architectural blueprints for different team sizes and organizational contexts. Each blueprint '
+   791→    'specifies permanently loaded vs on-demand skills, agent configuration, MCP infrastructure topology, communication patterns, '
+   792→    'and scaling rules that define what changes as the organization grows.',
+   793→    body_style
+   794→))
+   795→
+   796→bp_overview = [
+   797→    [Paragraph('<b>Blueprint</b>', th_style), Paragraph('<b>Scale</b>', th_style), Paragraph('<b>Permanent Skills</b>', th_style), Paragraph('<b>MCP Topology</b>', th_style)],
+   798→    [Paragraph('Solo Founder', td_style), Paragraph('1 person, MVP', td_style), Paragraph('3 (superpowers, persistent-memory, context-compressor)', td_style), Paragraph('Flat (all servers direct)', td_style)],
+   799→    [Paragraph('Startup Team', td_style), Paragraph('3-5 people, growth', td_style), Paragraph('5 (add deployment-manager, feedback-loop)', td_style), Paragraph('Star (shared hub)', td_style)],
+   800→    [Paragraph('Enterprise Squad', td_style), Paragraph('8-12, compliance', td_style), Paragraph('6 (add secret-vault, mcp-security-scanner)', td_style), Paragraph('Hub-and-spoke with security isolation', td_style)],
+   801→    [Paragraph('Agency/Freelancer', td_style), Paragraph('Multi-client, billing', td_style), Paragraph('4 (add context-compressor, output-formatter)', td_style), Paragraph('Client-namespaced partitions', td_style)],
+   802→    [Paragraph('Open Source Maintainer', td_style), Paragraph('Community-driven, PR-heavy', td_style), Paragraph('4 (add explained-code, skill-finder)', td_style), Paragraph('Star with public registry', td_style)],
+   803→    [Paragraph('AI-Native Organization', td_style), Paragraph('Autonomous agents, minimal human', td_style), Paragraph('7 (all system + orchestrator skills)', td_style), Paragraph('Mesh agent topology', td_style)],
+   804→]
+   805→story.append(Spacer(1, 8))
+   806→story.append(make_table(bp_overview, [CONTENT_W*0.18, CONTENT_W*0.16, CONTENT_W*0.38, CONTENT_W*0.28]))
+   807→story.append(Paragraph('Table 7: Architectural Blueprint Overview', caption_style))
+   808→
+   809→# Detail each blueprint
+   810→blueprints = [
+   811→    {
+   812→        'title': 'Solo Founder Blueprint',
+   813→        'scale': '1 person, MVP stage, mobile + desktop hybrid',
+   814→        'desc': 'The solo founder operates as a one-person army, switching between ideation (mobile, SKILL_01) and implementation (desktop, SKILL_02+03). Three skills are permanently loaded: superpowers (code generation backbone), persistent-memory (session continuity), and context-compressor (manages growing context). All other skills are on-demand, loaded via the Universal Router when the task requires them.',
+   815→        'comm': 'Communication is self-communication across time: persistent-memory carries decisions from yesterday\'s session to today\'s. The context-compressor runs before every skill switch to prevent context contamination. The solo founder should NEVER load all 4 skills simultaneously (22,100 tokens wasteful). Instead, rotate 2-skill combinations based on current task.',
+   816→        'scaling': 'At 2-3 people, add deployment-manager permanently (shared deployment responsibility). At 4-5 people, add feedback-loop (shared monitoring). The transition from solo to team is the most impactful scaling event, requiring the shift from self-communication to shared memory (persistent-memory becomes team-accessible).',
+   817→    },
+   818→    {
+   819→        'title': 'Startup Team Blueprint',
+   820→        'scale': '3-5 people, growth stage, multi-role',
+   821→        'desc': 'The startup team has role-specific skill loading: the frontend lead always has SKILL_02, the backend lead always has SKILL_03, and the product lead always has SKILL_01. Five skills are permanently loaded across the team: the solo founder\'s three plus deployment-manager (shared CI/CD) and feedback-loop (shared monitoring). Each role has a primary agent mode: Product = Eagle, Frontend = Ant, Backend = Beaver.',
+   822→        'comm': 'Star topology MCP with a shared hub. The persistent-memory skill becomes a shared team resource (not individual). Async standups are facilitated by feedback-loop metrics. The CONTINUITY protocol handles handoffs between roles (e.g., product spec handed to frontend implementation).',
+   823→        'scaling': 'The critical inflection point is 5 to 8 people. At 8 people, the flat topology breaks: add a hub-and-spoke MCP topology with a dedicated infrastructure lead. At 8+ people, secret-vault and mcp-security-scanner become permanently loaded (security can no longer be ad-hoc).',
+   824→    },
+   825→    {
+   826→        'title': 'Enterprise Squad Blueprint',
+   827→        'scale': '8-12 people, production systems, compliance-required',
+   828→        'desc': 'Six skills are permanently loaded: the startup team\'s five plus secret-vault and mcp-security-scanner. Compliance is a first-class concern: every deployment is scanned, every secret is managed, every access is audited. The hub-and-spoke MCP topology isolates security-sensitive servers (secret-vault, mcp-security-scanner) on a separate spoke accessible only by the infrastructure lead.',
+   829→        'comm': 'Hub-and-spoke with security isolation. The infrastructure lead acts as the MCP hub, managing access to sensitive servers. Persistent-memory is partitioned by team (not individual). Feedback-loop generates weekly compliance reports. The agent-maintenance skill runs automated health checks every 6 hours.',
+   830→        'scaling': 'At 12-15 people, split into two squads with a shared platform team. The platform team owns secret-vault, deployment-manager, and feedback-loop as shared services. Each squad has its own persistent-memory partition. The 7-agent MASTER pipeline is activated for cross-squad coordination.',
+   831→    },
+   832→    {
+   833→        'title': 'AI-Native Organization Blueprint',
+   834→        'scale': 'AI-first workflows, autonomous agents, minimal human oversight',
+   835→        'desc': 'The most advanced blueprint, designed for organizations where AI agents handle the majority of operational work. Seven skills are permanently loaded: all system skills (persistent-memory, feedback-loop, context-compressor, agent-roles, system-prompt-sync) plus agent-master and agent-maintenance. Human oversight is reduced to a 1:10 review ratio (1 human review per 10 agent decisions).',
+   836→        'comm': 'Mesh agent topology where agents communicate directly with each other via the agent-master orchestrator. Three-tier autonomy levels: Tier 1 (auto-execute, no human review) for routine operations like health checks and certificate rotations; Tier 2 (auto-execute, log for review) for code changes and deployments; Tier 3 (require human approval) for security changes and production incidents.',
+   837→        'scaling': 'This blueprint scales by increasing the number of autonomous agents, not humans. At 10+ agents, introduce a supervisor agent that monitors agent health and reassigns tasks on failure. At 20+ agents, partition into domain-specific clusters (frontend agents, backend agents, infrastructure agents) with inter-cluster communication via agent-master.',
+   838→    },
+   839→]
+   840→
+   841→for bp in blueprints:
+   842→    story.append(add_heading(bp['title'], h2_style, 1))
+   843→    story.append(Paragraph('<b>Scale:</b> ' + bp['scale'], body_left_style))
+   844→    story.append(Paragraph(bp['desc'], body_style))
+   845→    story.append(Paragraph('<b>Communication Patterns:</b> ' + bp['comm'], body_style))
+   846→    story.append(Paragraph('<b>Scaling Rules:</b> ' + bp['scaling'], body_style))
+   847→
+   848→# Remaining blueprints
+   849→story.append(add_heading('Additional Blueprints', h2_style, 1))
+   850→story.append(Paragraph(
+   851→    '<b>Agency/Freelancer Blueprint:</b> Multi-client, billing-aware. Four permanent skills: superpowers, persistent-memory, '
+   852→    'context-compressor, output-formatter. The critical innovation is client-namespaced persistent-memory: each client has an isolated '
+   853→    'memory partition that prevents cross-client context contamination. The context-compressor runs BEFORE switching clients (compress '
+   854→    'Client A, then load Client B). Project-switching protocol targets <=5 minutes between clients. Output-formatter handles '
+   855→    'client-specific deliverable formatting. Billing-aware: gumroad-pipeline tracks time-per-client for invoicing.',
+   856→    body_style
+   857→))
+   858→story.append(Paragraph(
+   859→    '<b>Open Source Maintainer Blueprint:</b> Community-driven, PR-heavy. Four permanent skills: superpowers, persistent-memory, '
+   860→    'explained-code, skill-finder. The 4-stage automated PR review process uses: (1) mcp-security-scanner for vulnerability scanning, '
+   861→    '(2) audit-analyzer for code quality, (3) vercel-react-best-practices for pattern compliance, (4) explained-code generates '
+   862→    'socratic review comments that guide contributors rather than dictating changes. Skill-finder discovers new community-contributed '
+   863→    'skills. Persistent-memory stores contributor patterns and project conventions. The socratic review approach builds community '
+   864→    'rather than gatekeeping.',
+   865→    body_style
+   866→))
+   867→
+   868→# ━━ CROSS-REFERENCE & KEY FINDINGS ━━
+   869→story.append(add_heading('Cross-Reference Matrix & Key Findings', h1_style, 0))
+   870→story.append(Paragraph(
+   871→    'The following cross-reference matrix reveals which skills appear across multiple dimensions, identifying universal '
+   872→    'foundations, category-specific clusters, and critical gaps in the current 76-skill catalog.',
+   873→    body_style
+   874→))
+   875→
+   876→# Universal skills table
+   877→universal_data = [
+   878→    [Paragraph('<b>Skill</b>', th_style), Paragraph('<b>Use-Cases</b>', th_style), Paragraph('<b>User Types</b>', th_style), Paragraph('<b>Pipelines</b>', th_style), Paragraph('<b>Playbooks</b>', th_style), Paragraph('<b>Total Appearances</b>', th_style)],
+   879→    [Paragraph('persistent-memory', td_style), Paragraph('10/12', td_center_style), Paragraph('8/8', td_center_style), Paragraph('5/6', td_center_style), Paragraph('5/6', td_center_style), Paragraph('28', td_center_style)],
+   880→    [Paragraph('superpowers', td_style), Paragraph('9/12', td_center_style), Paragraph('7/8', td_center_style), Paragraph('4/6', td_center_style), Paragraph('4/6', td_center_style), Paragraph('24', td_center_style)],
+   881→    [Paragraph('context-compressor', td_style), Paragraph('7/12', td_center_style), Paragraph('7/8', td_center_style), Paragraph('5/6', td_center_style), Paragraph('3/6', td_center_style), Paragraph('22', td_center_style)],
+   882→    [Paragraph('chain-of-thought', td_style), Paragraph('6/12', td_center_style), Paragraph('5/8', td_center_style), Paragraph('5/6', td_center_style), Paragraph('3/6', td_center_style), Paragraph('19', td_center_style)],
+   883→    [Paragraph('deployment-manager', td_style), Paragraph('8/12', td_center_style), Paragraph('5/8', td_center_style), Paragraph('4/6', td_center_style), Paragraph('5/6', td_center_style), Paragraph('22', td_center_style)],
+   884→    [Paragraph('feedback-loop', td_style), Paragraph('5/12', td_center_style), Paragraph('4/8', td_center_style), Paragraph('4/6', td_center_style), Paragraph('5/6', td_center_style), Paragraph('18', td_center_style)],
+   885→]
+   886→story.append(Spacer(1, 8))
+   887→story.append(make_table(universal_data, [CONTENT_W*0.20, CONTENT_W*0.14, CONTENT_W*0.14, CONTENT_W*0.14, CONTENT_W*0.14, CONTENT_W*0.18]))
+   888→story.append(Paragraph('Table 8: Universal Skill Cross-Reference (Top 6 by Total Appearances)', caption_style))
+   889→
+   890→# Key findings
+   891→story.append(add_heading('Critical Findings', h2_style, 1))
+   892→
+   893→findings = [
+   894→    ('<b>Finding 1: Universal Core Exists.</b> The combination of persistent-memory + superpowers + context-compressor appears '
+   895→     'in 8+ use-cases and 7+ user types. These three skills form the universal foundation layer that should be loaded in every '
+   896→     'skill stack configuration, regardless of domain or user type. Any stack that omits one of these three is likely incomplete.'),
+   897→    ('<b>Finding 2: Infrastructure Category is the Tightest Cluster.</b> The six Infrastructure skills (9router-gateway, '
+   898→     'owl-proxy-defense, antigravity-proxy, 4cli-unified, triune-proxy-stack, secret-vault) achieve a synergy score of 96 in the '
+   899→     'Unified AI Gateway MCP stack, the highest of any category. These skills work best as a complete set; partial deployment '
+   900→     'significantly reduces their effectiveness.'),
+   901→    ('<b>Finding 3: Mobile is the Weakest Use-Case.</b> UC6 (Mobile App Development) scores the lowest synergy at 84 because '
+   902→     'none of the 76 skills are specifically designed for React Native or mobile development. A dedicated mobile skill covering '
+   903→     'native modules, platform-specific APIs, app store guidelines, and mobile performance optimization would close this gap '
+   904→     'and likely increase the synergy score to 88-90.'),
+   905→    ('<b>Finding 4: Analytics/Metrics is the Missing Capability.</b> No skill in the current catalog provides dedicated '
+   906→     'analytics, metrics, or observability functionality. This gap affects the Data Intelligence pipeline (no visualization skill), '
+   907→     'the Content Marketing use-case (no SEO tracking), and the DevOps use-case (no dedicated monitoring skill). This is the '
+   908→     'highest-value opportunity for skill expansion.'),
+   909→    ('<b>Finding 5: The 5-to-8 Transition is the Critical Scaling Inflection.</b> The transition from 5 to 8 team members '
+   910→     'is the most architecturally significant scaling event. At 5 people, flat topology works. At 8, it breaks. This transition '
+   911→     'requires: hub-and-spoke MCP topology, permanent security skills, shared persistent-memory partitions, and the activation '
+   912→     'of the 7-agent MASTER pipeline for cross-team coordination.'),
+   913→    ('<b>Finding 6: Content Category Forms a Near-Perfect Sequential Pipeline.</b> The four Content skills (seo-content-writer, '
+   914→     'humanizer, output-formatter, social-media-manager) form a near-perfect sequential pipeline that achieves 90 synergy. '
+   915→     'However, the category monoculture risk (all primary skills from the same category) creates fragility. Cross-category '
+   916→     'supporting skills (web-reader from Data & Web, brainstorming from Reasoning) mitigate this risk.'),
+   917→]
+   918→
+   919→for f in findings:
+   920→    story.append(Paragraph(f, body_style))
+   921→
+   922→# ━━ APPENDIX ━━
+   923→story.append(add_heading('Appendix: 76 Skills by Category', h1_style, 0))
+   924→
+   925→categories = [
+   926→    ('Design & UI (9)', 'ui-ux-pro-max-v7, anthropic-frontend-design, gsap-animations, animation-orchestrator, animation-auditor, motion-animator, gsap-animator, frontend-design, vercel-web-design-guidelines'),
+   927→    ('Reasoning (5)', 'chain-of-thought, socratic-method, devils-advocate, simulation-sandbox, brainstorming'),
+   928→    ('Development (12)', 'mcp-builder, superpowers, tdd-workflow, deployment-manager, browser-use, web-artifacts-builder, vercel-react-best-practices, explained-code, composition-patterns, threejs-orchestrator, skill-architect, context7-docs'),
+   929→    ('Content (4)', 'seo-content-writer, humanizer, social-media-manager, social-content-pillars'),
+   930→    ('Strategy (5)', 'jtbd-research, to-prd, gumroad-pipeline, feature-research, skill-finder'),
+   931→    ('System (6)', 'persistent-memory, system-prompt-sync, feedback-loop, context-compressor, agent-roles, sample-hello-skill'),
+   932→    ('Data & Web (5)', 'web-reader, audit-analyzer, web-design-guidelines, code-research, explore'),
+   933→    ('Creative (2)', 'photography-ai, output-formatter'),
+   934→    ('MCP Servers (5)', 'pictoflux-ai, mcp-stack-curator, mcp-registry, mcp-security-scanner, modelscope-mcp-hub'),
+   935→    ('Agents (7)', 'agent-rabbit, agent-owl, agent-ant, agent-eagle, agent-dolphin, agent-beaver, agent-elephant'),
+   936→    ('Infrastructure (6)', '9router-gateway, owl-proxy-defense, antigravity-proxy, 4cli-unified, triune-proxy-stack, secret-vault'),
+   937→]
+   938→
+   939→for cat_name, skills_list in categories:
+   940→    story.append(Paragraph('<b>%s:</b> %s' % (cat_name, skills_list), body_left_style))
+   941→
+   942→story.append(Spacer(1, 12))
+   943→
+   944→# 7-Agent MASTER Pipeline
+   945→story.append(Paragraph('<b>7-Agent MASTER Pipeline:</b> agent-master, agent-decision, agent-simulator, agent-auditor, agent-profiler, agent-optimizer, agent-maintenance', body_left_style))
+   946→story.append(Paragraph('<b>Animation Engineering (3):</b> animation-hybrid-architect, gsap-animation-engineer, motion-animation-engineer', body_left_style))
+   947→story.append(Paragraph('<b>4 Agent Skill Tiers:</b> SKILL_01 Conversational (4,400 tokens), SKILL_02 Design+Build (5,600 tokens), SKILL_03 Code+API (6,100 tokens), SKILL_04 Agentic (6,000 tokens)', body_left_style))
+   948→story.append(Paragraph('<b>8 MCP Stacks:</b> Full-Stack Web Studio (94), AI Research Lab (91), Content Engine (87), DevOps Command Center (92), Data Pipeline Studio (89), Security Audit Toolkit (86), Creative Studio (85), Mobile App Workshop (88), Unified AI Gateway (96)', body_left_style))
+   949→
+   950→# ━━ BUILD ━━
+   951→doc.multiBuild(story)
+   952→print(f"PDF generated: {output_path}")
+   953→print(f"File size: {os.path.getsize(output_path) / 1024:.1f} KB")
+   954→

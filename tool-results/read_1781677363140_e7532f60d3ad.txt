@@ -1,0 +1,442 @@
+     1→#!/usr/bin/env python3
+     2→"""
+     3→Generate: Skills Showcase Redesign Options — Senior Design Architect Prompt
+     4→v18.0.0 — Search-First + Design Optimization Tree + Supanova Suite + skills.sh Protocol
+     5→"""
+     6→import os, sys
+     7→from reportlab.lib.pagesizes import A4
+     8→from reportlab.lib.units import inch, mm
+     9→from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+    10→from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+    11→from reportlab.lib import colors
+    12→from reportlab.platypus import (
+    13→    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
+    14→    PageBreak, KeepTogether, HRFlowable
+    15→)
+    16→from reportlab.pdfbase import pdfmetrics
+    17→from reportlab.pdfbase.ttfonts import TTFont
+    18→from reportlab.pdfbase.pdfmetrics import registerFontFamily
+    19→
+    20→# ── Font Registration ──
+    21→pdfmetrics.registerFont(TTFont('LiberationSerif', '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf'))
+    22→pdfmetrics.registerFont(TTFont('LiberationSans', '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'))
+    23→pdfmetrics.registerFont(TTFont('DejaVuSans', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf'))
+    24→registerFontFamily('LiberationSerif', normal='LiberationSerif', bold='LiberationSerif')
+    25→registerFontFamily('LiberationSans', normal='LiberationSans', bold='LiberationSans')
+    26→
+    27→# ── Color Palette (auto-generated) ──
+    28→ACCENT       = colors.HexColor('#318ba9')
+    29→TEXT_PRIMARY  = colors.HexColor('#201f1d')
+    30→TEXT_MUTED    = colors.HexColor('#7e7972')
+    31→BG_SURFACE   = colors.HexColor('#e2ded8')
+    32→BG_PAGE      = colors.HexColor('#f1efed')
+    33→PURPLE       = colors.HexColor('#4338ca')
+    34→SUPANOVA_BG  = colors.HexColor('#f5f3ff')
+    35→SUPANOVA_BD  = colors.HexColor('#7c3aed')
+    36→
+    37→# ── Styles ──
+    38→styles = getSampleStyleSheet()
+    39→
+    40→title_style = ParagraphStyle(
+    41→    'DocTitle', fontName='LiberationSerif', fontSize=28, leading=36,
+    42→    alignment=TA_CENTER, textColor=ACCENT, spaceAfter=6
+    43→)
+    44→subtitle_style = ParagraphStyle(
+    45→    'DocSubtitle', fontName='LiberationSerif', fontSize=14, leading=20,
+    46→    alignment=TA_CENTER, textColor=TEXT_MUTED, spaceAfter=18
+    47→)
+    48→h1_style = ParagraphStyle(
+    49→    'H1', fontName='LiberationSerif', fontSize=20, leading=26,
+    50→    textColor=ACCENT, spaceBefore=24, spaceAfter=10
+    51→)
+    52→h2_style = ParagraphStyle(
+    53→    'H2', fontName='LiberationSerif', fontSize=15, leading=20,
+    54→    textColor=colors.HexColor('#1a5f7a'), spaceBefore=16, spaceAfter=8
+    55→)
+    56→h3_style = ParagraphStyle(
+    57→    'H3', fontName='LiberationSerif', fontSize=12, leading=16,
+    58→    textColor=TEXT_PRIMARY, spaceBefore=10, spaceAfter=6
+    59→)
+    60→body_style = ParagraphStyle(
+    61→    'Body', fontName='LiberationSerif', fontSize=10.5, leading=17,
+    62→    alignment=TA_JUSTIFY, textColor=TEXT_PRIMARY, spaceAfter=8
+    63→)
+    64→code_style = ParagraphStyle(
+    65→    'Code', fontName='DejaVuSans', fontSize=8.5, leading=13,
+    66→    textColor=colors.HexColor('#1e40af'), leftIndent=18,
+    67→    backColor=colors.HexColor('#f0f4ff'), spaceAfter=6,
+    68→    borderPadding=(4, 6, 4, 6)
+    69→)
+    70→bullet_style = ParagraphStyle(
+    71→    'Bullet', fontName='LiberationSerif', fontSize=10.5, leading=17,
+    72→    textColor=TEXT_PRIMARY, leftIndent=24, bulletIndent=12, spaceAfter=4
+    73→)
+    74→small_style = ParagraphStyle(
+    75→    'Small', fontName='LiberationSerif', fontSize=9, leading=13,
+    76→    textColor=TEXT_MUTED, spaceAfter=4
+    77→)
+    78→header_cell_style = ParagraphStyle(
+    79→    'HeaderCell', fontName='LiberationSerif', fontSize=10, leading=14,
+    80→    textColor=colors.white, alignment=TA_CENTER
+    81→)
+    82→cell_style = ParagraphStyle(
+    83→    'Cell', fontName='LiberationSerif', fontSize=9.5, leading=14,
+    84→    textColor=TEXT_PRIMARY, alignment=TA_CENTER
+    85→)
+    86→cell_left_style = ParagraphStyle(
+    87→    'CellLeft', fontName='LiberationSerif', fontSize=9.5, leading=14,
+    88→    textColor=TEXT_PRIMARY, alignment=TA_LEFT
+    89→)
+    90→
+    91→OUTPUT = '/home/z/my-project/download/Skills_Showcase_Redesign_Options.pdf'
+    92→
+    93→doc = SimpleDocTemplate(
+    94→    OUTPUT, pagesize=A4,
+    95→    leftMargin=1*inch, rightMargin=1*inch,
+    96→    topMargin=0.8*inch, bottomMargin=0.8*inch
+    97→)
+    98→
+    99→story = []
+   100→W = A4[0] - 2*inch  # available width
+   101→
+   102→# ── COVER ──
+   103→story.append(Spacer(1, 60))
+   104→story.append(Paragraph('<b>Skills Showcase Redesign Options</b>', title_style))
+   105→story.append(Spacer(1, 8))
+   106→story.append(Paragraph('Senior Design Architect Prompt v18.0.0', subtitle_style))
+   107→story.append(HRFlowable(width='60%', thickness=1.5, color=ACCENT, spaceAfter=20, spaceBefore=8))
+   108→story.append(Paragraph('Interactive Web | Mobile-First | Ultra-Modern | Sophisticated &amp; Clean | Creative &amp; Bold', ParagraphStyle('Tagline', fontName='LiberationSerif', fontSize=11, leading=16, alignment=TA_CENTER, textColor=TEXT_MUTED, spaceAfter=16)))
+   109→story.append(Spacer(1, 12))
+   110→
+   111→# Context block
+   112→ctx_data = [
+   113→    [Paragraph('<b>Project</b>', header_cell_style), Paragraph('<b>Current Version</b>', header_cell_style), Paragraph('<b>Skills Count</b>', header_cell_style), Paragraph('<b>Stack</b>', header_cell_style)],
+   114→    [Paragraph('opencode-accomplishments', cell_style), Paragraph('v18.0.0', cell_style), Paragraph('87 across 11 categories', cell_style), Paragraph('HTML/CSS/JS PWA', cell_style)],
+   115→]
+   116→ctx_table = Table(ctx_data, colWidths=[W*0.30, W*0.20, W*0.28, W*0.22])
+   117→ctx_table.setStyle(TableStyle([
+   118→    ('BACKGROUND', (0,0), (-1,0), ACCENT),
+   119→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   120→    ('BACKGROUND', (0,1), (-1,-1), colors.white),
+   121→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   122→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   123→    ('TOPPADDING', (0,0), (-1,-1), 6),
+   124→    ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+   125→    ('LEFTPADDING', (0,0), (-1,-1), 8),
+   126→    ('RIGHTPADDING', (0,0), (-1,-1), 8),
+   127→    ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+   128→]))
+   129→story.append(ctx_table)
+   130→story.append(Spacer(1, 20))
+   131→
+   132→# Skill stack
+   133→story.append(Paragraph('<b>Integrated Combination Skill Stack</b>', h2_style))
+   134→stack_data = [
+   135→    [Paragraph('<b>Skill</b>', header_cell_style), Paragraph('<b>Install Command</b>', header_cell_style), Paragraph('<b>Installs</b>', header_cell_style), Paragraph('<b>Role</b>', header_cell_style)],
+   136→    [Paragraph('Stitch Loop', cell_left_style), Paragraph('npx skills add google-labs-code/stitch-skills --skill stitch-loop', cell_left_style), Paragraph('42.2K', cell_style), Paragraph('Iterative site builder', cell_left_style)],
+   137→    [Paragraph('Framer Motion Animator', cell_left_style), Paragraph('npx skills add patricio0312rev/skills --skill framer-motion-animator', cell_left_style), Paragraph('5.8K', cell_style), Paragraph('Animation + micro-interactions', cell_left_style)],
+   138→    [Paragraph('UI/UX Pro Max', cell_left_style), Paragraph('npx skills add nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max', cell_left_style), Paragraph('201.8K', cell_style), Paragraph('Design intelligence engine', cell_left_style)],
+   139→    [Paragraph('21st Dev Registry', cell_left_style), Paragraph('npx @21st-dev/registry install-skill --global', cell_left_style), Paragraph('234', cell_style), Paragraph('Component publishing + sharing', cell_left_style)],
+   140→]
+   141→stack_table = Table(stack_data, colWidths=[W*0.18, W*0.42, W*0.12, W*0.28])
+   142→stack_table.setStyle(TableStyle([
+   143→    ('BACKGROUND', (0,0), (-1,0), ACCENT),
+   144→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   145→    ('BACKGROUND', (0,1), (-1,-1), colors.white),
+   146→    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_SURFACE]),
+   147→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   148→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   149→    ('TOPPADDING', (0,0), (-1,-1), 5),
+   150→    ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+   151→    ('LEFTPADDING', (0,0), (-1,-1), 6),
+   152→    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+   153→]))
+   154→story.append(stack_table)
+   155→
+   156→story.append(PageBreak())
+   157→
+   158→# ── SECTION 1: DESIGN BRIEF ──
+   159→story.append(Paragraph('<b>1. Design Brief</b>', h1_style))
+   160→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   161→
+   162→story.append(Paragraph('<b>1.1 Objective</b>', h2_style))
+   163→story.append(Paragraph(
+   164→    'Redesign the Skills Showcase (87 skills, 11 categories) as a search-first, mobile-first interactive web experience that is ultra-modern, sophisticated and clean, yet creative and bold. The redesign must integrate four external skill systems (Stitch Loop, Framer Motion Animator, UI/UX Pro Max, 21st Dev Registry) following the skills.sh open agent skills protocol, and restructure every skill in the project to use the standardized <font name="DejaVuSans" size="8.5">npx skills add</font> install format. The design must present the Design Optimization Tree as a first-class interactive element, showcase the Supanova Suite from uxjoseph as a premium design tier, and make every skill installable via a single CLI command.',
+   165→    body_style
+   166→))
+   167→
+   168→story.append(Paragraph('<b>1.2 Target Audience</b>', h2_style))
+   169→story.append(Paragraph(
+   170→    'AI agent developers, design engineers, and full-stack builders who use AI coding agents (Claude Code, Cursor, Windsurf, Codex, Gemini CLI, GitHub Copilot). They expect instant search, one-click install commands, and visual hierarchy that maps directly to their development workflow. They browse on mobile during commutes and on desktop during deep work sessions. They value speed over decoration, but demand aesthetic sophistication as a signal of quality.',
+   171→    body_style
+   172→))
+   173→
+   174→story.append(Paragraph('<b>1.3 Design Principles</b>', h2_style))
+   175→principles = [
+   176→    'Search-first architecture: the search bar is the primary interaction, not a secondary filter',
+   177→    'Mobile-first responsive: touch targets 44x44px minimum, bottom-sheet modals, swipe gestures',
+   178→    'Ultra-modern:大胆 (bold) typography, dramatic scale contrast, cinematic whitespace',
+   179→    'Sophisticated and clean: zero decorative noise, every element earns its place',
+   180→    'Creative and bold: unexpected layout decisions, asymmetric grids, purposeful rule-breaking',
+   181→    'skills.sh protocol compliance: every skill displays its install command in standardized format',
+   182→    'Optimization tree as navigation: the design tree is the map, search is the compass',
+   183→]
+   184→for p in principles:
+   185→    story.append(Paragraph(p, bullet_style, bulletText='\xe2\x80\xa2'.decode('utf-8') if isinstance('\xe2\x80\xa2', bytes) else '\u2022'))
+   186→
+   187→# ── SECTION 2: SKILLS.SH PROTOCOL STANDARDIZATION ──
+   188→story.append(Paragraph('<b>2. skills.sh Protocol Standardization</b>', h1_style))
+   189→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   190→
+   191→story.append(Paragraph(
+   192→    'Following the Vercel skills ecosystem standard (vercel.com/changelog/introducing-skills-the-open-agent-skills-ecosystem), every skill in the project must be restructured to follow the <font name="DejaVuSans" size="8.5">npx skills add</font> protocol. This means each skill card must display its install command, and the SKILL.md frontmatter must conform to the standard schema with name and description fields at minimum.',
+   193→    body_style
+   194→))
+   195→
+   196→story.append(Paragraph('<b>2.1 SKILL.md Standard Format</b>', h2_style))
+   197→story.append(Paragraph(
+   198→    'Every SKILL.md must follow this frontmatter schema, derived from the skills.sh open standard:',
+   199→    body_style
+   200→))
+   201→story.append(Paragraph(
+   202→    '---<br/>name: skill-name<br/>description: What this skill does and when to use it<br/>allowed-tools:<br/>  - "tool*:*"<br/>---<br/><br/># Skill Name<br/><br/>Instructions for the agent...',
+   203→    code_style
+   204→))
+   205→
+   206→story.append(Paragraph('<b>2.2 Install Command Format</b>', h2_style))
+   207→story.append(Paragraph(
+   208→    'Every skill card in the UI must display its install command in one of these standardized formats:',
+   209→    body_style
+   210→))
+   211→cmd_data = [
+   212→    [Paragraph('<b>Format</b>', header_cell_style), Paragraph('<b>Command Pattern</b>', header_cell_style), Paragraph('<b>Example</b>', header_cell_style)],
+   213→    [Paragraph('GitHub shorthand', cell_left_style), Paragraph('npx skills add owner/repo --skill name', cell_left_style), Paragraph('npx skills add nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max', cell_left_style)],
+   214→    [Paragraph('Full GitHub URL', cell_left_style), Paragraph('npx skills add https://github.com/owner/repo', cell_left_style), Paragraph('npx skills add https://github.com/patricio0312rev/skills', cell_left_style)],
+   215→    [Paragraph('Scoped skill', cell_left_style), Paragraph('npx skills add owner/repo --skill name', cell_left_style), Paragraph('npx skills add google-labs-code/stitch-skills --skill stitch-loop', cell_left_style)],
+   216→    [Paragraph('Global install', cell_left_style), Paragraph('npx skills add owner/repo -g', cell_left_style), Paragraph('npx @21st-dev/registry install-skill --global', cell_left_style)],
+   217→    [Paragraph('Local path', cell_left_style), Paragraph('npx skills add ./path', cell_left_style), Paragraph('npx skills add ./skills/design-nested', cell_left_style)],
+   218→]
+   219→cmd_table = Table(cmd_data, colWidths=[W*0.18, W*0.35, W*0.47])
+   220→cmd_table.setStyle(TableStyle([
+   221→    ('BACKGROUND', (0,0), (-1,0), ACCENT),
+   222→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   223→    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_SURFACE]),
+   224→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   225→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   226→    ('TOPPADDING', (0,0), (-1,-1), 4),
+   227→    ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+   228→    ('LEFTPADDING', (0,0), (-1,-1), 6),
+   229→    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+   230→]))
+   231→story.append(cmd_table)
+   232→story.append(Spacer(1, 10))
+   233→
+   234→story.append(Paragraph('<b>2.3 Project Skill Mapping to skills.sh Format</b>', h2_style))
+   235→story.append(Paragraph(
+   236→    'All 87 skills in the project must be mapped to the skills.sh install command format. Skills with existing skills.sh entries use their canonical commands. Internal/project-specific skills use the local path format. The following table shows the mapping for each category:',
+   237→    body_style
+   238→))
+   239→
+   240→mapping_data = [
+   241→    [Paragraph('<b>Category</b>', header_cell_style), Paragraph('<b>Count</b>', header_cell_style), Paragraph('<b>Install Source</b>', header_cell_style), Paragraph('<b>Example Command</b>', header_cell_style)],
+   242→    [Paragraph('Design &amp; UI', cell_left_style), Paragraph('19', cell_style), Paragraph('Mixed (skills.sh + local)', cell_left_style), Paragraph('npx skills add nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max', cell_left_style)],
+   243→    [Paragraph('Animation Pipeline', cell_left_style), Paragraph('7', cell_style), Paragraph('Mixed', cell_left_style), Paragraph('npx skills add patricio0312rev/skills --skill framer-motion-animator', cell_left_style)],
+   244→    [Paragraph('Reasoning', cell_left_style), Paragraph('5', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/chain-of-thought', cell_left_style)],
+   245→    [Paragraph('Development', cell_left_style), Paragraph('11', cell_style), Paragraph('Mixed (skills.sh + local)', cell_left_style), Paragraph('npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices', cell_left_style)],
+   246→    [Paragraph('Content', cell_left_style), Paragraph('4', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/seo-content-writer', cell_left_style)],
+   247→    [Paragraph('Strategy', cell_left_style), Paragraph('5', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/jtbd-research', cell_left_style)],
+   248→    [Paragraph('System', cell_left_style), Paragraph('6', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/persistent-memory', cell_left_style)],
+   249→    [Paragraph('Data &amp; Web', cell_left_style), Paragraph('5', cell_style), Paragraph('Mixed', cell_left_style), Paragraph('npx skills add vercel-labs/agent-skills --skill web-reader', cell_left_style)],
+   250→    [Paragraph('Creative', cell_left_style), Paragraph('2', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/photography-ai', cell_left_style)],
+   251→    [Paragraph('MCP Servers', cell_left_style), Paragraph('5', cell_style), Paragraph('Mixed', cell_left_style), Paragraph('npx skills add ./skills/mcp-stack-curator', cell_left_style)],
+   252→    [Paragraph('Agents', cell_left_style), Paragraph('14', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/agent-master', cell_left_style)],
+   253→    [Paragraph('Infrastructure', cell_left_style), Paragraph('11', cell_style), Paragraph('Local', cell_left_style), Paragraph('npx skills add ./skills/9router-gateway', cell_left_style)],
+   254→]
+   255→mapping_table = Table(mapping_data, colWidths=[W*0.17, W*0.08, W*0.25, W*0.50])
+   256→mapping_table.setStyle(TableStyle([
+   257→    ('BACKGROUND', (0,0), (-1,0), ACCENT),
+   258→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   259→    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_SURFACE]),
+   260→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   261→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   262→    ('TOPPADDING', (0,0), (-1,-1), 4),
+   263→    ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+   264→    ('LEFTPADDING', (0,0), (-1,-1), 6),
+   265→    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+   266→]))
+   267→story.append(mapping_table)
+   268→
+   269→story.append(PageBreak())
+   270→
+   271→# ── SECTION 3: FIVE REDESIGN OPTIONS ──
+   272→story.append(Paragraph('<b>3. Five Redesign Options</b>', h1_style))
+   273→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   274→
+   275→story.append(Paragraph(
+   276→    'Each option below is a complete design concept with a distinct visual philosophy, layout approach, interaction model, and skill integration strategy. All five share the common requirements: search-first architecture, mobile-first responsive, skills.sh protocol compliance, Design Optimization Tree, and Supanova Suite integration. The differences lie in how these elements are composed, animated, and experienced.',
+   277→    body_style
+   278→))
+   279→
+   280→# ── OPTION 1 ──
+   281→story.append(Spacer(1, 12))
+   282→story.append(Paragraph('<b>Option 1: Command Palette</b>', h2_style))
+   283→story.append(Paragraph('<i>"VS Code meets Skills.sh"</i>', ParagraphStyle('Italic', fontName='LiberationSerif', fontSize=10, leading=14, textColor=TEXT_MUTED, spaceAfter=8)))
+   284→
+   285→story.append(Paragraph('<b>Visual Philosophy:</b> Developer-tool aesthetic inspired by VS Code command palette and Raycast. Dark mode default. Monospace accents. Keyboard-centric navigation. The entire experience feels like a power-user tool, not a marketing site.', body_style))
+   286→story.append(Paragraph('<b>Layout:</b> Single full-viewport command palette overlay. Press "/" or click the search bar to activate. Skills appear as a fuzzy-searched list with keyboard navigation (arrow keys + Enter). Category filters are tabs along the top. The Design Optimization Tree renders as a collapsible sidebar with tree-line connectors. Supanova skills glow with a purple accent.', body_style))
+   287→story.append(Paragraph('<b>Mobile Adaptation:</b> Bottom-sheet search with swipe-up gesture. Skills render as tappable cards in a vertical list. Tree collapses to a breadcrumb trail. Install commands are one-tap copyable.', body_style))
+   288→story.append(Paragraph('<b>Skill Integration:</b> Each skill card is a single row: icon + name + category badge + install command. The install command uses the skills.sh format with a copy button. Stitch Loop integrates as a "Generate Site" action at the top of the palette. Framer Motion Animator adds micro-interaction presets. UI/UX Pro Max provides the design system generator as a sub-command. 21st Dev Registry appears as a "Publish Component" action.', body_style))
+   289→story.append(Paragraph('<b>Typography:</b> JetBrains Mono for commands and install strings. Inter for body text. Massive scale contrast: search input at 24px, results at 14px. Zero serif.', body_style))
+   290→story.append(Paragraph('<b>Animation:</b> Framer Motion for the palette open/close (spring physics), stagger-in for search results, layout animations for filter changes. GSAP for the tree sidebar expansion. Reduced motion: instant show/hide.', body_style))
+   291→
+   292→opt1_skills = [
+   293→    [Paragraph('<b>Stack Skill</b>', header_cell_style), Paragraph('<b>Integration Point</b>', header_cell_style), Paragraph('<b>Interaction</b>', header_cell_style)],
+   294→    [Paragraph('Stitch Loop', cell_left_style), Paragraph('Top-of-palette action', cell_left_style), Paragraph('"Generate Site" button triggers baton-pass loop', cell_left_style)],
+   295→    [Paragraph('Framer Motion', cell_left_style), Paragraph('Palette + result animations', cell_left_style), Paragraph('Spring-based open/close, staggered results', cell_left_style)],
+   296→    [Paragraph('UI/UX Pro Max', cell_left_style), Paragraph('Design system sub-command', cell_left_style), Paragraph('Type "design" to trigger system generator', cell_left_style)],
+   297→    [Paragraph('21st Dev Registry', cell_left_style), Paragraph('Publish action', cell_left_style), Paragraph('Right-click skill card to publish component', cell_left_style)],
+   298→]
+   299→opt1_table = Table(opt1_skills, colWidths=[W*0.22, W*0.35, W*0.43])
+   300→opt1_table.setStyle(TableStyle([
+   301→    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1e293b')),
+   302→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   303→    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_SURFACE]),
+   304→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   305→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   306→    ('TOPPADDING', (0,0), (-1,-1), 4),
+   307→    ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+   308→    ('LEFTPADDING', (0,0), (-1,-1), 6),
+   309→    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+   310→]))
+   311→story.append(opt1_table)
+   312→
+   313→# ── OPTION 2 ──
+   314→story.append(Spacer(1, 16))
+   315→story.append(Paragraph('<b>Option 2: Spatial Canvas</b>', h2_style))
+   316→story.append(Paragraph('<i>"Figma meets Skills Galaxy"</i>', ParagraphStyle('Italic2', fontName='LiberationSerif', fontSize=10, leading=14, textColor=TEXT_MUTED, spaceAfter=8)))
+   317→
+   318→story.append(Paragraph('<b>Visual Philosophy:</b> Infinite canvas with skill nodes as interactive objects on a 2D plane. Zoom in for detail, zoom out for overview. Inspired by Figma, Miro, and the skills.sh trending visualization. The Design Optimization Tree IS the canvas. Supanova skills are constellation clusters with connecting lines. Each node is a skill card that expands on click.', body_style))
+   319→story.append(Paragraph('<b>Layout:</b> Full-viewport canvas with pan/zoom. Skills are positioned by category in radial clusters around the design-nested root node. The search bar floats top-center with a minimap in the bottom-right. Category filters highlight/dim clusters. The tree hierarchy is visible at default zoom; skill details appear at closer zoom.', body_style))
+   320→story.append(Paragraph('<b>Mobile Adaptation:</b> Touch pan and pinch zoom. Cards expand to full-screen detail sheets with swipe-to-dismiss. Search bar is persistent at top. Minimap becomes a category quick-jump bar at bottom.', body_style))
+   321→story.append(Paragraph('<b>Skill Integration:</b> Each node displays the skill name, icon, and a small install badge. Tapping a node reveals the full skill card with the skills.sh install command in a prominent position. Stitch Loop creates a "build zone" on the canvas where generated pages appear as connected nodes. Framer Motion powers the zoom transitions and node expansion animations. UI/UX Pro Max nodes are larger and more detailed, reflecting their higher install counts. 21st Dev Registry adds a "publish" radial menu option.', body_style))
+   322→story.append(Paragraph('<b>Typography:</b> Sora for headings (geometric, modern), Source Sans Pro for body. Canvas text uses a condensed variant for density. Skill names at 14px on canvas, 24px in expanded view.', body_style))
+   323→story.append(Paragraph('<b>Animation:</b> GSAP ScrollTrigger-style zoom transitions. Framer Motion for node expansion and card transitions. Canvas uses CSS transforms for performance. Spring physics for drag-and-release of nodes. Parallax depth between cluster layers.', body_style))
+   324→
+   325→# ── OPTION 3 ──
+   326→story.append(Spacer(1, 16))
+   327→story.append(Paragraph('<b>Option 3: Magazine Editorial</b>', h2_style))
+   328→story.append(Paragraph('<i>"Kinfolk meets The Verge for AI Skills"</i>', ParagraphStyle('Italic3', fontName='LiberationSerif', fontSize=10, leading=14, textColor=TEXT_MUTED, spaceAfter=8)))
+   329→
+   330→story.append(Paragraph('<b>Visual Philosophy:</b> Long-form editorial layout with dramatic typography, generous whitespace, and full-bleed imagery. Skills are presented as curated stories, not database entries. The Design Optimization Tree is a full-bleed infographic. Supanova Suite gets a dedicated "cover story" section. Inspired by Kinfolk, Cereal, and The Verge long-form articles.', body_style))
+   331→story.append(Paragraph('<b>Layout:</b> Vertical scroll narrative. Hero section with a massive "87 Skills" headline and a single search bar. Scroll-triggered sections: featured skill story, category overview with large type numbers, the Design Optimization Tree as a full-width infographic, Supanova cover story with premium aesthetic samples, and finally the searchable grid. Search is persistent via a floating action button.', body_style))
+   332→story.append(Paragraph('<b>Mobile Adaptation:</b> Single-column scroll with full-bleed images. Sticky search FAB at bottom-right. Skills cards stack vertically with generous padding. Tree becomes an accordion. Supanova section gets swipeable gallery.', body_style))
+   333→story.append(Paragraph('<b>Skill Integration:</b> Featured skills get a story treatment with full description, use cases, and the skills.sh install command in a pull-quote style box. Regular skills in the grid show a compact card with name, category, and a copyable install command. Stitch Loop is presented as a narrative "how we built this" section. Framer Motion handles scroll-triggered reveals and parallax. UI/UX Pro Max provides the design rules governing the editorial layout itself. 21st Dev Registry links appear as "Related Components" in each skill story.', body_style))
+   334→story.append(Paragraph('<b>Typography:</b> Playfair Display for headlines (keeps current brand), but pushed to extremes: 72px hero, 48px section titles. Inter for body. Dramatic scale contrast: 72px vs 11px. Generous line-height (1.8). Orphan control via CSS.', body_style))
+   335→story.append(Paragraph('<b>Animation:</b> GSAP ScrollTrigger for all scroll-based animations: text reveals, parallax layers, progress bars. Framer Motion for interactive elements: modal open/close, FAB expansion. No animation on skills that are not in viewport. Reduced motion: opacity-only transitions.', body_style))
+   336→
+   337→# ── OPTION 4 ──
+   338→story.append(Spacer(1, 16))
+   339→story.append(Paragraph('<b>Option 4: Glassmorphic Dashboard</b>', h2_style))
+   340→story.append(Paragraph('<i>"Linear meets Arc Browser for Skills"</i>', ParagraphStyle('Italic4', fontName='LiberationSerif', fontSize=10, leading=14, textColor=TEXT_MUTED, spaceAfter=8)))
+   341→
+   342→story.append(Paragraph('<b>Visual Philosophy:</b> Glassmorphic cards on a dark gradient background. Sidebar navigation with category tree. Main content area shows skill cards in a masonry grid. The Design Optimization Tree lives in the sidebar as an expandable tree control. Supanova skills have a frosted-glass purple treatment. Inspired by Linear, Arc Browser, and Raycast.', body_style))
+   343→story.append(Paragraph('<b>Layout:</b> Three-column layout: (1) narrow sidebar with categories + tree, (2) main content with search bar at top + skill grid below, (3) detail panel that slides in from the right when a skill is selected. The search bar is always visible at the top of the main column. Keyboard shortcut "/" focuses search.', body_style))
+   344→story.append(Paragraph('<b>Mobile Adaptation:</b> Sidebar collapses to bottom tab bar. Detail panel becomes a full-screen modal. Grid switches to 1-column. Tree accessible via dedicated tab. Search bar persistent at top with voice input option.', body_style))
+   345→story.append(Paragraph('<b>Skill Integration:</b> Skill cards show icon, name, category badge, and a one-line install command with copy button. The detail panel shows full description, tags, the complete skills.sh install command, MCP servers, and JSON-LD. Stitch Loop integrates as a "Generate" tab in the detail panel. Framer Motion powers panel slide-in/out and card hover effects. UI/UX Pro Max provides the glassmorphism design tokens. 21st Dev Registry adds a "Publish to Team" button in the detail panel.', body_style))
+   346→story.append(Paragraph('<b>Typography:</b> SF Pro or Inter with tight letter-spacing. All-caps category labels. Monospace for install commands. Contrast: white text on dark glass, muted text on surfaces. Small but perfectly legible.', body_style))
+   347→story.append(Paragraph('<b>Animation:</b> Framer Motion for panel transitions and card hover lift. GSAP for the tree expansion animation and sidebar category scroll. Glass cards have subtle parallax on mouse move (desktop only). Backdrop-filter for glass effect. Reduced motion: no parallax, instant panels.', body_style))
+   348→
+   349→# ── OPTION 5 ──
+   350→story.append(Spacer(1, 16))
+   351→story.append(Paragraph('<b>Option 5: Conversational Interface</b>', h2_style))
+   352→story.append(Paragraph('<i>"ChatGPT meets Skills.sh Directory"</i>', ParagraphStyle('Italic5', fontName='LiberationSerif', fontSize=10, leading=14, textColor=TEXT_MUTED, spaceAfter=8)))
+   353→
+   354→story.append(Paragraph('<b>Visual Philosophy:</b> Chat-based interface where the user describes what they need and the system recommends skills. The search bar becomes a chat input. Results appear as message bubbles with skill cards embedded. The Design Optimization Tree is presented as a visual "thinking" step before recommendations. Supanova skills appear with premium visual treatment inside the chat bubbles. Inspired by ChatGPT, Perplexity, and the Vercel AI SDK patterns.', body_style))
+   355→story.append(Paragraph('<b>Layout:</b> Full-height chat interface with persistent input at bottom. Initial screen shows a greeting with suggested prompts: "I need a landing page", "Animate my React app", "Set up a proxy stack", "Design a mobile app". Each prompt triggers a skill recommendation chain from the Design Optimization Tree. Results appear as rich message bubbles with skill cards, install commands, and rationale. A sidebar toggle shows the full skills directory with traditional grid/list view.', body_style))
+   356→story.append(Paragraph('<b>Mobile Adaptation:</b> Native chat experience with bottom input bar. Suggested prompts as horizontal scrollable chips. Skill cards are compact with expand-on-tap. Sidebar becomes a slide-over sheet. Install commands are one-tap copyable with haptic feedback.', body_style))
+   357→story.append(Paragraph('<b>Skill Integration:</b> Each recommendation includes the skills.sh install command prominently. The system explains WHY each skill was recommended using the Design Optimization Tree routing logic. Stitch Loop is recommended when the user says "build me a site" and triggers the baton-pass loop automatically. Framer Motion is recommended for any animation request. UI/UX Pro Max is recommended for any design system request. 21st Dev Registry is suggested after a skill is used: "Want to share this component with your team?".', body_style))
+   358→story.append(Paragraph('<b>Typography:</b> Clean chat typography: system font stack (San Francisco on iOS, Segoe UI on Windows). Monospace for install commands in code blocks. Generous line-height (1.7) for readability. Small avatar icons for the "assistant" messages.', body_style))
+   359→story.append(Paragraph('<b>Animation:</b> Framer Motion for message bubble entrance animations (spring from bottom). GSAP for the tree "thinking" visualization (nodes light up in sequence as the system routes). Typing indicator during recommendation generation. Card expand/collapse with layout animation. Reduced motion: instant show, no typing indicator.', body_style))
+   360→
+   361→story.append(PageBreak())
+   362→
+   363→# ── SECTION 4: COMPARATIVE MATRIX ──
+   364→story.append(Paragraph('<b>4. Comparative Decision Matrix</b>', h1_style))
+   365→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   366→
+   367→story.append(Paragraph(
+   368→    'The following matrix compares all five options across key design dimensions. Use this to select the option that best aligns with the project goals, or combine elements from multiple options into a hybrid approach.',
+   369→    body_style
+   370→))
+   371→
+   372→matrix_data = [
+   373→    [Paragraph('<b>Dimension</b>', header_cell_style), Paragraph('<b>Opt 1: Command Palette</b>', header_cell_style), Paragraph('<b>Opt 2: Spatial Canvas</b>', header_cell_style), Paragraph('<b>Opt 3: Magazine Editorial</b>', header_cell_style), Paragraph('<b>Opt 4: Glass Dashboard</b>', header_cell_style), Paragraph('<b>Opt 5: Conversational</b>', header_cell_style)],
+   374→    [Paragraph('Search Priority', cell_left_style), Paragraph('Highest', cell_style), Paragraph('Medium', cell_style), Paragraph('Medium', cell_style), Paragraph('High', cell_style), Paragraph('Highest', cell_style)],
+   375→    [Paragraph('Mobile UX', cell_left_style), Paragraph('Good', cell_style), Paragraph('Complex', cell_style), Paragraph('Excellent', cell_style), Paragraph('Good', cell_style), Paragraph('Excellent', cell_style)],
+   376→    [Paragraph('Tree Integration', cell_left_style), Paragraph('Sidebar', cell_style), Paragraph('Native', cell_style), Paragraph('Infographic', cell_style), Paragraph('Sidebar', cell_style), Paragraph('Thinking step', cell_style)],
+   377→    [Paragraph('Supanova Showcase', cell_left_style), Paragraph('Purple glow', cell_style), Paragraph('Constellation', cell_style), Paragraph('Cover story', cell_style), Paragraph('Frosted glass', cell_style), Paragraph('Premium card', cell_style)],
+   378→    [Paragraph('Developer Appeal', cell_left_style), Paragraph('Highest', cell_style), Paragraph('Medium', cell_style), Paragraph('Medium', cell_style), Paragraph('High', cell_style), Paragraph('High', cell_style)],
+   379→    [Paragraph('Implementation Complexity', cell_left_style), Paragraph('Low', cell_style), Paragraph('Very High', cell_style), Paragraph('Medium', cell_style), Paragraph('Medium', cell_style), Paragraph('High', cell_style)],
+   380→    [Paragraph('Accessibility', cell_left_style), Paragraph('Excellent', cell_style), Paragraph('Challenging', cell_style), Paragraph('Good', cell_style), Paragraph('Good', cell_style), Paragraph('Good', cell_style)],
+   381→    [Paragraph('Performance Budget', cell_left_style), Paragraph('30KB', cell_style), Paragraph('100KB+', cell_style), Paragraph('50KB', cell_style), Paragraph('40KB', cell_style), Paragraph('45KB', cell_style)],
+   382→    [Paragraph('Brand Fit', cell_left_style), Paragraph('Strong', cell_style), Paragraph('Bold', cell_style), Paragraph('Premium', cell_style), Paragraph('Modern', cell_style), Paragraph('Friendly', cell_style)],
+   383→]
+   384→matrix_table = Table(matrix_data, colWidths=[W*0.16, W*0.168, W*0.168, W*0.168, W*0.168, W*0.168])
+   385→matrix_table.setStyle(TableStyle([
+   386→    ('BACKGROUND', (0,0), (-1,0), ACCENT),
+   387→    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+   388→    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_SURFACE]),
+   389→    ('GRID', (0,0), (-1,-1), 0.5, TEXT_MUTED),
+   390→    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+   391→    ('TOPPADDING', (0,0), (-1,-1), 4),
+   392→    ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+   393→    ('LEFTPADDING', (0,0), (-1,-1), 4),
+   394→    ('RIGHTPADDING', (0,0), (-1,-1), 4),
+   395→    ('FONTSIZE', (0,1), (-1,-1), 8),
+   396→]))
+   397→story.append(matrix_table)
+   398→
+   399→story.append(Spacer(1, 16))
+   400→
+   401→# ── SECTION 5: IMPLEMENTATION ROADMAP ──
+   402→story.append(Paragraph('<b>5. Implementation Roadmap</b>', h1_style))
+   403→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   404→
+   405→story.append(Paragraph('<b>Phase 1: skills.sh Protocol Migration (All Options)</b>', h2_style))
+   406→story.append(Paragraph(
+   407→    'Before any visual redesign, every skill in the project must be migrated to the skills.sh standard protocol. This involves three steps that are independent of the chosen design option: (1) Update all 87 SKILL.md files to include the standard YAML frontmatter with name and description fields, following the exact format demonstrated by the stitch-loop skill from Google Labs. (2) Add the installCommand field to each skill object in the JavaScript data array, mapping each skill to its canonical npx skills add command. For skills with existing skills.sh entries, use the official source. For project-specific skills, use the local path format npx skills add ./skills/skill-name. (3) Update every skill card in the UI to display the install command prominently, with a one-click copy button.',
+   408→    body_style
+   409→))
+   410→
+   411→story.append(Paragraph('<b>Phase 2: Visual Redesign (Selected Option)</b>', h2_style))
+   412→story.append(Paragraph(
+   413→    'After the protocol migration is complete, implement the chosen design option. The implementation must follow the animation hybrid architecture: Motion v12 for UI-layer animations (modals, panels, gestures) and GSAP v3.13+ for content-layer animations (scroll sequences, tree visualization, text effects). Never animate the same element with both libraries. All animations must respect prefers-reduced-motion. Performance budget: 30KB initial JS for the ultra-runtime variant, 100KB for the full web experience. The Stitch Loop integration requires the .stitch/ directory structure (metadata.json, DESIGN.md, SITE.md, next-prompt.md) to be generated automatically when a user clicks "Generate Site".',
+   414→    body_style
+   415→))
+   416→
+   417→story.append(Paragraph('<b>Phase 3: Skill Integration Deepening</b>', h2_style))
+   418→story.append(Paragraph(
+   419→    'With the visual redesign live, deepen the integration of each stack skill. Framer Motion Animator should provide 6 animation presets (fadeIn, scaleOnHover, staggeredChildren, pageTransition, scrollTriggered, gestureDriven) that users can preview inline and copy with a single click. UI/UX Pro Max should power a "Design System Generator" modal where users select a product type and receive a complete design system with tokens, palettes, and component rules. 21st Dev Registry should enable publishing any skill card as a shared team component with the npx @21st-dev/registry publish command. Stitch Loop should offer a "Generate with Stitch" action on design-category skills that creates a .stitch/ project and begins the autonomous baton-pass loop.',
+   420→    body_style
+   421→))
+   422→
+   423→story.append(Spacer(1, 16))
+   424→
+   425→# ── SECTION 6: RECOMMENDATION ──
+   426→story.append(Paragraph('<b>6. Recommendation</b>', h1_style))
+   427→story.append(HRFlowable(width='100%', thickness=0.5, color=ACCENT, spaceAfter=12))
+   428→
+   429→story.append(Paragraph(
+   430→    'Based on the comparative matrix and the project requirements, <b>Option 1 (Command Palette)</b> is the recommended primary approach, with select elements from <b>Option 3 (Magazine Editorial)</b> for the Supanova cover story section and <b>Option 5 (Conversational)</b> for the skill recommendation engine. This hybrid approach delivers the strongest developer experience (keyboard-centric, search-first), the most accessible implementation path, the best mobile adaptation, and the lowest performance overhead. The editorial elements add premium aesthetic weight to the Supanova Suite showcase, while the conversational recommendation engine makes the Design Optimization Tree actionable without requiring users to understand the tree structure explicitly.',
+   431→    body_style
+   432→))
+   433→
+   434→story.append(Paragraph(
+   435→    'The recommended implementation order is: (1) skills.sh protocol migration for all 87 skills, (2) Command Palette redesign with search-first hero, (3) Supanova editorial section, (4) Conversational recommendation engine for the optimization tree, and (5) Stitch Loop integration with .stitch/ project scaffolding. This phased approach delivers value at each step and allows for iterative user testing between phases.',
+   436→    body_style
+   437→))
+   438→
+   439→# ── Build ──
+   440→doc.build(story)
+   441→print(f'Generated: {OUTPUT}')
+   442→

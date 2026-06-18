@@ -1,0 +1,1328 @@
+     1→# User-Type Skill Stack Research Report
+     2→## 76 Skills · 11 Categories · 8 User Types · 4 Agent Skill Tiers · 9 MCP Stacks
+     3→
+     4→---
+     5→
+     6→## EXECUTIVE SUMMARY
+     7→
+     8→This report maps 76 skills across 11 categories to 8 distinct user types, providing each with a complete stack profile including: recommended skills (Core / Extended / Power-User), agent skill tier assignment and progression, primary agent mode, MCP server stack, learning path, token budget, common pitfalls, and an optimal 1-hour workflow. The analysis draws from existing persona research, the 4-skill manifest architecture (SKILL_01–04), and 9 pre-built MCP stacks.
+     9→
+    10→**Key Findings:**
+    11→- `persistent-memory` is the #1 most-universal skill (recommended for 8/8 user types)
+    12→- `superpowers` and `context-compressor` are #2 most-universal (7/8 user types each)
+    13→- Backend/API Engineer, Full-Stack Generalist, and Data Scientist are **new user types** not covered in prior persona research, requiring original stack design
+    14→- The 4 Agent Skill Tiers map cleanly to user-type progression paths: all users start at SKILL_01, then diverge based on their primary workflow
+    15→- Token budgets range from 4,400 (SKILL_01 only) to 12,500 (all 4 skills loaded) — most users need 2 active skills at any time (~10,000 tokens)
+    16→
+    17→---
+    18→
+    19→## USER TYPE 1: SOLO INDIE HACKER
+    20→
+    21→### Profile Description
+    22→The Solo Indie Hacker is a non-technical or semi-technical founder building their first product. They typically have a business or marketing background with enough coding knowledge to be dangerous — they can modify existing code, follow tutorials, and use AI-assisted development, but they lack the deep architectural knowledge to make sound technical decisions independently. They operate under extreme resource constraints: bootstrapped budgets, no team, and a "ship or die" timeline. Mobile-first usage is their reality — they think about their product during commutes, sketch features on their phone, and need the AI to be their entire technical team. They need guided, opinionated workflows that make decisions for them when possible and present clear choices when necessary. Their psychological profile is scrappy, impatient with abstraction, and deeply motivated by seeing tangible progress.
+    23→
+    24→### Recommended Skills
+    25→
+    26→**Core (7 skills — the "Ship Loop"):**
+    27→| # | Skill | Category | Why |
+    28→|---|-------|----------|-----|
+    29→| 1 | to-prd | Strategy | Converts their fuzzy idea into a buildable spec — the #1 bottleneck for non-technical founders |
+    30→| 2 | superpowers | Development | Swiss-army knife for everything they can't do themselves: API integration, auth, database queries |
+    31→| 3 | frontend-design | Design & UI | Produces professional-looking UIs without a designer — the gap between "hobby project" and "real product" |
+    32→| 4 | deployment-manager | Development | One-command deploy eliminates the DevOps knowledge gap entirely |
+    33→| 5 | gumroad-pipeline | Strategy | Revenue from day one — landing page + checkout + digital delivery |
+    34→| 6 | seo-content-writer | Content | Organic acquisition without ad spend — the bootstrap growth engine |
+    35→| 7 | persistent-memory | System | Carries context across interrupted sessions — the founder never re-explains their codebase |
+    36→
+    37→**Extended (6 skills):**
+    38→| # | Skill | Category | Why |
+    39→|---|-------|----------|-----|
+    40→| 8 | brainstorming | Reasoning | Breaks founder tunnel vision — generates alternatives when stuck |
+    41→| 9 | devils-advocate | Reasoning | Stress-tests assumptions before committing scarce dev time |
+    42→| 10 | web-reader | Data & Web | Reads competitor pricing pages, reviews, and market data |
+    43→| 11 | humanizer | Content | Rewrites AI-generated marketing copy to sound authentic |
+    44→| 12 | context-compressor | System | Compresses growing codebase context as the product scales |
+    45→| 13 | social-media-manager | Content | Launch amplification and building-in-public narrative |
+    46→
+    47→**Power-User (4 skills):**
+    48→| # | Skill | Category | Why |
+    49→|---|-------|----------|-----|
+    50→| 14 | jtbd-research | Strategy | Deep customer research for PMF iteration |
+    51→| 15 | web-artifacts-builder | Development | Interactive demos for investor/user validation |
+    52→| 16 | skill-finder | Strategy | Discovers new skills as product needs evolve |
+    53→| 17 | mcp-stack-curator | MCP Servers | Optimizes MCP configuration as stack grows |
+    54→
+    55→### Agent Skill Tier
+    56→**Start: SKILL_01 (Conversational) — 4,400 tokens**
+    57→
+    58→The indie hacker starts mobile-first, exploring ideas and getting advice. SKILL_01's low token footprint and conversational style match their usage pattern. They chat on the train, sketch features over lunch, and validate ideas conversationally.
+    59→
+    60→**Progression:**
+    61→- Week 1–2: SKILL_01 only — ideate, validate, plan
+    62→- Week 3–4: + SKILL_02 (Design + Build) — start building the MVP on desktop
+    63→- Week 5–6: + SKILL_03 (Code + API) — production code for backend logic and APIs
+    64→- Week 7+: SKILL_04 (Agentic) — automate deployment, content generation, and monitoring
+    65→
+    66→**Final active set:** SKILL_01 + SKILL_02 (daily driver), SKILL_03 for deep work sessions, SKILL_04 for autonomous tasks.
+    67→
+    68→### Primary Agent Mode
+    69→**🦅 Eagle (Strategy)** — The indie hacker's primary thinking mode is strategic: *what* to build next, *where* to invest time, *when* to pivot. Eagle mode prioritizes the strategic lens over tactical depth. Secondary: **🐰 Rabbit (Ideation)** during early brainstorming and **🦫 Beaver (Systems)** during implementation sprints.
+    70→
+    71→### MCP Stack
+    72→**Primary: Product Launch Stack (github + brave-search + pictoflux-ai + memory)**
+    73→
+    74→This stack is purpose-built for zero-to-launch: research (brave-search), build (github), visuals (pictoflux-ai), and remember (memory). The indie hacker gets competitive analysis, version control, AI-generated launch assets, and persistent context — all free, all unlimited.
+    75→
+    76→**Custom modification:** Add `fetch` MCP for webhook testing and API integration (common indie hacker task not covered by the base stack). Remove pictoflux-ai if the product isn't visual and replace with `vercel` MCP for deployment pipeline.
+    77→
+    78→### Learning Path
+    79→**Phase 1 — "Ship It" (Weeks 1–2):**
+    80→- Load SKILL_01 + to-prd + superpowers + frontend-design
+    81→- Build the absolute minimum: a landing page with email capture
+    82→- Goal: Something live on the internet in 48 hours
+    83→- Key lesson: Done > Perfect
+    84→
+    85→**Phase 2 — "Monetize It" (Weeks 3–4):**
+    86→- Add deployment-manager + gumroad-pipeline + seo-content-writer
+    87→- Deploy the full MVP, connect payments, write first 3 SEO articles
+    88→- Goal: First dollar of revenue
+    89→- Key lesson: Revenue validates; nothing else does
+    90→
+    91→**Phase 3 — "Scale It" (Weeks 5–8):**
+    92→- Add persistent-memory + context-compressor + brainstorming + devils-advocate
+    93→- Iterate on PMF, scale content, manage growing codebase context
+    94→- Goal: $1K MRR or clear signal to pivot
+    95→- Key lesson: Speed of iteration beats quality of any single iteration
+    96→
+    97→### Token Budget Recommendation
+    98→**Recommended: 8,000–10,000 tokens (2 skills active)**
+    99→
+   100→| Scenario | Skills Active | Token Budget |
+   101→|----------|---------------|-------------|
+   102→| Mobile ideation | SKILL_01 only | 4,400 |
+   103→| Desktop building | SKILL_01 + SKILL_02 | 10,000 |
+   104→| Deep coding session | SKILL_01 + SKILL_03 | 10,500 |
+   105→| Autonomous deployment | SKILL_04 only | 6,000 |
+   106→
+   107→The indie hacker should NOT load all 4 skills simultaneously — they'd waste 22,100 tokens on a context they don't need. Instead, switch based on the task at hand. The CONTINUITY protocol ensures no context is lost between switches.
+   108→
+   109→### Common Pitfalls
+   110→1. **Over-engineering the MVP** — The indie hacker's biggest risk is adding features instead of shipping. The `to-prd` skill should enforce a strict "3 features max" rule for v1. Without this, they'll build a Swiss-army knife nobody wants to use.
+   111→2. **Skipping the humanizer** — AI-generated marketing copy sounds like AI-generated marketing copy. Users can tell. The `humanizer` skill is not optional — it's the difference between "clearly written by a robot" and "sounds like a real person who understands my problem."
+   112→3. **Ignoring persistent-memory** — Re-explaining your entire codebase every session is the #1 time-waster for indie hackers. Load `persistent-memory` from Day 1, not Week 3.
+   113→4. **Loading too many skills** — Analysis paralysis. 7 core skills are enough to ship. Don't add extended skills until the core loop is working.
+   114→5. **Building before validating** — Using `superpowers` to build features nobody asked for. The correct order is: to-prd → jtbd-research → superpowers. Not the reverse.
+   115→
+   116→### Optimal 1-Hour Session
+   117→```
+   118→:00–:10  IDEATE (SKILL_01, Eagle mode)
+   119→         "I want to add a referral system. Is that the right next feature?"
+   120→         → Devils-advocate challenges: "Your churn is 40%. Fix retention first."
+   121→         → Eagle agrees: pivot to retention feature, not referral
+   122→
+   123→:10–:25  BUILD (SKILL_02, Beaver mode)
+   124→         "Build a churn survey modal that appears on cancel"
+   125→         → Frontend-design creates the modal component
+   126→         → Superpowers writes the backend endpoint
+   127→         → Context-compressor manages the growing codebase context
+   128→
+   129→:25–:40  SHIP (SKILL_03, Beaver mode)  
+   130→         → Deployment-manager pushes to staging
+   131→         → Browser-use verifies on 3 breakpoints
+   132→         → Persistent-memory stores the deployment config
+   133→
+   134→:40–:55  GROW (SKILL_01, Eagle mode)
+   135→         → SEO-content-writer drafts a "We reduced churn by 30%" article
+   136→         → Humanizer rewrites it to sound authentic
+   137→         → Social-media-manager schedules the announcement
+   138→
+   139→:55–:60  REVIEW
+   140→         → "What did we ship? What's next?"
+   141→         → Persistent-memory saves today's decisions
+   142→         → Eagle mode: "Tomorrow: A/B test the survey copy"
+   143→```
+   144→
+   145→**Session token usage:** ~8,200 tokens (SKILL_01 + SKILL_02 active, SKILL_03 briefly)
+   146→
+   147→---
+   148→
+   149→## USER TYPE 2: FRONTEND DEVELOPER
+   150→
+   151→### Profile Description
+   152→The Frontend Developer is an experienced React/Vue engineer focused on UI implementation, animation, and design systems. They work within teams — interfacing with designers on one side and backend engineers on the other. Their daily work involves translating Figma designs into pixel-perfect components, managing complex state flows, optimizing bundle sizes, and ensuring cross-browser compatibility. They care deeply about code quality, accessibility, and developer experience. Their biggest pain points are: (1) staying current with the rapidly evolving React/Next.js ecosystem, (2) bridging the gap between design intent and implementation, and (3) maintaining animation and interaction quality at scale. They need skills that respect their expertise while eliminating the boilerplate and research that slows them down.
+   153→
+   154→### Recommended Skills
+   155→
+   156→**Core (8 skills — the "Pixel-Perfect Pipeline"):**
+   157→| # | Skill | Category | Why |
+   158→|---|-------|----------|-----|
+   159→| 1 | vercel-react-best-practices | Development | Canonical React/Next.js patterns — prevents architectural mistakes that compound over time |
+   160→| 2 | ui-ux-pro-max-v7 | Design & UI | Design-to-code translation — bridges the designer-engineer gap |
+   161→| 3 | frontend-design | Design & UI | Rapid UI prototyping — the "first pass" skill for turning specs into markup |
+   162→| 4 | gsap-animations | Design & UI | Production animation — GSAP is the industry standard for performant web animations |
+   163→| 5 | composition-patterns | Development | React composition patterns — the architecture that makes code maintainable |
+   164→| 6 | context7-docs | Development | Always-current documentation — prevents using deprecated APIs |
+   165→| 7 | browser-use | Development | Visual verification — "does this actually render correctly?" in seconds |
+   166→| 8 | explained-code | Development | Team documentation — component JSDoc, README, and architecture decision records |
+   167→
+   168→**Extended (6 skills):**
+   169→| # | Skill | Category | Why |
+   170→|---|-------|----------|-----|
+   171→| 9 | animation-orchestrator | Design & UI | Multi-element animation sequences — hero sections, onboarding flows |
+   172→| 10 | animation-hybrid-architect | Animation Eng. | Architecture for combining CSS + GSAP + scroll effects without conflicts |
+   173→| 11 | tdd-workflow | Development | Test-driven component development — catches regressions before staging |
+   174→| 12 | audit-analyzer | Data & Web | Lighthouse scores, bundle analysis, DOM complexity auditing |
+   175→| 13 | persistent-memory | System | Remembers component library decisions and naming conventions |
+   176→| 14 | context-compressor | System | Manages large codebase context — frontend projects generate massive component trees |
+   177→
+   178→**Power-User (6 skills):**
+   179→| # | Skill | Category | Why |
+   180→|---|-------|----------|-----|
+   181→| 15 | threejs-orchestrator | Development | 3D web experiences for premium projects |
+   182→| 16 | animation-auditor | Design & UI | Performance and accessibility verification for animations |
+   183→| 17 | gsap-animation-engineer | Animation Eng. | Advanced GSAP techniques (ScrollTrigger, SplitText, MorphSVG) |
+   184→| 18 | motion-animation-engineer | Animation Eng. | Motion v12 (Framer Motion) for UI-layer declarative animations |
+   185→| 19 | code-research | Data & Web | Deep codebase pattern analysis and migration planning |
+   186→| 20 | superpowers | Development | General-purpose dev for non-UI tasks (auth, API integration) |
+   187→
+   188→### Agent Skill Tier
+   189→**Start: SKILL_02 (Design + Build) — 5,600 tokens**
+   190→
+   191→The frontend developer's primary mode IS design + build. They live in SKILL_02. The depth-seeking layers, the anti-defaults protocol, the 3-direction approach — this skill was built for them.
+   192→
+   193→**Progression:**
+   194→- Day 1: SKILL_02 — their natural habitat
+   195→- Week 1: + SKILL_03 (Code + API) — for backend integration and API consumption
+   196→- Month 1: + SKILL_04 (Agentic) — for orchestrating component library builds across multiple files
+   197→- As needed: SKILL_01 (Conversational) — for architecture discussions and code reviews
+   198→
+   199→**Final active set:** SKILL_02 (always loaded) + SKILL_03 (for API/backend work)
+   200→
+   201→### Primary Agent Mode
+   202→**🐜 Ant (Decomposition)** — The frontend engineer's dominant thinking pattern is decomposition: breaking a Figma file into component hierarchies, a page into layout regions, an animation into keyframe sequences. Ant mode structures chaos into implementable units. Secondary: **🦉 Owl (Analysis)** for debugging and performance investigation.
+   203→
+   204→### MCP Stack
+   205→**Primary: Full-Stack Web Studio (filesystem + github + vercel + postgres)**
+   206→
+   207→The frontend developer needs filesystem for direct file access (the core of their workflow), github for PR workflows and code review, vercel for instant preview deploys, and postgres for database schema awareness when building data-driven UIs.
+   208→
+   209→**Custom modification:** Replace `postgres` with `context7` MCP for real-time documentation lookup — the frontend developer references docs more often than databases. Add `sequential-thinking` for complex state management and component architecture decisions.
+   210→
+   211→### Learning Path
+   212→**Phase 1 — "Write Correct React" (Week 1–2):**
+   213→- Load SKILL_02 + vercel-react-best-practices + frontend-design + composition-patterns + context7-docs
+   214→- Build 5 components following production patterns
+   215→- Goal: Every component follows the same architecture, uses current APIs, passes visual review
+   216→- Key lesson: Pattern consistency > individual component cleverness
+   217→
+   218→**Phase 2 — "Bridge Design to Code" (Week 3–4):**
+   219→- Add ui-ux-pro-max-v7 + gsap-animations + explained-code + browser-use
+   220→- Take 3 real Figma designs to production implementation
+   221→- Goal: Zero ambiguity between design spec and shipped code
+   222→- Key lesson: The gap between design and code is where bugs live
+   223→
+   224→**Phase 3 — "Own Animation & Performance" (Month 2+):**
+   225→- Add animation-orchestrator + animation-hybrid-architect + audit-analyzer + tdd-workflow
+   226→- Build a complete animated page with scroll sequences, UI transitions, and 60fps performance
+   227→- Goal: Animation quality that matches design intent without performance regression
+   228→- Key lesson: Animation architecture must be planned, not bolted on
+   229→
+   230→### Token Budget Recommendation
+   231→**Recommended: 10,000–11,700 tokens (2 skills active)**
+   232→
+   233→| Scenario | Skills Active | Token Budget |
+   234→|----------|---------------|-------------|
+   235→| Design iteration | SKILL_02 only | 5,600 |
+   236→| UI + API integration | SKILL_02 + SKILL_03 | 11,700 |
+   237→| Component library build | SKILL_02 + SKILL_04 | 11,600 |
+   238→| Code review discussion | SKILL_01 only | 4,400 |
+   239→
+   240→The frontend developer typically runs SKILL_02 + SKILL_03 in parallel during active development. The 11,700 token budget is justified because they're doing the most context-intensive work in the system — large component trees, design tokens, animation specs, and API contracts all need to be in context simultaneously.
+   241→
+   242→### Common Pitfalls
+   243→1. **Animation without architecture** — Adding GSAP animations ad-hoc without the `animation-hybrid-architect` leads to conflicting animations, memory leaks, and 30fps scroll performance. Always architect before animating.
+   244→2. **Ignoring context7-docs** — Using deprecated Next.js APIs (like `getServerSideProps` instead of `generateStaticParams`) creates technical debt that's expensive to fix. The `context7-docs` skill prevents this at zero cost.
+   245→3. **Skipping browser-use verification** — "It works on my machine" is a frontend developer's famous last words. The `browser-use` skill catches rendering issues in 30 seconds that would take 30 minutes to discover in QA.
+   246→4. **Over-investing in animation skills** — 6 of 20 recommended skills are animation-related. This is appropriate for animation-heavy projects but overkill for dashboard/CRUD apps. Tailor the extended stack to the project type.
+   247→5. **Not documenting for the team** — The `explained-code` skill is not optional for team environments. Undocumented components become unmaintainable components within 3 months.
+   248→
+   249→### Optimal 1-Hour Session
+   250→```
+   251→:00–:12  DECOMPOSE (SKILL_02, Ant mode)
+   252→         Receive Figma design for new pricing page
+   253→         → Ant mode breaks page into: PricingHero, TierCard, ComparisonTable, FAQ, CTA
+   254→         → Composition-patterns determines: TierCard = compound component
+   255→         → Context7-docs confirms latest Next.js 15 patterns
+   256→
+   257→:12–:30  IMPLEMENT (SKILL_02, Beaver mode)
+   258→         → Frontend-design scaffolds layout structure
+   259→         → Ui-ux-pro-max-v7 provides component specs from design tokens
+   260→         → Browser-use takes visual snapshot after each component
+   261→         → Vercel-react-best-practices validates architecture
+   262→
+   263→:30–:45  ANIMATE (SKILL_02, Dolphin mode)
+   264→         → Gsap-animations: tier cards stagger in on scroll
+   265→         → Animation-orchestrator: hero → cards → table → CTA sequence
+   266→         → Animation-hybrid-architect: ensures CSS + GSAP don't conflict
+   267→         → Audit-analyzer: checks Lighthouse score impact
+   268→
+   269→:45–:55  INTEGRATE (SKILL_03, Beaver mode)
+   270→         → Superpowers: connects pricing API endpoint
+   271→         → Tdd-workflow: writes tests for pricing calculation logic
+   272→         → Context-compressor: manages large codebase context
+   273→
+   274→:55–:60  DOCUMENT & SHIP
+   275→         → Explained-code: generates JSDoc for each new component
+   276→         → GitHub MCP: creates PR with component screenshots
+   277→         → Persistent-memory: stores component decisions for next session
+   278→```
+   279→
+   280→**Session token usage:** ~11,700 tokens (SKILL_02 + SKILL_03 active)
+   281→
+   282→---
+   283→
+   284→## USER TYPE 3: BACKEND/API ENGINEER
+   285→
+   286→### Profile Description
+   287→The Backend/API Engineer is a systems thinker who builds APIs, databases, microservices, and the infrastructure that powers applications. They are deeply technical — comfortable with distributed systems, database design, API design patterns (REST, GraphQL, gRPC), message queues, caching strategies, and performance optimization. They think in terms of latency percentiles, throughput, error rates, and reliability. Their daily work involves designing schemas, writing service endpoints, implementing authentication/authorization, optimizing queries, debugging production issues, and writing integration tests. They are the least visually-oriented user type — they care about correctness, performance, and reliability, not pixel perfection. Their biggest challenges are: (1) managing API versioning and backward compatibility, (2) debugging distributed system failures across service boundaries, (3) maintaining database performance under load, and (4) ensuring security across the entire API surface.
+   288→
+   289→### Recommended Skills
+   290→
+   291→**Core (7 skills — the "Reliability Stack"):**
+   292→| # | Skill | Category | Why |
+   293→|---|-------|----------|-----|
+   294→| 1 | superpowers | Development | Backend swiss-army knife — handles schema design, API implementation, middleware, and integration code |
+   295→| 2 | tdd-workflow | Development | Test-driven API development — the backend engineer's safety net; untested APIs are broken APIs |
+   296→| 3 | explained-code | Development | API documentation, runbooks, and architectural decision records — APIs without docs are unusable |
+   297→| 4 | deployment-manager | Development | CI/CD pipeline management — deploys, rollbacks, blue-green deployments |
+   298→| 5 | secret-vault | Infrastructure | Secrets management — API keys, database credentials, JWT secrets; one leak destroys trust |
+   299→| 6 | persistent-memory | System | Remembers API contracts, schema decisions, and production incident history |
+   300→| 7 | context-compressor | System | Manages enormous context from logs, stack traces, and distributed system debugging |
+   301→
+   302→**Extended (7 skills):**
+   303→| # | Skill | Category | Why |
+   304→|---|-------|----------|-----|
+   305→| 8 | mcp-builder | Development | Builds custom MCP servers for internal tooling and API testing |
+   306→| 9 | chain-of-thought | Reasoning | Structured debugging — traces through distributed system failures step by step |
+   307→| 10 | devils-advocate | Reasoning | Challenges API design decisions — "what happens at 10x scale? under partial failure?" |
+   308→| 11 | 4cli-unified | Infrastructure | Unified CLI for kubectl, terraform, aws, docker — eliminates context-switching |
+   309→| 12 | triune-proxy-stack | Infrastructure | Proxy infrastructure for API routing, load balancing, and service mesh |
+   310→| 13 | mcp-security-scanner | MCP Servers | Scans API endpoints, dependencies, and configurations for vulnerabilities |
+   311→| 14 | feedback-loop | System | Monitors API health metrics and triggers automated remediation |
+   312→
+   313→**Power-User (5 skills):**
+   314→| # | Skill | Category | Why |
+   315→|---|-------|----------|-----|
+   316→| 15 | owl-proxy-defense | Infrastructure | WAF rules, DDoS mitigation, and traffic analysis for API protection |
+   317→| 16 | 9router-gateway | Infrastructure | API gateway: rate limiting, auth, and service mesh routing |
+   318→| 17 | agent-beaver | Agents | Systems-thinking agent for complex infrastructure design |
+   319→| 18 | agent-maintenance | Agents | Automated maintenance: dependency updates, health checks, certificate rotation |
+   320→| 19 | code-research | Data & Web | Deep codebase analysis for migration planning and dependency auditing |
+   321→
+   322→### Agent Skill Tier
+   323→**Start: SKILL_03 (Code + API) — 6,100 tokens**
+   324→
+   325→The backend engineer's natural habitat is SKILL_03 — production code with maximum effort, heavy thinking, and quality gates. They should never start with SKILL_01 (too conversational) or SKILL_02 (too visual). SKILL_03's code quality checklist, algorithm-first approach, and correctness focus are perfectly aligned.
+   326→
+   327→**Progression:**
+   328→- Day 1: SKILL_03 — their natural home
+   329→- Week 2: + SKILL_04 (Agentic) — for orchestrating multi-service deployments and parallel API builds
+   330→- Month 1: + SKILL_01 (Conversational) — for architecture discussions and design reviews
+   331→- Rarely needed: SKILL_02 (Design + Build) — only for internal dashboards or API documentation sites
+   332→
+   333→**Final active set:** SKILL_03 (always loaded) + SKILL_04 (for orchestration)
+   334→
+   335→### Primary Agent Mode
+   336→**🦫 Beaver (Systems)** — The backend engineer's dominant mode is systems thinking: understanding how services interact, where failures cascade, and how to build resilient architectures. Beaver mode is the natural fit for anyone whose job is making complex systems work reliably. Secondary: **🦉 Owl (Analysis)** for debugging and root-cause analysis.
+   337→
+   338→### MCP Stack
+   339→**Primary: DevOps Command Center (github + docker + kubernetes + slack)**
+   340→
+   341→Wait — the backend engineer is NOT a DevOps engineer. They need a different stack. Let me correct:
+   342→
+   343→**Primary: Full-Stack Web Studio (filesystem + github + vercel + postgres)**
+   344→
+   345→But replace `vercel` with `docker` for container management. The backend engineer needs: filesystem for code, github for version control, postgres for database operations, and docker for containerization.
+   346→
+   347→**Custom stack:** filesystem + github + postgres + docker
+   348→- `filesystem`: Read/write source code, configs, and logs
+   349→- `github`: PR workflows, code review, CI/CD triggers
+   350→- `postgres`: Query design, schema management, migration execution
+   351→- `docker`: Container builds, compose stacks, and local development environments
+   352→
+   353→### Learning Path
+   354→**Phase 1 — "Build Reliable APIs" (Week 1–2):**
+   355→- Load SKILL_03 + superpowers + tdd-workflow + explained-code + persistent-memory
+   356→- Build 5 API endpoints with full test coverage and documentation
+   357→- Goal: Every endpoint has tests, docs, and error handling
+   358→- Key lesson: An API without tests is a liability, not an asset
+   359→
+   360→**Phase 2 — "Secure & Deploy" (Week 3–4):**
+   361→- Add deployment-manager + secret-vault + mcp-security-scanner + context-compressor
+   362→- Set up CI/CD pipeline, scan for vulnerabilities, manage secrets properly
+   363→- Goal: APIs deployed automatically with zero manual steps and zero exposed secrets
+   364→- Key lesson: Security is not a feature — it's a foundation
+   365→
+   366→**Phase 3 — "Scale & Orchestrate" (Month 2+):**
+   367→- Add chain-of-thought + devils-advocate + 4cli-unified + triune-proxy-stack + agent-beaver
+   368→- Design for 10x scale, implement proxy infrastructure, automate maintenance
+   369→- Goal: APIs that handle production traffic without heroics
+   370→- Key lesson: The best infrastructure is boring infrastructure
+   371→
+   372→### Token Budget Recommendation
+   373→**Recommended: 12,100 tokens (2 skills active)**
+   374→
+   375→| Scenario | Skills Active | Token Budget |
+   376→|----------|---------------|-------------|
+   377→| API implementation | SKILL_03 only | 6,100 |
+   378→| API + orchestration | SKILL_03 + SKILL_04 | 12,100 |
+   379→| Architecture review | SKILL_01 + SKILL_03 | 10,500 |
+   380→| Incident debugging | SKILL_03 + SKILL_04 | 12,100 |
+   381→
+   382→The backend engineer has the highest token budget need because their work is the most context-intensive — they need to hold API contracts, database schemas, service topologies, and production logs all in context simultaneously. The 12,100 budget for SKILL_03 + SKILL_04 is the maximum recommended daily allocation.
+   383→
+   384→### Common Pitfalls
+   385→1. **Building without testing** — The backend engineer's #1 mistake is writing API code without tests. The `tdd-workflow` skill should be loaded before `superpowers` — write the test first, then the implementation. Untested backend code in production is a time bomb.
+   386→2. **Ignoring secret-vault** — Hardcoded API keys in `.env` files that get committed to git. The `secret-vault` skill should be loaded from Day 1, not added later. One leaked secret can cost more than the entire product.
+   387→3. **Over-engineering the architecture** — The backend engineer's love of elegant systems leads to microservices for products that need a monolith. Use `devils-advocate` to challenge: "Does this actually need to be a separate service?"
+   388→4. **Skipping documentation** — APIs without docs are unusable. The `explained-code` skill is not optional — it's the difference between an API your team can use and one they'll rewrite from scratch.
+   389→5. **Not using context-compressor for debugging** — Production incidents generate enormous log files and stack traces. Without `context-compressor`, the backend engineer hits token limits before identifying the root cause.
+   390→
+   391→### Optimal 1-Hour Session
+   392→```
+   393→:00–:10  DESIGN (SKILL_03, Beaver mode)
+   394→         "Design a rate-limited API endpoint for user subscriptions"
+   395→         → Chain-of-thought: maps out the endpoint contract
+   396→         → Devils-advocate: "What happens when Redis is down? Fallback?"
+   397→         → Persistent-memory: recalls existing auth middleware pattern
+   398→
+   399→:10–:25  IMPLEMENT (SKILL_03, Beaver mode)
+   400→         → Tdd-workflow: write tests first (happy path, rate limit, auth failure)
+   401→         → Superpowers: implement the endpoint with rate limiting
+   402→         → Secret-vault: inject Redis credentials securely
+   403→         → Context-compressor: manage growing codebase context
+   404→
+   405→:25–:40  SECURE & TEST (SKILL_03, Owl mode)
+   406→         → MCP-security-scanner: scan for injection vulnerabilities
+   407→         → Tdd-workflow: run full test suite — all green
+   408→         → Explained-code: generate OpenAPI spec and JSDoc
+   409→         → Feedback-loop: set up health monitoring for the endpoint
+   410→
+   411→:40–:50  DEPLOY (SKILL_04, Beaver mode)
+   412→         → Deployment-manager: push to staging, run smoke tests
+   413→         → Docker: build container, verify health check endpoint
+   414→         → 4cli-unified: check k8s deployment status
+   415→
+   416→:50–:60  DOCUMENT & REVIEW
+   417→         → Explained-code: generate API runbook
+   418→         → Persistent-memory: store endpoint contract and deployment config
+   419→         → GitHub MCP: create PR with test results and API spec
+   420→         → "What's the p99 latency target? 200ms. Ship it."
+   421→```
+   422→
+   423→**Session token usage:** ~12,100 tokens (SKILL_03 + SKILL_04 active)
+   424→
+   425→---
+   426→
+   427→## USER TYPE 4: FULL-STACK GENERALIST
+   428→
+   429→### Profile Description
+   430→The Full-Stack Generalist does a bit of everything — frontend, backend, deployment, design, content, and strategy. They're the startup's first engineering hire, the agency's utility player, or the experienced solo developer who refuses to be pigeonholed. Their technical level is mid-to-senior across multiple domains but not deeply specialized in any single one. They can build a React component, write a SQL query, configure a Docker container, and draft a blog post — all in the same afternoon. Their superpower is context-switching; their kryptonite is context-switching. They need skills that work across domains, switch cleanly between modes, and don't require deep expertise to use effectively. The key insight is that the generalist doesn't need the BEST skill for each domain — they need the MOST VERSATILE skill that covers the MOST domains.
+   431→
+   432→### Recommended Skills
+   433→
+   434→**Core (8 skills — the "Everything Stack"):**
+   435→| # | Skill | Category | Why |
+   436→|---|-------|----------|-----|
+   437→| 1 | superpowers | Development | The generalist's primary tool — handles any development task across the stack |
+   438→| 2 | frontend-design | Design & UI | UI delivery without a designer — produces professional results quickly |
+   439→| 3 | deployment-manager | Development | One-command deploys for any project type — eliminates the DevOps tax |
+   440→| 4 | to-prd | Strategy | Converts ambiguous requirements into actionable specs — the generalist's clarity engine |
+   441→| 5 | explained-code | Development | Documents everything they build — because they'll forget how it works in 2 weeks |
+   442→| 6 | persistent-memory | System | Multi-project context management — the generalist's most critical skill |
+   443→| 7 | context-compressor | System | Compresses context from Project A to make room for Project B — enables switching |
+   444→| 8 | output-formatter | Creative | Formats deliverables for different audiences — client docs, team handoff, personal notes |
+   445→
+   446→**Extended (7 skills):**
+   447→| # | Skill | Category | Why |
+   448→|---|-------|----------|-----|
+   449→| 9 | brainstorming | Reasoning | Generates alternatives when stuck — the generalist's creative escape hatch |
+   450→| 10 | devils-advocate | Reasoning | Stress-tests decisions across domains — "is this the right tech stack? the right feature?" |
+   451→| 11 | seo-content-writer | Content | Most full-stack projects need content — this skill makes them self-sufficient |
+   452→| 12 | web-artifacts-builder | Development | Interactive prototypes and demos — sells the idea before building it |
+   453→| 13 | gumroad-pipeline | Strategy | Monetization — adds revenue features that justify higher project value |
+   454→| 14 | composition-patterns | Development | Architecture patterns that work across frontend and backend — the generalist's design language |
+   455→| 15 | skill-finder | Strategy | Discovers new skills as projects require unfamiliar capabilities |
+   456→
+   457→**Power-User (5 skills):**
+   458→| # | Skill | Category | Why |
+   459→|---|-------|----------|-----|
+   460→| 16 | ui-ux-pro-max-v7 | Design & UI | Elevates design quality for premium projects |
+   461→| 17 | tdd-workflow | Development | Test coverage for production deployments |
+   462→| 18 | chain-of-thought | Reasoning | Structured reasoning for complex multi-domain decisions |
+   463→| 19 | agent-roles | System | Switches between specialized agent personas mid-project |
+   464→| 20 | agent-master | Agents | Coordinates multiple agent modes for complex multi-phase projects |
+   465→
+   466→### Agent Skill Tier
+   467→**Start: SKILL_01 (Conversational) — 4,400 tokens**
+   468→
+   469→The full-stack generalist starts at SKILL_01 because their first interaction with any project is exploratory — understanding the requirements, mapping the domain, and planning the approach. SKILL_01's conversational style and low token footprint let them switch contexts quickly.
+   470→
+   471→**Progression (the fastest progression of any user type):**
+   472→- Day 1: SKILL_01 — explore, plan, understand
+   473→- Day 3: + SKILL_02 — start building the frontend
+   474→- Day 5: + SKILL_03 — switch to backend implementation
+   475→- Day 7: + SKILL_04 — orchestrate the full build
+   476→- Week 2+: All 4 skills in rotation, switching based on task
+   477→
+   478→**Final active set:** All 4 skills in rotation — this is the ONLY user type that uses all 4 skills regularly. The CONTINUITY protocol is essential for this user.
+   479→
+   480→### Primary Agent Mode
+   481→**🐘 Elephant (Synthesis)** — The generalist's dominant mode is synthesis: pulling together frontend, backend, design, and strategy into a coherent whole. Elephant mode excels at cross-domain integration — which is exactly what a generalist does daily. Secondary: **🦫 Beaver (Systems)** for implementation and **🐰 Rabbit (Ideation)** for brainstorming.
+   482→
+   483→### MCP Stack
+   484→**Primary: Full-Stack Web Studio (filesystem + github + vercel + postgres)**
+   485→
+   486→This is the perfect generalist stack: code (filesystem), version control (github), deployment (vercel), and database (postgres) — the complete development pipeline. No other stack covers as much ground with just 4 servers.
+   487→
+   488→**Custom modification:** Add `memory` MCP for multi-project context persistence — the generalist's version of persistent-memory at the MCP level. The `memory` + `persistent-memory` skill pairing creates a double-layer memory system that survives session resets.
+   489→
+   490→### Learning Path
+   491→**Phase 1 — "Ship Something" (Week 1):**
+   492→- Load SKILL_01 + SKILL_02 + superpowers + frontend-design + deployment-manager
+   493→- Build and deploy a complete (if simple) web application
+   494→- Goal: Full-stack delivery from idea to live URL
+   495→- Key lesson: End-to-end ownership is the generalist's superpower
+   496→
+   497→**Phase 2 — "Ship Quality" (Week 2–3):**
+   498→- Add SKILL_03 + to-prd + explained-code + persistent-memory + context-compressor
+   499→- Add documentation, testing, and proper architecture to the project
+   500→- Goal: Professional-quality deliverables that don't break in production
+   501→- Key lesson: Shipping fast is only valuable if what you ship works
+   502→
+   503→**Phase 3 — "Ship Everything" (Month 2+):**
+   504→- Add SKILL_04 + all extended and power-user skills
+   505→- Handle complex multi-domain projects autonomously
+   506→- Goal: The generalist can handle any project type end-to-end
+   507→- Key lesson: Versatility compounds — each project makes the next one faster
+   508→
+   509→### Token Budget Recommendation
+   510→**Recommended: 10,000–12,100 tokens (2–3 skills active)**
+   511→
+   512→| Scenario | Skills Active | Token Budget |
+   513→|----------|---------------|-------------|
+   514→| Planning/exploring | SKILL_01 only | 4,400 |
+   515→| Frontend sprint | SKILL_01 + SKILL_02 | 10,000 |
+   516→| Backend sprint | SKILL_01 + SKILL_03 | 10,500 |
+   517→| Full build orchestration | SKILL_02 + SKILL_04 | 11,600 |
+   518→| Maximum (rare) | SKILL_03 + SKILL_04 | 12,100 |
+   519→
+   520→The generalist should NEVER load all 4 skills simultaneously (22,100 tokens — wasteful and confusing). Instead, they should rotate between 2-skill combinations based on the current task. The `agent-roles` skill (power-user) helps them switch personas without switching skill contexts.
+   521→
+   522→### Common Pitfalls
+   523→1. **Skill-switching overhead** — The generalist's biggest time-waster is switching between SKILL_02 (frontend) and SKILL_03 (backend) mid-session without the CONTINUITY protocol. Each switch without CONTINUITY loses 10–15 minutes of re-contextualization.
+   524→2. **Jack of all trades, master of none** — The generalist risks producing "good enough" work across all domains but never exceptional work in any. Mitigation: use `ui-ux-pro-max-v7` for design quality and `tdd-workflow` for code quality — these skills provide specialist-level guardrails.
+   525→3. **Context contamination** — When switching between projects, context from Project A leaks into Project B. The `context-compressor` skill should be used BEFORE switching, not after. Compress A, then load B.
+   526→4. **Not using to-prd for scope** — The generalist's instinct is to start building immediately. Without `to-prd`, they build the wrong thing fast. Always spec first, build second.
+   527→5. **Ignoring agent-roles** — The `agent-roles` skill is the generalist's secret weapon for context-switching. Without it, they try to be a designer and an engineer simultaneously — and do both poorly.
+   528→
+   529→### Optimal 1-Hour Session
+   530→```
+   531→:00–:08  SCOPE (SKILL_01, Elephant mode)
+   532→         "Client wants an e-commerce site with subscription billing"
+   533→         → To-prd: create 1-page spec with 5 must-have features
+   534→         → Devils-advocate: challenge scope — "Do they need subscriptions
+   535→           or just one-time purchases? What's the MVP?"
+   536→         → Scope reduced from 5 features to 3
+   537→
+   538→:08–:25  BUILD FRONTEND (SKILL_02, Beaver mode)
+   539→         → Frontend-design: scaffold product grid + cart + checkout
+   540→         → Superpowers: implement cart state management
+   541→         → Context-compressor: compress backend context to focus on UI
+   542→         → Browser-use: quick visual check on mobile
+   543→
+   544→:25–:40  BUILD BACKEND (SKILL_03, Beaver mode)
+   545→         [CONTINUITY: "Switching to Code mode — noted your product grid
+   546→          uses Tailwind + the cart uses Zustand"]
+   547→         → Superpowers: build Stripe checkout API endpoint
+   548→         → Tdd-workflow: write integration tests for payment flow
+   549→         → Secret-vault: inject Stripe keys securely
+   550→         → Deployment-manager: push to staging
+   551→
+   552→:40–:52  CONTENT & POLISH (SKILL_02, Dolphin mode)
+   553→         [CONTINUITY: "Back to Design mode — noted your API returns
+   554→          product data in {id, name, price, image} format"]
+   555→         → SEO-content-writer: product descriptions and meta tags
+   556→         → Output-formatter: create client handoff documentation
+   557→
+   558→:52–:60  SHIP & REMEMBER
+   559→         → Deployment-manager: deploy to production
+   560→         → Persistent-memory: store project decisions, tech choices,
+   561→           client preferences for next project
+   562→         → Gumroad-pipeline: if client wants digital product sales
+   563→         → "Session complete. 3 features shipped. Client happy."
+   564→```
+   565→
+   566→**Session token usage:** ~10,500 tokens (rotating SKILL_01 → SKILL_02 → SKILL_03 → SKILL_02)
+   567→
+   568→---
+   569→
+   570→## USER TYPE 5: DATA SCIENTIST/ANALYST
+   571→
+   572→### Profile Description
+   573→The Data Scientist/Analyst works with data, statistics, ML models, and visualization. They live in Jupyter notebooks, SQL editors, and Python scripts. Their technical stack includes pandas, NumPy, scikit-learn, matplotlib/seaborn, and increasingly large language models for NLP tasks. They are deeply analytical — comfortable with probability, hypothesis testing, regression analysis, and experimental design. Their daily work involves data cleaning (the unglamorous 80% of the job), exploratory analysis, feature engineering, model training, evaluation, and communicating findings to stakeholders who don't speak statistics. They are not software engineers — their code is "good enough for analysis" rather than production-grade. Their biggest challenges are: (1) managing the overwhelming volume of data and context, (2) communicating complex findings to non-technical stakeholders, (3) reproducing analyses across sessions, and (4) bridging the gap between analysis and production deployment.
+   574→
+   575→### Recommended Skills
+   576→
+   577→**Core (6 skills — the "Insight Pipeline"):**
+   578→| # | Skill | Category | Why |
+   579→|---|-------|----------|-----|
+   580→| 1 | chain-of-thought | Reasoning | Structured analytical reasoning — hypothesis formation, statistical inference, result interpretation |
+   581→| 2 | code-research | Data & Web | Deep codebase analysis — understands data pipeline implementations and model architectures |
+   582→| 3 | web-reader | Data & Web | Reads research papers, documentation, and data source descriptions |
+   583→| 4 | audit-analyzer | Data & Web | Analyzes data quality, statistical significance, and model performance metrics |
+   584→| 5 | persistent-memory | System | Maintains analysis history, feature engineering decisions, and model configurations across sessions |
+   585→| 6 | context-compressor | System | Manages enormous context from datasets, logs, and analysis results |
+   586→
+   587→**Extended (7 skills):**
+   588→| # | Skill | Category | Why |
+   589→|---|-------|----------|-----|
+   590→| 7 | socratic-method | Reasoning | Asks probing questions about methodology — prevents confirmation bias and p-hacking |
+   591→| 8 | devils-advocate | Reasoning | Challenges analytical assumptions — "are these results real or an artifact of the data?" |
+   592→| 9 | simulation-sandbox | Reasoning | Simulates experimental conditions before running expensive analyses |
+   593→| 10 | superpowers | Development | Data pipeline code, preprocessing scripts, and API integration |
+   594→| 11 | explained-code | Development | Documents analytical methodology for reproducibility |
+   595→| 12 | output-formatter | Creative | Formats findings for different audiences — executive summary, technical report, dashboard |
+   596→| 13 | explore | Data & Web | Open-ended data exploration and anomaly detection |
+   597→
+   598→**Power-User (4 skills):**
+   599→| # | Skill | Category | Why |
+   600→|---|-------|----------|-----|
+   601→| 14 | modelscope-mcp-hub | MCP Servers | Access to pre-trained models and datasets — accelerates experimentation |
+   602→| 15 | mcp-stack-curator | MCP Servers | Optimizes MCP server configuration for data workflows |
+   603→| 16 | agent-owl | Agents | Dedicated analytical agent for deep data investigation |
+   604→| 17 | composition-patterns | Development | Composable data pipeline architecture — modular preprocessing and feature engineering |
+   605→
+   606→### Agent Skill Tier
+   607→**Start: SKILL_03 (Code + API) — 6,100 tokens**
+   608→
+   609→Surprisingly, the data scientist starts at SKILL_03, not SKILL_01. Why? Because their work is fundamentally code-driven — Python scripts, SQL queries, API calls to data sources. SKILL_03's quality gates and algorithm-first approach align with their need for correctness. The heavy thinking mode matches their analytical mindset.
+   610→
+   611→**Progression:**
+   612→- Day 1: SKILL_03 — data pipeline code and analysis scripts
+   613→- Week 2: + SKILL_01 (Conversational) — for communicating findings and brainstorming hypotheses
+   614→- Month 1: + SKILL_04 (Agentic) — for orchestrating multi-step data pipelines and parallel model training
+   615→- Rarely needed: SKILL_02 (Design + Build) — only for dashboard creation
+   616→
+   617→**Final active set:** SKILL_03 (daily driver) + SKILL_01 (for interpretation and communication)
+   618→
+   619→### Primary Agent Mode
+   620→**🦉 Owl (Analysis)** — The data scientist's dominant mode is analytical: dissecting data, interpreting results, identifying confounds, and drawing valid conclusions. Owl mode is the scientific mindset incarnate. Secondary: **🐰 Rabbit (Ideation)** for hypothesis generation and **🐘 Elephant (Synthesis)** for connecting findings across domains.
+   621→
+   622→### MCP Stack
+   623→**Primary: Data Pipeline Studio (postgres + sqlite + fetch + filesystem)**
+   624→
+   625→This is the data scientist's dream stack: postgres for warehouse queries and heavy analytics, sqlite for local experimentation and rapid prototyping, fetch for pulling data from APIs and scraping sources, and filesystem for managing datasets and output artifacts.
+   626→
+   627→**Custom modification:** Add `memory` MCP for storing analysis metadata, feature dictionaries, and model performance baselines. The combination of `postgres` + `sqlite` is specifically called out as safe in the MCP stack synergy rules — "Postgres for production data, SQLite for local analytics."
+   628→
+   629→### Learning Path
+   630→**Phase 1 — "Analyze Anything" (Week 1–2):**
+   631→- Load SKILL_03 + chain-of-thought + code-research + web-reader + audit-analyzer
+   632→- Complete 3 end-to-end analyses: data acquisition → cleaning → analysis → findings
+   633→- Goal: Reproducible analyses with clear methodology
+   634→- Key lesson: The analysis is only as good as the reasoning behind it
+   635→
+   636→**Phase 2 — "Communicate Findings" (Week 3–4):**
+   637→- Add persistent-memory + context-compressor + output-formatter + socratic-method
+   638→- Create stakeholder-ready reports for each analysis
+   639→- Goal: Findings that drive decisions, not just charts
+   640→- Key lesson: The best analysis is useless if nobody understands it
+   641→
+   642→**Phase 3 — "Build Data Systems" (Month 2+):**
+   643→- Add superpowers + explained-code + simulation-sandbox + agent-owl
+   644→- Build automated data pipelines and model training workflows
+   645→- Goal: Reproducible, automated systems that scale
+   646→- Key lesson: Analysis should be reproducible; insight should be communicable
+   647→
+   648→### Token Budget Recommendation
+   649→**Recommended: 10,500 tokens (2 skills active)**
+   650→
+   651→| Scenario | Skills Active | Token Budget |
+   652→|----------|---------------|-------------|
+   653→| Data analysis | SKILL_03 only | 6,100 |
+   654→| Analysis + communication | SKILL_01 + SKILL_03 | 10,500 |
+   655→| Multi-step pipeline | SKILL_03 + SKILL_04 | 12,100 |
+   656→| Research exploration | SKILL_01 only | 4,400 |
+   657→
+   658→The data scientist typically runs SKILL_03 during analysis and adds SKILL_01 when they need to interpret results or communicate findings. The 10,500 budget for the dual-skill mode is sufficient for most analytical sessions.
+   659→
+   660→### Common Pitfalls
+   661→1. **Confirmation bias in analysis** — The data scientist's biggest risk is finding what they expect to find. The `socratic-method` + `devils-advocate` pairing is essential for challenging analytical assumptions. Without these, the data scientist is just confirming priors.
+   662→2. **Not using audit-analyzer for data quality** — Garbage in, garbage out. The `audit-analyzer` skill should be used on EVERY dataset before analysis, not just when results look wrong. Most "surprising" findings are data quality issues.
+   663→3. **Ignoring context-compressor** — Data analysis generates enormous context: dataset schemas, statistical results, visualization code, and methodology notes. Without `context-compressor`, the data scientist hits token limits before completing the analysis.
+   664→4. **Over-complicating the model** — The data scientist's instinct is to use the most sophisticated model available. The `chain-of-thought` skill should start with "Is a simple model sufficient?" before jumping to deep learning.
+   665→5. **Not documenting for reproducibility** — Analyses that can't be reproduced are worthless. The `explained-code` skill should document every transformation, every filter, every assumption.
+   666→
+   667→### Optimal 1-Hour Session
+   668→```
+   669→:00–:10  HYPOTHESIZE (SKILL_03, Owl mode)
+   670→         "Did the new pricing tier increase conversion?"
+   671→         → Chain-of-thought: formalize hypothesis and test design
+   672→         → Socratic-method: "What's the control group? Seasonality?"
+   673→         → Devils-advocate: "Is the effect real or a confound?"
+   674→         → Persistent-memory: recall previous analysis of this cohort
+   675→
+   676→:10–:25  ACQUIRE & CLEAN (SKILL_03, Beaver mode)
+   677→         → Fetch MCP: pull conversion data from analytics API
+   678→         → Postgres MCP: query historical conversion rates
+   679→         → Audit-analyzer: check data quality (missing values, outliers)
+   680→         → Context-compressor: compress raw data to key metrics
+   681→
+   682→:25–:45  ANALYZE (SKILL_03, Owl mode)
+   683→         → Chain-of-thought: execute A/B test methodology
+   684→         → Audit-analyzer: compute statistical significance, effect size
+   685→         → Simulation-sandbox: model what conversion would look like
+   686→           under the null hypothesis
+   687→         → Devils-advocate: check for multiple comparison issues
+   688→
+   689→:45–:55  COMMUNICATE (SKILL_01, Elephant mode)
+   690→         [CONTINUITY: "Switching to Conversational mode — noted your
+   691→          analysis shows 12% lift with p=0.003, controlled for seasonality"]
+   692→         → Output-formatter: create executive summary (1 paragraph),
+   693→           technical report (full methodology), and dashboard specs
+   694→         → Explained-code: document methodology for reproducibility
+   695→
+   696→:55–:60  REMEMBER
+   697→         → Persistent-memory: store hypothesis, methodology, results,
+   698→           and next questions
+   699→         → "Session complete. 12% conversion lift confirmed. Next:
+   700→           segment by user cohort for deeper analysis."
+   701→```
+   702→
+   703→**Session token usage:** ~10,500 tokens (SKILL_03 + SKILL_01 active)
+   704→
+   705→---
+   706→
+   707→## USER TYPE 6: DEVOPS/SRE
+   708→
+   709→### Profile Description
+   710→The DevOps/SRE builds and maintains the infrastructure that other teams rely on. They manage CI/CD pipelines, container orchestration, cloud resources, monitoring, security, and deployment automation. They think in terms of reliability, scalability, observability, and automation. Their daily work involves writing Terraform/CloudFormation, configuring Docker containers, managing Kubernetes clusters, setting up monitoring dashboards, debugging production incidents, and hardening security postures. They are deeply technical and operationally minded — their work is invisible when everything works and highly visible when it doesn't. Their biggest challenges are: (1) managing infrastructure complexity at scale, (2) preventing security vulnerabilities in deployment pipelines, (3) maintaining uptime and reliability, and (4) enabling developer productivity without sacrificing control.
+   711→
+   712→### Recommended Skills
+   713→
+   714→**Core (7 skills — the "Boring Infrastructure Stack"):**
+   715→| # | Skill | Category | Why |
+   716→|---|-------|----------|-----|
+   717→| 1 | deployment-manager | Development | The core operational skill — handles deployments, rollbacks, environment management |
+   718→| 2 | secret-vault | Infrastructure | Secrets management — the single most critical security skill; one leak destroys trust |
+   719→| 3 | 4cli-unified | Infrastructure | Unified CLI — eliminates context-switching between kubectl, terraform, aws, docker |
+   720→| 4 | triune-proxy-stack | Infrastructure | Proxy infrastructure — routing, load balancing, and network topology |
+   721→| 5 | persistent-memory | System | Remembers configuration decisions, incident history, and architectural evolution |
+   722→| 6 | mcp-security-scanner | MCP Servers | Scans for vulnerabilities in dependencies, configs, and deployment manifests |
+   723→| 7 | context-compressor | System | Manages enormous context from infrastructure-as-code, logs, and incident data |
+   724→
+   725→**Extended (7 skills):**
+   726→| # | Skill | Category | Why |
+   727→|---|-------|----------|-----|
+   728→| 8 | owl-proxy-defense | Infrastructure | Advanced proxy security — WAF, DDoS mitigation, traffic analysis |
+   729→| 9 | 9router-gateway | Infrastructure | API gateway — rate limiting, authentication, service mesh routing |
+   730→| 10 | antigravity-proxy | Infrastructure | Reverse proxy and tunnel management for internal service communication |
+   731→| 11 | feedback-loop | System | Monitors deployment health and triggers automated remediation |
+   732→| 12 | system-prompt-sync | System | Keeps infrastructure config in sync across environments and team members |
+   733→| 13 | agent-beaver | Agents | Systems-thinking agent for complex infrastructure design |
+   734→| 14 | agent-maintenance | Agents | Scheduled maintenance: dependency updates, health checks, cert rotation |
+   735→
+   736→**Power-User (5 skills):**
+   737→| # | Skill | Category | Why |
+   738→|---|-------|----------|-----|
+   739→| 15 | mcp-builder | Development | Builds custom MCP servers for internal tooling |
+   740→| 16 | superpowers | Development | Scripting, automation, and one-off operational tools |
+   741→| 17 | explained-code | Development | Documents runbooks, architectural decisions, and incident post-mortems |
+   742→| 18 | agent-auditor | Agents | Infrastructure auditing agent for compliance and drift detection |
+   743→| 19 | agent-optimizer | Agents | Performance optimization agent for resource right-sizing |
+   744→
+   745→### Agent Skill Tier
+   746→**Start: SKILL_03 (Code + API) — 6,100 tokens**
+   747→
+   748→The DevOps engineer's work is fundamentally code — infrastructure-as-code, pipeline configurations, shell scripts, and automation. SKILL_03's quality gates are essential because infrastructure mistakes are catastrophic. The algorithm-first approach ensures they think before they deploy.
+   749→
+   750→**Progression:**
+   751→- Day 1: SKILL_03 — write Terraform, Dockerfiles, CI/CD configs
+   752→- Week 2: + SKILL_04 (Agentic) — orchestrate multi-service deployments
+   753→- Month 1: + SKILL_01 (Conversational) — incident response communication
+   754→- Rarely needed: SKILL_02 — only for internal dashboards or status pages
+   755→
+   756→**Final active set:** SKILL_03 + SKILL_04 (infrastructure code + orchestration)
+   757→
+   758→### Primary Agent Mode
+   759→**🦫 Beaver (Systems)** — The DevOps engineer's dominant mode is systems thinking: understanding how components interact, where failures cascade, and how to build resilient architectures. Beaver mode is the natural fit for anyone whose job is making complex systems work reliably. Secondary: **🦉 Owl (Analysis)** for incident investigation.
+   760→
+   761→### MCP Stack
+   762→**Primary: DevOps Command Center (github + docker + kubernetes + slack)**
+   763→
+   764→This stack is purpose-built for DevOps: code management (github), container operations (docker), orchestration (kubernetes), and team communication (slack). Every server maps directly to a daily DevOps workflow.
+   765→
+   766→**Custom modification:** Add `filesystem` for log access and configuration file management. The 5-server configuration (github + docker + kubernetes + slack + filesystem) provides comprehensive operational coverage without conflicts.
+   767→
+   768→### Learning Path
+   769→**Phase 1 — "Deploy Reliably" (Week 1–2):**
+   770→- Load SKILL_03 + deployment-manager + 4cli-unified + secret-vault + persistent-memory
+   771→- Set up automated deployment pipeline for one service
+   772→- Goal: Zero-manual-step deployments with secrets management
+   773→- Key lesson: If you deploy manually, you will deploy wrong
+   774→
+   775→**Phase 2 — "Secure Everything" (Week 3–4):**
+   776→- Add mcp-security-scanner + triune-proxy-stack + context-compressor
+   777→- Scan all services for vulnerabilities, set up proxy infrastructure
+   778→- Goal: Every deployment is scanned, every endpoint is proxied, every secret is vaulted
+   779→- Key lesson: Security is a verb, not a noun
+   780→
+   781→**Phase 3 — "Automate Everything" (Month 2+):**
+   782→- Add owl-proxy-defense + 9router-gateway + feedback-loop + agent-beaver + agent-maintenance
+   783→- Design platform-as-a-service, automate maintenance, enable self-service for dev teams
+   784→- Goal: Infrastructure so boring it doesn't need heroics
+   785→- Key lesson: The best SRE is one who has nothing to do
+   786→
+   787→### Token Budget Recommendation
+   788→**Recommended: 12,100 tokens (2 skills active)**
+   789→
+   790→| Scenario | Skills Active | Token Budget |
+   791→|----------|---------------|-------------|
+   792→| Infrastructure code | SKILL_03 only | 6,100 |
+   793→| Deploy + orchestrate | SKILL_03 + SKILL_04 | 12,100 |
+   794→| Incident response | SKILL_01 + SKILL_03 | 10,500 |
+   795→| Post-mortem analysis | SKILL_01 + SKILL_03 | 10,500 |
+   796→
+   797→The DevOps engineer needs the highest token budget when deploying or debugging production issues. Infrastructure context is enormous — Terraform files, Kubernetes manifests, Docker configs, monitoring dashboards, and incident logs all need to be in context. The 12,100 budget is justified for active incident response.
+   798→
+   799→### Common Pitfalls
+   800→1. **Not using secret-vault from Day 1** — Hardcoded credentials in config files are the #1 cause of security incidents. The `secret-vault` skill should be the FIRST skill loaded, not an afterthought.
+   801→2. **Ignoring context-compressor during incidents** — Production incidents generate enormous log output. Without `context-compressor`, the engineer can't fit the relevant logs, stack traces, and monitoring data in context to diagnose the root cause.
+   802→3. **Manual deployments** — If the deployment process requires manual steps, it will fail at 3 AM when the on-call engineer is half asleep. The `deployment-manager` skill should eliminate every manual step.
+   803→4. **No feedback-loop** — Deploying without health monitoring is flying blind. The `feedback-loop` skill should be configured for every production deployment — if the health check fails, roll back automatically.
+   804→5. **Over-automation** — Automating everything sounds good until the automation breaks in a way no human can debug. Use `devils-advocate` to challenge: "What happens when this automation fails?"
+   805→
+   806→### Optimal 1-Hour Session
+   807→```
+   808→:00–:10  DESIGN (SKILL_03, Beaver mode)
+   809→         "Set up blue-green deployment for the payment service"
+   810→         → Chain-of-thought: map deployment strategy
+   811→         → Devils-advocate: "What if the new version fails health checks?"
+   812→         → Persistent-memory: recall existing deployment patterns
+   813→
+   814→:10–:25  IMPLEMENT (SKILL_03, Beaver mode)
+   815→         → Deployment-manager: create blue-green config
+   816→         → Secret-vault: inject payment service credentials
+   817→         → 4cli-unified: verify k8s cluster state
+   818→         → Triune-proxy-stack: configure traffic routing
+   819→
+   820→:25–:40  SECURE & TEST (SKILL_03, Owl mode)
+   821→         → MCP-security-scanner: scan new deployment config
+   822→         → Feedback-loop: configure health monitoring
+   823→         → Context-compressor: manage large infrastructure context
+   824→         → System-prompt-sync: sync config across environments
+   825→
+   826→:40–:50  DEPLOY (SKILL_04, Beaver mode)
+   827→         → Deployment-manager: deploy to blue environment
+   828→         → Feedback-loop: monitor health metrics (5 min window)
+   829→         → Switch traffic from green to blue
+   830→         → Agent-maintenance: schedule health check rotation
+   831→
+   832→:50–:60  DOCUMENT & REVIEW
+   833→         → Explained-code: generate deployment runbook
+   834→         → Persistent-memory: store deployment config and decisions
+   835→         → Agent-auditor: verify compliance with security baseline
+   836→         → "Blue-green deployment live. Zero downtime. Ship it."
+   837→```
+   838→
+   839→**Session token usage:** ~12,100 tokens (SKILL_03 + SKILL_04 active)
+   840→
+   841→---
+   842→
+   843→## USER TYPE 7: CONTENT CREATOR/MARKETER
+   844→
+   845→### Profile Description
+   846→The Content Creator/Marketer writes, designs, and publishes content for a living. They run a blog, newsletter, social media presence, or all three. Their income comes from a mix of ad revenue, affiliate marketing, sponsored content, digital product sales, and community subscriptions. They are not deeply technical but are comfortable with no-code tools, basic HTML/CSS, and platform-specific workflows (WordPress, Substack, Gumroad, Beehiiv). Their primary challenges are: (1) producing high-quality content at volume, (2) standing out in an increasingly AI-saturated content landscape, (3) SEO visibility against established domains, and (4) converting readers into paying customers. They think in terms of content calendars, keyword clusters, and audience segments. The AI is their writing partner, research assistant, and distribution engine — they need it to amplify their voice, not replace it.
+   847→
+   848→### Recommended Skills
+   849→
+   850→**Core (6 skills — the "Content Machine"):**
+   851→| # | Skill | Category | Why |
+   852→|---|-------|----------|-----|
+   853→| 1 | seo-content-writer | Content | The foundation — writes content that ranks; keyword integration, heading structure, SERP optimization |
+   854→| 2 | humanizer | Content | The differentiator — transforms AI drafts into writing with voice, opinions, and personality |
+   855→| 3 | social-content-pillars | Content | Strategy framework — defines 3–5 recurring themes that make the brand coherent |
+   856→| 4 | social-media-manager | Content | Distribution engine — schedules and adapts content across platforms |
+   857→| 5 | output-formatter | Creative | Formats content for different mediums — blog → newsletter → social → ebook |
+   858→| 6 | persistent-memory | System | Remembers content calendar, brand voice, audience preferences across sessions |
+   859→
+   860→**Extended (7 skills):**
+   861→| # | Skill | Category | Why |
+   862→|---|-------|----------|-----|
+   863→| 7 | brainstorming | Reasoning | Generates fresh angles and avoids topic fatigue |
+   864→| 8 | web-reader | Data & Web | Research — reads source material, competitor content, reference articles |
+   865→| 9 | jtbd-research | Strategy | Understands what the audience actually needs — informs content and product creation |
+   866→| 10 | gumroad-pipeline | Strategy | Monetization — creates and sells digital products from the content audience |
+   867→| 11 | photography-ai | Creative | Featured images, social graphics, and visual content |
+   868→| 12 | chain-of-thought | Reasoning | Structures complex opinion pieces and analytical content |
+   869→| 13 | context-compressor | System | Compresses research material into manageable briefs |
+   870→
+   871→**Power-User (4 skills):**
+   872→| # | Skill | Category | Why |
+   873→|---|-------|----------|-----|
+   874→| 14 | agent-dolphin | Agents | Dedicated creative agent for experimental content formats |
+   875→| 15 | agent-rabbit | Agents | Rapid ideation agent for content brainstorming sessions |
+   876→| 16 | vercel-web-design-guidelines | Design & UI | Design principles for personal site/blog |
+   877→| 17 | skill-finder | Strategy | Discovers new skills as content strategy evolves |
+   878→
+   879→### Agent Skill Tier
+   880→**Start: SKILL_01 (Conversational) — 4,400 tokens**
+   881→
+   882→The content creator's primary mode is conversational — they think out loud, brainstorm in chat, and refine ideas through dialogue. SKILL_01's low token footprint and conversational style match their mobile-first, always-on usage pattern. They dictate ideas on walks, refine headlines on the train, and schedule posts from coffee shops.
+   883→
+   884→**Progression:**
+   885→- Day 1: SKILL_01 — brainstorm, outline, draft
+   886→- Week 2: + SKILL_02 (Design + Build) — for blog design, landing pages, visual content
+   887→- Month 1: + SKILL_04 (Agentic) — for batch content creation and scheduling automation
+   888→- Rarely needed: SKILL_03 — only for custom website code
+   889→
+   890→**Final active set:** SKILL_01 (always loaded) + SKILL_02 (for visual work)
+   891→
+   892→### Primary Agent Mode
+   893→**🐬 Dolphin (Creative)** — The content creator's dominant mode is creative: generating ideas, finding unique angles, and crafting narratives that resonate. Dolphin mode prioritizes originality and emotional connection. Secondary: **🦉 Owl (Analysis)** for SEO research and performance analysis.
+   894→
+   895→### MCP Stack
+   896→**Primary: Content Engine (filesystem + brave-search + google-drive + slack)**
+   897→
+   898→Wait — let me use the actual pre-built stack. The "Content Machine" MCP stack is: brave-search + pictoflux-ai + filesystem + memory. This is better for the content creator — research (brave-search), visuals (pictoflux-ai), file management (filesystem), and brand memory (memory).
+   899→
+   900→**Custom modification:** Replace `slack` with `fetch` MCP for accessing publishing platform APIs (Substack, WordPress, Ghost). Add `google-drive` for collaborative editing with editors.
+   901→
+   902→### Learning Path
+   903→**Phase 1 — "Write Well" (Week 1):**
+   904→- Load SKILL_01 + seo-content-writer + humanizer + output-formatter
+   905→- Write 5 pieces: 2 blog posts, 2 social threads, 1 newsletter
+   906→- Goal: Content that ranks AND sounds human
+   907→- Key lesson: AI can write; the humanizer makes it worth reading
+   908→
+   909→**Phase 2 — "Build the Machine" (Week 2–3):**
+   910→- Add social-content-pillars + social-media-manager + persistent-memory
+   911→- Define content pillars, create 2-week content calendar, schedule all posts
+   912→- Goal: Consistent, on-brand content distributed across platforms
+   913→- Key lesson: Consistency beats brilliance — 3 good posts/week > 1 perfect post/month
+   914→
+   915→**Phase 3 — "Monetize the Audience" (Month 2+):**
+   916→- Add brainstorming + web-reader + jtbd-research + gumroad-pipeline + photography-ai
+   917→- Create first digital product, launch to existing audience
+   918→- Goal: Revenue from content beyond ads and affiliates
+   919→- Key lesson: Your audience is your product — serve them, then sell to them
+   920→
+   921→### Token Budget Recommendation
+   922→**Recommended: 8,000–10,000 tokens (2 skills active)**
+   923→
+   924→| Scenario | Skills Active | Token Budget |
+   925→|----------|---------------|-------------|
+   926→| Writing session | SKILL_01 only | 4,400 |
+   927→| Content + design | SKILL_01 + SKILL_02 | 10,000 |
+   928→| Batch creation | SKILL_01 + SKILL_04 | 10,400 |
+   929→| Mobile brainstorming | SKILL_01 only | 4,400 |
+   930→
+   931→The content creator typically runs SKILL_01 alone during writing sessions (4,400 tokens — very efficient). They add SKILL_02 only when designing visual content. The low token budget reflects their conversational workflow.
+   932→
+   933→### Common Pitfalls
+   934→1. **Skipping the humanizer** — AI-generated content that sounds like AI-generated content is the content creator's #1 existential threat. The `humanizer` skill is not optional — it's the difference between content that builds an audience and content that gets scrolled past. Every piece must pass the "does this sound like a robot?" test.
+   935→2. **No content pillars** — Writing without a strategy is publishing into the void. The `social-content-pillars` skill should be the FIRST thing configured — before writing a single word. Without pillars, every piece is a one-off that doesn't compound.
+   936→3. **Ignoring SEO** — "If you write it, they will come" is a lie. The `seo-content-writer` skill ensures every piece has a chance to rank. Without SEO, the content creator is building on rented land (social platforms that can change algorithms overnight).
+   937→4. **Not using persistent-memory for brand voice** — The content creator's most valuable asset is their voice. The `persistent-memory` skill should store voice guidelines, tone preferences, and vocabulary choices so every session maintains consistency.
+   938→5. **Batch creating without quality control** — Using SKILL_04 to create 20 posts in one session without the humanizer results in 20 robotic posts. Quality must be checked individually, not batch-processed.
+   939→
+   940→### Optimal 1-Hour Session
+   941→```
+   942→:00–:08  PLAN (SKILL_01, Dolphin mode)
+   943→         "This week's theme: 'AI tools for non-technical creators'"
+   944→         → Social-content-pillars: confirms this fits pillar #2 (tools & tactics)
+   945→         → Brainstorming: generates 8 topic angles
+   946→         → Persistent-memory: recall which angles performed best last quarter
+   947→         → Select top 3: blog post, newsletter, social thread
+   948→
+   949→:08–:25  WRITE (SKILL_01, Dolphin mode)
+   950→         → SEO-content-writer: draft blog post with keyword targeting
+   951→           "AI tools for creators", "no-code AI", "content automation"
+   952→         → Chain-of-thought: structure the argument (problem → 5 tools → verdict)
+   953→         → Context-compressor: compress research into focused brief
+   954→
+   955→:25–:38  HUMANIZE & FORMAT (SKILL_01, Dolphin → Beaver mode)
+   956→         → Humanizer: rewrite draft with personal anecdotes, strong opinions,
+   957→           and natural language patterns
+   958→         → Output-formatter: create blog version, newsletter version,
+   959→           and 5-tweet social thread simultaneously
+   960→         → Photography-ai: generate featured image for blog post
+   961→
+   962→:38–:48  DISTRIBUTE (SKILL_01, Eagle mode)
+   963→         → Social-media-manager: schedule blog post, queue social thread,
+   964→           set newsletter send time
+   965→         → Persistent-memory: store content calendar update
+   966→         → Audit check: all platforms scheduled correctly?
+   967→
+   968→:48–:60  MONETIZE & IMPROVE
+   969→         → Gumroad-pipeline: "Should I create a 'Creator's AI Toolkit'
+   970→           ebook from this content?" → Yes, outline it
+   971→         → JTBD-research: "What job are creators hiring AI tools for?"
+   972→           → "Save time without losing authenticity"
+   973→         → "Next session: write the ebook outline and first chapter"
+   974→```
+   975→
+   976→**Session token usage:** ~4,400 tokens (SKILL_01 only — the most efficient user type)
+   977→
+   978→---
+   979→
+   980→## USER TYPE 8: AI/ML RESEARCHER
+   981→
+   982→### Profile Description
+   983→The AI/ML Researcher operates in the world of papers, experiments, models, and documentation. They read arxiv papers, implement architectures from scratch or modify existing ones, run training experiments, analyze results, and write research reports. Their technical level is extremely high in mathematics, Python, PyTorch/JAX, and scientific computing — but they may be less comfortable with frontend development, deployment, or business strategy. Their daily work involves literature review, experimental design, data preprocessing, model training, evaluation, and paper writing. Their biggest challenges are: (1) staying current with the overwhelming volume of new research, (2) reproducing results from papers with incomplete descriptions, (3) managing experiment tracking and hyperparameter configurations, and (4) communicating complex findings to both technical and non-technical audiences.
+   984→
+   985→### Recommended Skills
+   986→
+   987→**Core (6 skills — the "Research Pipeline"):**
+   988→| # | Skill | Category | Why |
+   989→|---|-------|----------|-----|
+   990→| 1 | chain-of-thought | Reasoning | Structured reasoning for proofs, experimental design, and result interpretation |
+   991→| 2 | code-research | Data & Web | Deep codebase analysis — understands model architectures and training pipelines |
+   992→| 3 | web-reader | Data & Web | Reads arxiv papers, blog posts, and reference implementations |
+   993→| 4 | explained-code | Development | Clear documentation for research code — makes implementations reproducible |
+   994→| 5 | context-compressor | System | Manages enormous context of papers, codebases, and experiment logs |
+   995→| 6 | persistent-memory | System | Maintains experiment history, hyperparameter configs, and research decisions |
+   996→
+   997→**Extended (7 skills):**
+   998→| # | Skill | Category | Why |
+   999→|---|-------|----------|-----|
+  1000→| 7 | socratic-method | Reasoning | Probes methodology and result interpretation — prevents confirmation bias |
+  1001→| 8 | devils-advocate | Reasoning | Challenges research assumptions and alternative explanations |
+  1002→| 9 | simulation-sandbox | Reasoning | Simulates experimental conditions before running expensive training jobs |
+  1003→| 10 | audit-analyzer | Data & Web | Analyzes experiment results, training curves, and evaluation metrics |
+  1004→| 11 | superpowers | Development | General-purpose coding for preprocessing and experiment scripting |
+  1005→| 12 | output-formatter | Creative | Formats findings for paper, blog post, presentation, or internal report |
+  1006→| 13 | explore | Data & Web | Open-ended exploration of datasets and model behaviors |
+  1007→
+  1008→**Power-User (5 skills):**
+  1009→| # | Skill | Category | Why |
+  1010→|---|-------|----------|-----|
+  1011→| 14 | modelscope-mcp-hub | MCP Servers | Access to model zoo and pre-trained weights |
+  1012→| 15 | composition-patterns | Development | Modular neural network architecture patterns |
+  1013→| 16 | agent-owl | Agents | Dedicated analytical agent for deep literature review |
+  1014→| 17 | agent-elephant | Agents | Cross-domain knowledge synthesis agent |
+  1015→| 18 | mcp-stack-curator | MCP Servers | Optimizes MCP configuration for research workflows |
+  1016→
+  1017→### Agent Skill Tier
+  1018→**Start: SKILL_03 (Code + API) — 6,100 tokens**
+  1019→
+  1020→The AI researcher's primary mode is code — Python scripts, PyTorch models, data pipelines, and experiment runners. SKILL_03's quality gates ensure reproducibility (critical for research), and the algorithm-first approach matches their mathematical mindset.
+  1021→
+  1022→**Progression:**
+  1023→- Day 1: SKILL_03 — implement models, run experiments, analyze results
+  1024→- Week 2: + SKILL_01 (Conversational) — for literature review discussions and hypothesis generation
+  1025→- Month 1: + SKILL_04 (Agentic) — for orchestrating multi-experiment runs and parallel training
+  1026→- Rarely needed: SKILL_02 — only for research visualization dashboards
+  1027→
+  1028→**Final active set:** SKILL_03 (daily driver) + SKILL_01 (for interpretation and writing)
+  1029→
+  1030→### Primary Agent Mode
+  1031→**🦉 Owl (Analysis)** — The researcher's dominant mode is analytical: dissecting papers, interpreting results, identifying confounds, and drawing valid conclusions. Owl mode is the scientific mindset incarnate. Secondary: **🐰 Rabbit (Ideation)** for hypothesis generation and **🐘 Elephant (Synthesis)** for connecting findings across fields.
+  1032→
+  1033→### MCP Stack
+  1034→**Primary: AI Research Lab (brave-search + fetch + memory + sqlite)**
+  1035→
+  1036→This is the researcher's ideal stack: literature discovery (brave-search), paper/code retrieval (fetch), research memory (memory), and lightweight experiment tracking (sqlite). The sqlite server is particularly valuable for maintaining hyperparameter-result mappings without the overhead of a full database.
+  1037→
+  1038→**Custom modification:** Add `arxiv` MCP server for direct paper search and citation analysis (if available). Replace `fetch` with `sequential-thinking` MCP for extended mathematical reasoning — the researcher needs step-by-step proof verification more than web scraping.
+  1039→
+  1040→### Learning Path
+  1041→**Phase 1 — "Read & Understand" (Week 1–2):**
+  1042→- Load SKILL_03 + chain-of-thought + web-reader + code-research + persistent-memory
+  1043→- Read 5 papers, understand 3 implementations, reproduce 1 result
+  1044→- Goal: Research comprehension pipeline from paper to code
+  1045→- Key lesson: If you can't reproduce it, you don't understand it
+  1046→
+  1047→**Phase 2 — "Experiment & Document" (Week 3–4):**
+  1048→- Add explained-code + context-compressor + audit-analyzer + socratic-method
+  1049→- Run experiments, document methodology, analyze results with statistical rigor
+  1050→- Goal: Reproducible experiments with clear methodology
+  1051→- Key lesson: Documentation is not optional — it's the experiment's output
+  1052→
+  1053→**Phase 3 — "Publish & Synthesize" (Month 2+):**
+  1054→- Add output-formatter + devils-advocate + simulation-sandbox + agent-owl + agent-elephant
+  1055→- Write papers, challenge findings, connect across fields
+  1056→- Goal: Rigorous, publishable research that advances understanding
+  1057→- Key lesson: The best research answers questions AND raises new ones
+  1058→
+  1059→### Token Budget Recommendation
+  1060→**Recommended: 10,500 tokens (2 skills active)**
+  1061→
+  1062→| Scenario | Skills Active | Token Budget |
+  1063→|----------|---------------|-------------|
+  1064→| Implementation | SKILL_03 only | 6,100 |
+  1065→| Code + interpretation | SKILL_01 + SKILL_03 | 10,500 |
+  1066→| Multi-experiment orchestration | SKILL_03 + SKILL_04 | 12,100 |
+  1067→| Literature review | SKILL_01 only | 4,400 |
+  1068→
+  1069→The researcher typically runs SKILL_03 during implementation and SKILL_01 during interpretation. The 10,500 budget is sufficient for most research sessions. The exception is multi-experiment orchestration (SKILL_03 + SKILL_04), which needs the full 12,100 budget.
+  1070→
+  1071→### Common Pitfalls
+  1072→1. **Confirmation bias in result interpretation** — The researcher's biggest risk is seeing what they want to see in the data. The `socratic-method` + `devils-advocate` pairing is essential for challenging interpretations. Without these, the researcher is just telling stories with numbers.
+  1073→2. **Not documenting for reproducibility** — Research that can't be reproduced is worthless. The `explained-code` skill should document every hyperparameter, every data transformation, every random seed. If another researcher can't reproduce the result, it doesn't exist.
+  1074→3. **Ignoring context-compressor** — Research generates enormous context: paper PDFs, code repositories, experiment logs, and analysis notebooks. Without `context-compressor`, the researcher hits token limits before completing the analysis loop.
+  1075→4. **Not using audit-analyzer for statistical rigor** — "The loss went down" is not a result. The `audit-analyzer` skill should compute confidence intervals, effect sizes, and statistical significance for every claimed finding.
+  1076→5. **Over-investing in implementation, under-investing in reasoning** — The researcher's instinct is to start coding immediately. But 30 minutes of `chain-of-thought` reasoning before implementation can save 30 hours of debugging. Think first, code second.
+  1077→
+  1078→### Optimal 1-Hour Session
+  1079→```
+  1080→:00–:12  LITERATURE (SKILL_01, Owl mode)
+  1081→         "What's the state of mixture-of-experts for small models?"
+  1082→         → Web-reader: read 3 recent MoE papers
+  1083→         → Chain-of-thought: synthesize key findings and gaps
+  1084→         → Persistent-memory: store insights for future reference
+  1085→         → Identify gap: "No one has tried MoE with <1B params on edge"
+  1086→
+  1087→:12–:25  HYPOTHESIZE (SKILL_01, Rabbit → Owl mode)
+  1088→         → Chain-of-thought: formalize hypothesis
+  1089→           "MoE with 4 experts on 500M param model matches
+  1090→            dense 1B model on reasoning tasks"
+  1091→         → Devils-advocate: "What if routing collapse occurs?
+  1092→           What if the overhead exceeds the benefit?"
+  1093→         → Simulation-sandbox: model expected parameter counts
+  1094→         → Socratic-method: "What would falsify this hypothesis?"
+  1095→
+  1096→:25–:45  IMPLEMENT (SKILL_03, Ant → Beaver mode)
+  1097→         [CONTINUITY: "Switching to Code mode — noted your hypothesis
+  1098→          is MoE-4x500M ≈ Dense-1B on reasoning benchmarks"]
+  1099→         → Code-research: study existing MoE implementations
+  1100→         → Superpowers: implement MoE routing layer
+  1101→         → Composition-patterns: modular expert architecture
+  1102→         → Explained-code: document every architectural decision
+  1103→
+  1104→:45–:55  ANALYZE (SKILL_03, Owl mode)
+  1105→         → Audit-analyzer: compute parameter counts, FLOPs comparison
+  1106→         → Chain-of-thought: verify the theoretical argument
+  1107→         → Devils-advocate: check for confounds in the comparison
+  1108→         → Context-compressor: compress experiment logs
+  1109→
+  1110→:55–:60  DOCUMENT & PLAN
+  1111→         → Explained-code: generate reproducibility documentation
+  1112→         → Output-formatter: draft experiment plan for actual training
+  1113→         → Persistent-memory: store hypothesis, architecture, and next steps
+  1114→         → "Next session: run training on GPU cluster with documented config"
+  1115→```
+  1116→
+  1117→**Session token usage:** ~10,500 tokens (SKILL_01 + SKILL_03 active)
+  1118→
+  1119→---
+  1120→
+  1121→## CROSS-REFERENCE MATRIX
+  1122→
+  1123→### Skill Allocation by User Type
+  1124→
+  1125→| Skill | Indie Hacker | Frontend Dev | Backend Eng | Full-Stack | Data Scientist | DevOps/SRE | Content Creator | AI Researcher |
+  1126→|-------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+  1127→| **DESIGN & UI** | | | | | | | | |
+  1128→| ui-ux-pro-max-v7 | | C | | P | | | | |
+  1129→| anthropic-frontend-design | | E | | | | | | |
+  1130→| gsap-animations | | C | | | | | | |
+  1131→| animation-orchestrator | | E | | | | | | |
+  1132→| animation-auditor | | P | | | | | | |
+  1133→| motion-animator | | | | | | | | |
+  1134→| gsap-animator | | | | | | | | |
+  1135→| frontend-design | C | C | | C | | | | |
+  1136→| vercel-web-design-guidelines | | C | | | | | P | |
+  1137→| **REASONING** | | | | | | | | |
+  1138→| chain-of-thought | | | E | P | C | | E | C |
+  1139→| socratic-method | | | | | E | | | E |
+  1140→| devils-advocate | E | | E | E | E | E | | E |
+  1141→| simulation-sandbox | | | | | E | | | E |
+  1142→| brainstorming | E | | | E | | | E | |
+  1143→| **DEVELOPMENT** | | | | | | | | |
+  1144→| mcp-builder | | | E | | | P | | |
+  1145→| superpowers | C | P | C | C | E | P | | E |
+  1146→| tdd-workflow | | E | C | P | | | | |
+  1147→| deployment-manager | C | | C | C | | C | | |
+  1148→| browser-use | | C | | | | | | |
+  1149→| web-artifacts-builder | P | E | | E | | | | |
+  1150→| vercel-react-best-practices | | C | | | | | | |
+  1151→| explained-code | | C | C | C | E | P | | C |
+  1152→| composition-patterns | | C | | E | P | | | P |
+  1153→| threejs-orchestrator | | P | | | | | | |
+  1154→| skill-architect | | | | | | | | |
+  1155→| context7-docs | | C | | | | | | |
+  1156→| **CONTENT** | | | | | | | | |
+  1157→| seo-content-writer | C | | | E | | | C | |
+  1158→| humanizer | E | | | | | | C | |
+  1159→| social-media-manager | E | | | | | | C | |
+  1160→| social-content-pillars | | | | | | | C | |
+  1161→| **STRATEGY** | | | | | | | | |
+  1162→| jtbd-research | P | | | | E | | E | |
+  1163→| to-prd | C | | | C | | | | |
+  1164→| gumroad-pipeline | C | | | E | | | E | |
+  1165→| feature-research | | | | | | | | |
+  1166→| skill-finder | P | | | E | | | P | |
+  1167→| **SYSTEM** | | | | | | | | |
+  1168→| persistent-memory | C | E | C | C | C | C | C | C |
+  1169→| system-prompt-sync | | | | | | E | | |
+  1170→| feedback-loop | | | | | | E | | |
+  1171→| context-compressor | E | E | C | C | C | C | E | C |
+  1172→| agent-roles | | | | P | | | | |
+  1173→| sample-hello-skill | | | | | | | | |
+  1174→| **DATA & WEB** | | | | | | | | |
+  1175→| web-reader | E | | | | C | | E | C |
+  1176→| audit-analyzer | | E | | | C | | | E |
+  1177→| web-design-guidelines | | E | | | | | | |
+  1178→| code-research | | P | P | | C | | | C |
+  1179→| explore | | | | | E | | | E |
+  1180→| **CREATIVE** | | | | | | | | |
+  1181→| photography-ai | | | | | | | E | |
+  1182→| output-formatter | | | | C | E | | C | E |
+  1183→| **MCP SERVERS** | | | | | | | | |
+  1184→| pictoflux-ai | | | | | | | | |
+  1185→| mcp-stack-curator | P | | | | P | | | P |
+  1186→| mcp-registry | | | | | | | | |
+  1187→| mcp-security-scanner | | | E | | | C | | |
+  1188→| modelscope-mcp-hub | | | | | P | | | P |
+  1189→| **AGENTS** | | | | | | | | |
+  1190→| agent-rabbit | | | | | | | P | |
+  1191→| agent-owl | | | | | P | | | P |
+  1192→| agent-ant | | | | | | | | |
+  1193→| agent-eagle | | | | | | | | |
+  1194→| agent-dolphin | | | | | | | P | |
+  1195→| agent-beaver | | | P | | | E | | |
+  1196→| agent-elephant | | | | P | | | | P |
+  1197→| **INFRASTRUCTURE** | | | | | | | | |
+  1198→| 9router-gateway | | | P | | | E | | |
+  1199→| owl-proxy-defense | | | P | | | E | | |
+  1200→| antigravity-proxy | | | | | | E | | |
+  1201→| 4cli-unified | | | E | | | C | | |
+  1202→| triune-proxy-stack | | | E | | | C | | |
+  1203→| secret-vault | | | C | | | C | | |
+  1204→| **7-AGENT MASTER** | | | | | | | | |
+  1205→| agent-master | | | | P | | | | |
+  1206→| agent-decision | | | | | | | | |
+  1207→| agent-simulator | | | | | | | | |
+  1208→| agent-auditor | | | | | | P | | |
+  1209→| agent-profiler | | | | | | | | |
+  1210→| agent-optimizer | | | | | | P | | |
+  1211→| agent-maintenance | | | P | | | E | | |
+  1212→| **ANIMATION ENG.** | | | | | | | | |
+  1213→| animation-hybrid-architect | | E | | | | | | |
+  1214→| gsap-animation-engineer | | P | | | | | | |
+  1215→| motion-animation-engineer | | P | | | | | | |
+  1216→
+  1217→C = Core | E = Extended | P = Power-User | blank = not recommended
+  1218→
+  1219→### Agent Skill Tier Assignment Summary
+  1220→
+  1221→| User Type | Start Tier | Progression Target | Final Active Set | Primary Token Budget |
+  1222→|-----------|-----------|-------------------|-----------------|---------------------|
+  1223→| Solo Indie Hacker | SKILL_01 | SKILL_01 + SKILL_02 | SKILL_01 + SKILL_02 | 8,000–10,000 |
+  1224→| Frontend Developer | SKILL_02 | SKILL_02 + SKILL_03 | SKILL_02 + SKILL_03 | 10,000–11,700 |
+  1225→| Backend/API Engineer | SKILL_03 | SKILL_03 + SKILL_04 | SKILL_03 + SKILL_04 | 12,100 |
+  1226→| Full-Stack Generalist | SKILL_01 | All 4 (rotating) | 2 at a time (rotating) | 10,000–12,100 |
+  1227→| Data Scientist | SKILL_03 | SKILL_03 + SKILL_01 | SKILL_03 + SKILL_01 | 10,500 |
+  1228→| DevOps/SRE | SKILL_03 | SKILL_03 + SKILL_04 | SKILL_03 + SKILL_04 | 12,100 |
+  1229→| Content Creator | SKILL_01 | SKILL_01 + SKILL_02 | SKILL_01 only | 4,400 |
+  1230→| AI/ML Researcher | SKILL_03 | SKILL_03 + SKILL_01 | SKILL_03 + SKILL_01 | 10,500 |
+  1231→
+  1232→### MCP Stack Assignment Summary
+  1233→
+  1234→| User Type | Primary MCP Stack | Custom Modification |
+  1235→|-----------|------------------|-------------------|
+  1236→| Solo Indie Hacker | Product Launch (github + brave-search + pictoflux-ai + memory) | + fetch for webhook testing |
+  1237→| Frontend Developer | Full-Stack Web Studio (filesystem + github + vercel + postgres) | Replace postgres with context7; + sequential-thinking |
+  1238→| Backend/API Engineer | Custom (filesystem + github + postgres + docker) | Replace vercel with docker |
+  1239→| Full-Stack Generalist | Full-Stack Web Studio (filesystem + github + vercel + postgres) | + memory MCP for multi-project context |
+  1240→| Data Scientist | Data Pipeline Studio (postgres + sqlite + fetch + filesystem) | + memory for analysis metadata |
+  1241→| DevOps/SRE | DevOps Command Center (github + docker + kubernetes + slack) | + filesystem for log access |
+  1242→| Content Creator | Content Machine (brave-search + pictoflux-ai + filesystem + memory) | + fetch for publishing APIs |
+  1243→| AI/ML Researcher | AI Research Lab (brave-search + fetch + memory + sqlite) | + sequential-thinking for math proofs |
+  1244→
+  1245→### Primary Agent Mode Assignment
+  1246→
+  1247→| User Type | Primary Mode | Secondary Mode | Why |
+  1248→|-----------|-------------|---------------|-----|
+  1249→| Solo Indie Hacker | 🦅 Eagle (Strategy) | 🐰 Rabbit (Ideation) | Strategic decision-making under uncertainty |
+  1250→| Frontend Developer | 🐜 Ant (Decomposition) | 🦉 Owl (Analysis) | Breaking Figma designs into component hierarchies |
+  1251→| Backend/API Engineer | 🦫 Beaver (Systems) | 🦉 Owl (Analysis) | Systems thinking for API and service design |
+  1252→| Full-Stack Generalist | 🐘 Elephant (Synthesis) | 🦫 Beaver (Systems) | Cross-domain integration and context-switching |
+  1253→| Data Scientist | 🦉 Owl (Analysis) | 🐰 Rabbit (Ideation) | Statistical analysis and hypothesis generation |
+  1254→| DevOps/SRE | 🦫 Beaver (Systems) | 🦉 Owl (Analysis) | Infrastructure reliability and incident debugging |
+  1255→| Content Creator | 🐬 Dolphin (Creative) | 🦉 Owl (Analysis) | Creative writing and SEO research |
+  1256→| AI/ML Researcher | 🦉 Owl (Analysis) | 🐘 Elephant (Synthesis) | Rigorous analysis and cross-domain synthesis |
+  1257→
+  1258→---
+  1259→
+  1260→## MOST UNIVERSAL SKILLS (Ranked by User-Type Coverage)
+  1261→
+  1262→| Rank | Skill | Coverage | User Types |
+  1263→|------|-------|----------|-----------|
+  1264→| 1 | persistent-memory | 8/8 | All |
+  1265→| 2 | superpowers | 7/8 | All except Content Creator |
+  1266→| 3 | context-compressor | 7/8 | All except Content Creator (extended) |
+  1267→| 4 | explained-code | 6/8 | All except Indie Hacker, Content Creator |
+  1268→| 5 | devils-advocate | 6/8 | All except Frontend Dev, Content Creator |
+  1269→| 6 | chain-of-thought | 5/8 | Backend, Full-Stack, Data, Content, Researcher |
+  1270→| 7 | web-reader | 4/8 | Indie Hacker, Full-Stack, Data, Researcher |
+  1271→| 8 | deployment-manager | 4/8 | Indie Hacker, Backend, Full-Stack, DevOps |
+  1272→| 9 | output-formatter | 4/8 | Full-Stack, Data, Content, Researcher |
+  1273→| 10 | audit-analyzer | 3/8 | Frontend, Data, Researcher |
+  1274→
+  1275→## MOST UNIQUE SKILLS (Single User Type)
+  1276→
+  1277→| Skill | Exclusive User Type | Why Unique |
+  1278→|-------|-------------------|-----------|
+  1279→| animation-orchestrator | Frontend Developer | Complex multi-element animation sequencing |
+  1280→| animation-hybrid-architect | Frontend Developer | CSS + GSAP + scroll conflict architecture |
+  1281→| gsap-animation-engineer | Frontend Developer | Advanced GSAP plugin techniques |
+  1282→| motion-animation-engineer | Frontend Developer | Framer Motion / Motion v12 declarative animations |
+  1283→| animation-auditor | Frontend Developer | Animation performance and accessibility QA |
+  1284→| social-content-pillars | Content Creator | Content strategy theme framework |
+  1285→| seo-content-writer | Indie Hacker, Content Creator | SEO-optimized content generation |
+  1286→| humanizer | Content Creator | AI-to-human voice transformation |
+  1287→| social-media-manager | Indie Hacker, Content Creator | Cross-platform content distribution |
+  1288→| 4cli-unified | Backend, DevOps | Unified CLI for infrastructure tools |
+  1289→| triune-proxy-stack | Backend, DevOps | Proxy infrastructure management |
+  1290→| owl-proxy-defense | Backend, DevOps | WAF and DDoS protection |
+  1291→| agent-master | Full-Stack Generalist | Multi-agent coordination |
+  1292→| agent-roles | Full-Stack Generalist | In-session persona switching |
+  1293→
+  1294→---
+  1295→
+  1296→## SKILL COUNT SUMMARY BY USER TYPE
+  1297→
+  1298→| User Type | Core | Extended | Power-User | Total |
+  1299→|-----------|:----:|:--------:|:----------:|:-----:|
+  1300→| Solo Indie Hacker | 7 | 6 | 4 | 17 |
+  1301→| Frontend Developer | 8 | 6 | 6 | 20 |
+  1302→| Backend/API Engineer | 7 | 7 | 5 | 19 |
+  1303→| Full-Stack Generalist | 8 | 7 | 5 | 20 |
+  1304→| Data Scientist | 6 | 7 | 4 | 17 |
+  1305→| DevOps/SRE | 7 | 7 | 5 | 19 |
+  1306→| Content Creator | 6 | 7 | 4 | 17 |
+  1307→| AI/ML Researcher | 6 | 7 | 5 | 18 |
+  1308→| **Average** | **6.9** | **6.8** | **4.8** | **18.4** |
+  1309→
+  1310→---
+  1311→
+  1312→## CRITICAL GAP ANALYSIS BY USER TYPE
+  1313→
+  1314→| User Type | Critical Gaps (Skills That Don't Exist) | Severity |
+  1315→|-----------|----------------------------------------|----------|
+  1316→| Solo Indie Hacker | Analytics/metrics, Database/ORM, Email marketing | 🔴🔴🔴 |
+  1317→| Frontend Developer | State management specialist, a11y specialist, CSS architecture | 🔴🔴🔴 |
+  1318→| Backend/API Engineer | API design patterns, Database optimization, Message queues | 🔴🔴🟡 |
+  1319→| Full-Stack Generalist | Project management, Design-to-code pipeline, Client CRM | 🔴🔴🟡 |
+  1320→| Data Scientist | ML framework specialist, Experiment tracking, Data pipeline | 🔴🔴🔴 |
+  1321→| DevOps/SRE | Monitoring/observability, IaC (Terraform), Kubernetes mgmt | 🔴🔴🔴 |
+  1322→| Content Creator | Email marketing, SEO analytics, Video/multimedia | 🔴🔴🟡 |
+  1323→| AI/ML Researcher | ML framework specialist, Experiment tracking, Paper writing | 🔴🔴🟡 |
+  1324→
+  1325→---
+  1326→
+  1327→*Report generated from analysis of 76 skills across 11 categories, 4 agent skill tiers, 9 pre-built MCP stacks, and 7 agent modes. All recommendations are based on the principle that skill stacks should form sequential pipelines where each skill's output feeds the next skill's input, minimizing friction and maximizing compound value.*
+  1328→

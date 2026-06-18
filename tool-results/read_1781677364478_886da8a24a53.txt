@@ -1,0 +1,668 @@
+     1→import openpyxl
+     2→from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+     3→from openpyxl.utils import get_column_letter
+     4→
+     5→wb = openpyxl.Workbook()
+     6→ws = wb.active
+     7→ws.title = "Comparative Matrix"
+     8→
+     9→# ============================================================
+    10→# DATA: 29 skills with 12 dimensions
+    11→# ============================================================
+    12→# Top 20 from project matched to Skills.sh + 9 specifically listed
+    13→# Some overlap (browser-use, deployment-manager, persistent-memory, mcp-builder are in both lists)
+    14→
+    15→skills_data = [
+    16→    # (Skill Name, Category, Skills.sh Rank, Skills.sh Installs, Purpose, Use-Case, Misconception, Conspiracy, Overlooked, Contradictions, Compatible With, Not Compatible With, Stackable, Not Stackable, Best Combined With, Worst Combined With)
+    17→
+    18→    # ── TOP 20 MATCHING SKILLS (Project ↔ Skills.sh) ──
+    19→    ("frontend-design", "Design & UI", "#2 (490.5K)",
+    20→     "shadcn/ui + Tailwind + React component generation for production-ready UI with accessibility-first patterns",
+    21→     "Generating production React components with shadcn/ui and Tailwind CSS; building accessible UI systems from design tokens to implementation",
+    22→     "It's just a CSS helper — actually it enforces WCAG compliance, dark mode, and design token governance at scale",
+    23→     "Collects design tokens to sell to third parties — in reality all processing is local and no data leaves the machine",
+    24→     "The design token validation layer that catches contrast failures before they reach production; most use it as a component generator only",
+    25→     "Requires both dark mode AND exact pixel fidelity — but dark mode may need different spacing/colors than light mode, creating inevitable tradeoffs",
+    26→     "Tailwind CSS, React, shadcn/ui, Next.js, Vercel, any component-driven framework",
+    27→     "Angular, Vue SFC (different component model), Svelte (different reactivity), server-rendered only frameworks without hydration",
+    28→     "Yes — stackable with animation, content, and deployment skills",
+    29→     "Not stackable with other design systems simultaneously (e.g., Material UI + shadcn/ui on same page)",
+    30→     "animation-orchestrator, motion-animator, vercel-react-best-practices, deployment-manager",
+    31→     "chain-of-thought (wrong abstraction level), simulation-sandbox (mismatched domain)"),
+    32→
+    33→    ("vercel-react-best-practices", "Development", "#3 (444.5K)",
+    34→     "React code quality enforcement with PR workflows, containerized builds, and performance optimization",
+    35→     "Writing React code following Vercel-verified patterns; setting up PR review workflows; containerized build pipelines",
+    36→     "It's just a linter — actually it provides architectural decision frameworks, rendering strategy selection, and build optimization",
+    37→     "Vercel uses it to lock developers into their platform — the patterns are platform-agnostic and work on any Node.js host",
+    38→     "The rendering strategy selector (SSR vs SSG vs ISR vs RSC) that most developers skip, defaulting to whatever the tutorial used",
+    39→     "Promotes both server components AND client-side interactivity — choosing the wrong boundary creates hydration mismatches and performance regressions",
+    40→     "React 18+, Next.js, Vercel, TypeScript, any React framework",
+    41→     "Angular, Vue, Svelte, legacy jQuery codebases, non-React ecosystems",
+    42→     "Yes — stackable with all development and deployment skills",
+    43→     "Not stackable with older React patterns (class components + hooks simultaneously)",
+    44→     "frontend-design, deployment-manager, tdd-workflow, superpowers",
+    45→     "photography-ai (wrong domain), seo-content-writer (different output type)"),
+    46→
+    47→    ("web-design-guidelines", "Data & Web", "#6 (359.8K)",
+    48→     "Accessibility-first UX rules, performance budgets, and design checklists for web development",
+    49→     "Validating designs against accessibility standards; setting performance budgets; creating design rule checklists",
+    50→     "It's just a checklist — actually it's a real-time validation framework that enforces rules during development, not after",
+    51→     "The guidelines are designed to make all websites look the same — they enforce accessibility, not aesthetic conformity",
+    52→     "The performance budget enforcement — most teams set budgets but never actually block deployments that exceed them",
+    53→     "Champions both maximum accessibility AND cutting-edge visual effects — some animations inherently conflict with reduced-motion requirements",
+    54→     "Any web framework, CSS systems, accessibility testing tools, performance monitoring",
+    55→     "Native mobile apps (different accessibility standards), desktop-only applications, CLI tools",
+    56→     "Yes — stackable as a validation layer on top of any design/development skill",
+    57→     "Not stackable with ui-ux-pro-max-v7 (both define design rules; conflicting authority)",
+    58→     "frontend-design, anthropic-frontend-design, vercel-web-design-guidelines",
+    59→     "chain-of-thought (too abstract), simulation-sandbox (different validation scope)"),
+    60→
+    61→    ("agent-browser", "Development", "#9 (334.7K)",
+    62→     "Fast Rust-based headless browser automation with Node.js fallback for AI agent web navigation and interaction",
+    63→     "Automating browser tasks for AI agents; navigating, clicking, typing, and snapshotting web pages via structured commands",
+    64→     "It's just a web scraper — actually it provides full interactive browser automation with session persistence across sequential agent commands",
+    65→     "The browser agent can 'see' pages like a human — it processes DOM structure and screenshots, not visual perception",
+    66→     "The session continuity feature — most browser automation tools lose state between commands, but agent-browser maintains it",
+    67→     "Provides both headless Chromium AND real Chrome profiles — choosing wrong one for the task creates either detection (headless) or slowness (real Chrome)",
+    68→     "Playwright, Puppeteer, web-reader, browser-use, any web automation framework",
+    69→     "Native desktop apps, terminal-only environments, offline systems, API-only services",
+    70→     "Yes — stackable with web-reader, audit-analyzer, and content skills",
+    71→     "Not stackable with browser-use simultaneously (both control browser; resource conflict)",
+    72→     "web-reader, audit-analyzer, deployment-manager, persistent-memory",
+    73→     "context-compressor (reduces context that browser needs), mcp-builder (different domain)"),
+    74→
+    75→    ("brainstorming", "Reasoning", "#25 (196.2K)",
+    76→     "Structured divergent/convergent brainstorming framework with ideation, evaluation, and prioritization phases",
+    77→     "Generating creative ideas in structured sessions; evaluating and prioritizing brainstorming outputs; facilitating group ideation",
+    78→     "It's just free-form idea generation — actually it enforces structured divergent THEN convergent phases with evaluation criteria",
+    79→     "The AI steals your best ideas — brainstorming output stays local and is never transmitted unless explicitly shared",
+    80→     "The convergence phase — most people enjoy divergent thinking but skip the rigorous evaluation that makes ideas actionable",
+    81→     "Encourages both 'no bad ideas' (divergent) AND strict evaluation (convergent) — the phase transition is where most sessions fail",
+    82→     "Any creative or strategic skill, socratic-method, devils-advocate, jtbd-research, any planning workflow",
+    83→     "tdd-workflow (too rigid for ideation), context-compressor (destroys nuanced ideas), audit-focused skills",
+    84→     "Yes — stackable as an input phase for any skill that needs creative options",
+    85→     "Not stackable with devils-advocate during divergent phase (kills ideation); use AFTER divergent only",
+    86→     "socratic-method, agent-rabbit, jtbd-research, simulation-sandbox",
+    87→     "tdd-workflow (during ideation), context-compressor (loses nuance)"),
+    88→
+    89→    ("skill-creator", "Development", "#14 (247.4K)",
+    90→     "Create, modify, and optimize AI agent skills following the agentskills.io open standard with quality validation",
+    91→     "Building new skills from scratch; optimizing existing skill definitions; running evals to test skill performance",
+    92→     "It just generates SKILL.md files — actually it provides full lifecycle management including evaluation, benchmarking, and version control",
+    93→     "The skill-creator injects backdoors into generated skills — all generated code is auditable and open-source",
+    94→     "The evaluation and benchmarking framework — most people create skills but never measure their actual performance or accuracy",
+    95→     "Promotes both creative skill design AND strict template compliance — over-optimizing for either produces either unusable or generic skills",
+    96→     "Any skill definition format, agentskills.io standard, YAML/TOML frontmatter, mcp-builder",
+    97→     "Non-standard skill formats, proprietary skill systems, closed-source platforms",
+    98→     "Yes — stackable with skill-architect, mcp-builder, and any skill creation workflow",
+    99→     "Not stackable with skill-architect simultaneously (both modify skill definitions; conflict risk)",
+   100→     "skill-architect, mcp-builder, persistent-memory, superpowers",
+   101→     "browser-use (different domain), photography-ai (different output type)"),
+   102→
+   103→    ("caveman", "Reasoning", "#22 (200.6K)",
+   104→     "Minimalist reasoning framework that strips away complexity to find the simplest viable solution",
+   105→     "Simplifying overengineered solutions; cutting through analysis paralysis; finding the shortest path to a working answer",
+   106→     "It's anti-intellectual or lazy — actually it's a disciplined simplification methodology that requires deep understanding to identify what's truly unnecessary",
+   107→     "It makes you dumber by avoiding complexity — it builds deeper understanding by forcing you to identify what actually matters versus what's decorative",
+   108→     "The discipline of knowing when to STOP analyzing — most people either over-simplify early or never simplify at all",
+   109→     "Advocates for simplicity but requires complex understanding to execute well — the paradox that simple solutions require sophisticated reasoning",
+   110→     "Any development skill, chain-of-thought, socratic-method, tdd-workflow (simplest viable test)",
+   111→     "simulation-sandbox (adds complexity), animation-hybrid-architect (complex by nature), ui-ux-pro-max-v7 (design complexity required)",
+   112→     "Yes — stackable as a simplification filter on top of any skill",
+   113→     "Not stackable with skills that inherently require complexity (animation-hybrid-architect, triune-proxy-stack)",
+   114→     "chain-of-thought, superpowers, tdd-workflow, context-compressor",
+   115→     "animation-hybrid-architect, triune-proxy-stack, ui-ux-pro-max-v7"),
+   116→
+   117→    ("superpowers", "Development", "N/A (obra/skills)",
+   118→     "Spec-first development with TDD and sub-agent delegation — write specs before code, generate tests from specs",
+   119→     "Spec-first development workflows; delegating implementation to sub-agents; writing specifications that generate tests automatically",
+   120→     "It's just another TDD tool — actually it reverses the workflow: specs first, then tests generated FROM specs, then code implements the specs",
+   121→     "The 'superpowers' name implies unlimited capability — it's actually a constraint-based system that derives power FROM strict specification discipline",
+   122→     "The spec-to-test generation pipeline — most developers write specs but never auto-generate tests from them, losing the key efficiency gain",
+   123→     "Promotes both rigid spec compliance AND creative sub-agent delegation — specs must be precise but delegation requires trusting autonomous agents",
+   124→     "tdd-workflow, any testing framework, sub-agent systems, persistent-memory (for spec versioning)",
+   125→     "browser-use (wrong abstraction), brainstorming (spec-first conflicts with exploratory), content-creation skills",
+   126→     "Yes — stackable with all development and testing skills",
+   127→     "Not stackable with brainstorming during spec phase (exploration corrupts specification precision)",
+   128→     "tdd-workflow, deployment-manager, mcp-builder, persistent-memory",
+   129→     "brainstorming (during spec phase), simulation-sandbox (spec-first conflicts with experimental)"),
+   130→
+   131→    ("chain-of-thought", "Reasoning", "N/A (project)",
+   132→     "Step-by-step reasoning framework for complex problems with explicit intermediate steps and confidence levels",
+   133→     "Solving complex multi-step problems; debugging logical errors in reasoning; validating decision chains before committing to conclusions",
+   134→     "It's just 'show your work' — actually it provides structured decomposition, confidence scoring, and counter-argument generation that prevents reasoning errors",
+   135→     "The AI uses chain-of-thought to manipulate users into accepting false conclusions — CoT actually makes reasoning MORE auditable and transparent",
+   136→     "The counter-argument and confidence scoring steps — most people use CoT for the reasoning chain but skip validating their own conclusions",
+   137→     "Requires both confident reasoning AND explicit uncertainty acknowledgment — showing confidence levels on conclusions that might be wrong",
+   138→     "socratic-method, devils-advocate, any analytical skill, simulation-sandbox (test reasoning)",
+   139→     "browser-use (action-oriented, not reasoning), deployment-manager (execution, not analysis), animation skills",
+   140→     "Yes — stackable as a reasoning layer beneath any decision-making skill",
+   141→     "Not stackable with caveman during deep analysis (caveman cuts reasoning depth that CoT requires)",
+   142→     "socratic-method, devils-advocate, persistent-memory, agent-owl",
+   143→     "caveman (opposing depth), context-compressor (removes reasoning steps)"),
+   144→
+   145→    ("context-compressor", "System", "N/A (project)",
+   146→     "Compress long contexts preserving critical information using hierarchical summarization and relevance scoring",
+   147→     "Reducing token usage while maintaining essential context; fitting long conversations within model limits; optimizing context windows for efficiency",
+   148→     "It's just summarization — actually it uses hierarchical importance scoring, entity extraction, and decay rates to preserve CRITICAL information while cutting redundancy",
+   149→     "The compressor reads and stores your private conversations — all processing happens in-session, no data is persisted unless explicitly saved",
+   150→     "The relevance scoring algorithm — most compression tools use length-based truncation, but this scores by information importance and recency",
+   151→     "Compresses context to save tokens BUT risks losing nuanced details that seem unimportant but are actually critical for later reasoning",
+   152→     "persistent-memory (synergy: compress then store), any skill with large context needs, chain-of-thought (compress reasoning steps)",
+   153→     "animation-hybrid-architect (needs full visual context), browser-use (needs full DOM context), audit-analyzer (needs complete data)",
+   154→     "Yes — stackable as a preprocessing step before any token-sensitive operation",
+   155→     "Not stackable with chain-of-thought during active reasoning (compresses reasoning steps mid-chain)",
+   156→     "persistent-memory, agent-owl, superpowers, any development skill",
+   157→     "chain-of-thought (during active reasoning), browser-use (needs full context)"),
+   158→
+   159→    ("persistent-memory", "System", "N/A (project)",
+   160→     "Structured memory system for agent context continuity with hierarchical taxonomy, importance scoring, and decay rates",
+   161→     "Maintaining context across sessions; storing and retrieving long-term agent memory; ensuring consistency across multi-session workflows",
+   162→     "It's just a database — actually it implements a cognitive memory model with importance scoring, temporal decay, and associative retrieval that mimics human memory",
+   163→     "The memory system creates a permanent surveillance record — memories decay over time by design, and users control retention policies",
+   164→     "The decay rate system — most memory systems are append-only and grow unbounded, but persistent-memory intentionally forgets low-importance information to stay efficient",
+   165→     "Provides both persistent storage AND intentional forgetting — the decision of what to forget is as critical as what to remember, and getting it wrong loses important context",
+   166→     "Any skill that needs cross-session state, context-compressor, agent-roles, system-prompt-sync, feedback-loop",
+   167→     "Stateless microservices, one-shot tools, ephemeral execution environments, skills that explicitly avoid state",
+   168→     "Yes — stackable as a memory layer beneath nearly every other skill",
+   169→     "Not stackable with context-compressor simultaneously on the same data (compress then store, not both at once)",
+   170→     "context-compressor, agent-owl, superpowers, mcp-builder, deployment-manager",
+   171→     "caveman (may over-simplify memory structure), simulation-sandbox (simulated state vs real memory conflict)"),
+   172→
+   173→    ("mcp-builder", "Development", "#179 (67.2K) 🔥Hot #19",
+   174→     "Build MCP servers with TypeScript + Python, full lifecycle from scaffold to deploy with tool definitions and transport configuration",
+   175→     "Building MCP (Model Context Protocol) servers; creating tool integrations for AI agents; scaffolding server infrastructure with proper transport layers",
+   176→     "It's just a boilerplate generator — actually it handles the full MCP specification including tool discovery, resource handlers, transport negotiation, and security audit",
+   177→     "MCP servers built with this skill phone home — all generated servers are self-contained with no external telemetry unless explicitly added",
+   178→     "The transport configuration layer — most developers focus on tool definitions but neglect transport (stdio vs HTTP vs SSE), which determines deployment compatibility",
+   179→     "Supports both TypeScript AND Python — choosing wrong language for the target environment creates deployment friction and performance issues",
+   180→     "MCP ecosystem tools, mcp-stack-curator, mcp-registry, mcp-security-scanner, any MCP client (Claude Desktop, Cursor, VS Code)",
+   181→     "Non-MCP protocols, REST-only APIs (needs adapter), GraphQL-only backends (needs translation layer)",
+   182→     "Yes — stackable with MCP ecosystem skills and deployment skills",
+   183→     "Not stackable with mcp-stack-curator simultaneously (builder creates, curator selects; conflict if both modify same config)",
+   184→     "mcp-stack-curator, mcp-security-scanner, deployment-manager, persistent-memory",
+   185→     "browser-use (different protocol), animation-orchestrator (wrong domain)"),
+   186→
+   187→    ("deployment-manager", "Development", "N/A (not on Skills.sh)",
+   188→     "Deploy, monitor, update across GitHub Pages, Vercel, Netlify, and Cloudflare Pages with pipeline management",
+   189→     "Deploying web applications to multiple hosting platforms; managing build configurations and environment variables; implementing CI/CD pipelines",
+   190→     "It's just a deployment script — actually it manages the full deployment lifecycle including rollback, monitoring, and multi-platform synchronization",
+   191→     "The deployment manager has access to all your source code — it only accesses the specific build artifacts and config needed for deployment",
+   192→     "The multi-platform sync feature — most teams deploy to one platform and manually copy to others, but this skill automates cross-platform consistency",
+   193→     "Supports both automated deployment AND manual rollback — the automation should have guardrails, but adding too many guardrails defeats the purpose of automation",
+   194→     "Vercel, Netlify, GitHub Pages, Cloudflare Pages, Docker, any CI/CD system, secret-vault",
+   195→     "On-premise only infrastructure, air-gapped environments, legacy FTP deployment, mainframe systems",
+   196→     "Yes — stackable with all development and infrastructure skills",
+   197→     "Not stackable with other deployment tools simultaneously on the same target (Vercel CLI + deployment-manager conflict)",
+   198→     "mcp-builder, persistent-memory, 9router-gateway, secret-vault, feedback-loop",
+   199→     "simulation-sandbox (deploying simulated vs real), context-compressor (may lose deployment config)"),
+   200→
+   201→    ("browser-use", "Development", "#163 (77.6K)",
+   202→     "Headful browser automation with natural language control, session persistence, and multi-mode browser support",
+   203→     "Automating browser tasks with natural language commands; navigating, clicking, typing, and extracting data from web pages; browser-based testing",
+   204→     "It's just Selenium — actually it provides natural language control, session continuity across commands, and three browser modes (headless, real Chrome, cloud-hosted)",
+   205→     "The browser automation can access your banking and private accounts — it only operates on URLs you explicitly provide and cannot access local files",
+   206→     "The session persistence — most browser tools lose state between commands, but browser-use maintains cookies, localStorage, and session state across sequential operations",
+   207→     "Provides both headless AND real Chrome — headless is faster but detectable, real Chrome is stealthy but resource-heavy; choosing wrong mode creates problems",
+   208→     "Playwright, web-reader, agent-browser, any web testing framework, audit-analyzer",
+   209→     "API-only services (no browser needed), native mobile automation, desktop application testing, offline systems",
+   210→     "Yes — stackable with web-reader, audit-analyzer, and content extraction skills",
+   211→     "Not stackable with agent-browser simultaneously (both control browser instances; port conflict)",
+   212→     "web-reader, audit-analyzer, persistent-memory, deployment-manager",
+   213→     "context-compressor (may compress away browser context), mcp-builder (different domain)"),
+   214→
+   215→    ("9router-gateway", "Infrastructure", "N/A (project)",
+   216→     "AI routing gateway with RTK compression, tier-based provider fallback, circuit breaker, and real-time dashboard",
+   217→     "Setting up AI model routing; managing provider tiers with cost optimization; implementing circuit breaker patterns for API resilience",
+   218→     "It's just a load balancer — actually it implements intelligent tier-based routing that prioritizes free-tier providers and only falls back to paid when necessary",
+   219→     "9Router secretly routes traffic through paid providers to generate referral revenue — routing decisions are transparent and configurable by the user",
+   220→     "The RTK compression — most users focus on routing but miss the request compression that can reduce token costs by 15-30%",
+   221→     "Optimizes for both cost AND performance — but the cheapest route may have highest latency, and the fastest route may be most expensive",
+   222→     "Any AI provider API, circuit breaker patterns, monitoring dashboards, triune-proxy-stack, secret-vault",
+   223→     "Direct API calls (bypasses gateway benefits), non-HTTP protocols, message queue systems (different routing model)",
+   224→     "Yes — stackable with all infrastructure and proxy skills",
+   225→     "Not stackable with openrelay-go simultaneously on same port (both are routing gateways)",
+   226→     "triune-proxy-stack, owl-proxy-defense, secret-vault, combined-proxy-billing",
+   227→     "context-compressor (compresses routing context), brainstorming (wrong domain)"),
+   228→
+   229→    ("owl-proxy-defense", "Infrastructure", "N/A (project)",
+   230→     "Protocol-first proxy defense stack with 5-tier escalation — anti-bot resilience with per-provider routing and CI/CD enforcement",
+   231→     "Building proxy defense layers against anti-bot systems; implementing protocol escalation strategies; hardening web scraping and API access pipelines",
+   232→     "It's just a VPN — actually it implements protocol-level fingerprint manipulation with 5-tier escalation from basic HTTP/1.1 to full browser emulation, not IP masking",
+   233→     "Owl proxy is used for illegal web scraping — it's a defensive tool for accessing legitimate APIs that deploy aggressive anti-bot measures against automated agents",
+   234→     "The 5-tier escalation system — most proxy tools use a single approach, but Owl dynamically escalates protocol sophistication based on server response",
+   235→     "Provides maximum anti-bot resilience BUT at the cost of increased latency and complexity — Tier 5 (full browser) can be 10x slower than Tier 1",
+   236→     "9router-gateway, triune-proxy-stack, antigravity-proxy, opencode-owl-install-proxy, openhuman-owl-install-proxy",
+   237→     "Direct API access (no proxy needed), internal microservices (no anti-bot), WebSocket-only services (different defense model)",
+   238→     "Yes — stackable as a defense layer with all routing and proxy skills",
+   239→     "Not stackable with antigravity-proxy on the same request (both manipulate headers; conflict)",
+   240→     "9router-gateway, triune-proxy-stack, secret-vault, openrelay-go",
+   241→     "context-compressor (removes protocol details), simulation-sandbox (simulated vs real defense)"),
+   242→
+   243→    ("antigravity-proxy", "Infrastructure", "N/A (project)",
+   244→     "MITM proxy bridge for free AI model access with multiple account rotation and staggered OAuth token refresh",
+   245→     "Setting up free AI model access via MITM proxy; managing staggered OAuth token refresh across accounts; bridging IDE traffic to AI providers",
+   246→     "It's piracy — actually it provides a MITM bridge for legitimate free-tier access using multiple accounts within ToS limits, with proper token management",
+   247→     "Antigravity steals AI compute — it routes through free-tier endpoints that users already have legitimate access to, managing the complexity of multi-account rotation",
+   248→     "The staggered OAuth token refresh — most multi-account setups fail because all tokens expire simultaneously, but antigravity staggers refresh cycles to maintain continuous access",
+   249→     "Provides free access BUT with reliability tradeoffs — free-tier endpoints have rate limits, lower priority, and may be throttled during peak usage",
+   250→     "4cli-unified, owl-proxy-defense, 9router-gateway, secret-vault, any IDE that uses AI providers",
+   251→     "Enterprise environments with SSO, air-gapped systems, paid-only API tiers (no free tier to bridge)",
+   252→     "Yes — stackable with all proxy infrastructure skills",
+   253→     "Not stackable with owl-proxy-defense on the same request (both modify request headers and routing; conflict)",
+   254→     "4cli-unified, 9router-gateway, secret-vault, combined-proxy-billing",
+   255→     "owl-proxy-defense (same request), direct-paid-API (eliminates need)"),
+   256→
+   257→    ("triune-proxy-stack", "Infrastructure", "N/A (project)",
+   258→     "Maximum redundancy proxy architecture — 9Router + OmniRoute + Orcaflow with token health dashboard and auto-failover",
+   259→     "Building high-availability proxy stacks; implementing triple redundancy routing; designing token health monitoring with auto-failover for zero-downtime AI access",
+   260→     "It's overengineered — actually triple redundancy is necessary for production AI workloads where a single proxy failure means application downtime",
+   261→     "Triune is a scam to sell proxy services — it's open-source infrastructure that you self-host, with no vendor lock-in or recurring fees",
+   262→     "The token health dashboard — most proxy stacks treat all tokens as equal, but triune monitors health per-token and auto-failovers from degraded tokens",
+   263→     "Maximum redundancy AND maximum complexity — three independent proxy layers means three sets of configuration, monitoring, and failure modes to manage",
+   264→     "9router-gateway, owl-proxy-defense, openrelay-go, secret-vault, combined-proxy-billing",
+   265→     "Simple single-provider setups (overkill), hobby projects, non-critical workloads, environments with only one AI provider",
+   266→     "Yes — stackable with all infrastructure and monitoring skills",
+   267→     "Not stackable with 9router-gateway as separate layers (triune already includes 9Router internally)",
+   268→     "owl-proxy-defense, secret-vault, combined-proxy-billing, deployment-manager",
+   269→     "caveman (opposes complexity), context-compressor (may lose health state)"),
+   270→
+   271→    ("4cli-unified", "Infrastructure", "N/A (project)",
+   272→     "Unified meta-CLI wrapper for OpenCode + Claude Code + Codex + Gemini CLI with shared config and credential vault",
+   273→     "Managing multiple AI coding CLIs; setting up unified routing across OpenCode/Claude/Codex/Gemini; building credential vaults for multi-CLI environments",
+   274→     "It's just aliases — actually it provides shared configuration, unified history, cross-CLI session continuity, and integrated credential vaulting",
+   275→     "4cli-unified sends your code to all four providers simultaneously — it routes to one provider at a time based on task type, not broadcasting",
+   276→     "The unified history and session continuity — most developers treat each CLI as independent, but sharing context across CLIs dramatically improves workflow continuity",
+   277→     "Unifies four CLIs BUT each CLI has different capabilities and limitations — the unified interface must handle feature parity gaps gracefully",
+   278→     "OpenCode, Claude Code, Codex CLI, Gemini CLI, 9router-gateway, antigravity-proxy, secret-vault",
+   279→     "Single-CLI environments (no need for unification), non-supported CLIs, IDE-only workflows without CLI",
+   280→     "Yes — stackable with all proxy, vault, and routing skills",
+   281→     "Not stackable with individual CLI-specific configurations that override unified settings",
+   282→     "9router-gateway, antigravity-proxy, secret-vault, deployment-manager",
+   283→     "caveman (opposes multi-tool complexity), browser-use (different interface model)"),
+   284→
+   285→    ("secret-vault", "Infrastructure", "N/A (project)",
+   286→     "Unified credential vault with age encryption — manages API keys, OAuth tokens, and proxy credentials with rotation and breach detection",
+   287→     "Managing API keys across providers; implementing encrypted credential storage; setting up secret rotation and breach detection workflows",
+   288→     "It's just a .env file — actually it provides age encryption, automatic rotation, audit logging, breach detection, and secure sharing between services",
+   289→     "The vault itself is a security risk — age encryption is quantum-resistant, and the vault's attack surface is smaller than scattered .env files",
+   290→     "The breach detection feature — most credential managers store and rotate but never actively monitor for credential exposure in known breach databases",
+   291→     "Maximum security AND usability — the most secure vault is useless if developers bypass it because it's too slow, but making it too convenient reduces security",
+   292→     "All infrastructure skills (9router, owl-proxy, antigravity, triune, 4cli-unified), deployment-manager, any skill that needs credentials",
+   293→     "Hardcoded credentials (anti-pattern), environment variables without encryption, plaintext config files",
+   294→     "Yes — stackable as a foundation layer with ALL skills that require credentials",
+   295→     "Not stackable with other credential management tools simultaneously (conflicting encryption/rotation policies)",
+   296→     "9router-gateway, owl-proxy-defense, antigravity-proxy, triune-proxy-stack, deployment-manager",
+   297→     "context-compressor (should never compress vault access logs), simulation-sandbox (simulated vs real credentials)"),
+   298→
+   299→    ("agent-owl", "Agents (7 Animal Modes)", "N/A (project)",
+   300→     "Deep analysis — systematic decomposition, evidence evaluation, and convergent thinking. Finds what others miss",
+   301→     "Performing deep analysis on complex topics; evaluating evidence rigorously; convergent thinking to find the single best answer from multiple possibilities",
+   302→     "Owl is just slow thinking — actually it's specifically convergent analysis that finds insights others miss by systematically decomposing problems and rigorously evaluating evidence",
+   303→     "Agent Owl is surveillance — it's a thinking mode that analyzes problems, not a monitoring tool that watches users",
+   304→     "The cross-mode collaboration — Owl works best when combined with other animal modes (Rabbit for ideas, Eagle for big picture), but most use it in isolation",
+   305→     "Champions both deep analysis AND practical actionability — analysis that doesn't produce actionable recommendations is just academic exercise",
+   306→     "All reasoning skills, all animal agent modes, persistent-memory, chain-of-thought, socratic-method",
+   307→     "Animation skills (wrong domain), content-creation skills (needs ideas first), deployment skills (execution, not analysis)",
+   308→     "Yes — stackable with all reasoning and agent mode skills",
+   309→     "Not stackable with agent-rabbit during convergent phase (Rabbit generates, Owl converges; simultaneous use creates conflict)",
+   310→     "agent-rabbit (ideas THEN converge), agent-eagle (analysis THEN big picture), chain-of-thought, persistent-memory",
+   311→     "agent-rabbit during convergence, context-compressor (loses analytical depth)"),
+   312→
+   313→    # ── 9 SPECIFICALLY LISTED SKILLS ──
+   314→    # (browser-use, deployment-manager, persistent-memory, mcp-builder already covered above)
+   315→
+   316→    ("opencode-owl-install-proxy", "Infrastructure", "N/A (new skill)",
+   317→     "OpenCode-optimized Owl proxy installer — automated setup of Owl proxy defense stack for OpenCode CLI with pre-configured tier routing and credential vaulting",
+   318→     "Installing Owl proxy for OpenCode CLI; configuring anti-bot defense for AI coding agents; setting up tier-based routing for OpenCode workflows",
+   319→     "It's just running install commands — actually it performs environment assessment, configures 5-tier escalation, sets up per-provider routing rules, and integrates the credential vault",
+   320→     "The installer gives the proxy access to your code — it only configures network routing, never reads or transmits source code through the proxy",
+   321→     "The per-provider tier mapping — most installations use the same tier for all providers, but each provider requires different anti-bot strategies",
+   322→     "Automates security setup BUT automation errors can leave configurations insecure — the installation report must be manually verified",
+   323→     "OpenCode CLI, owl-proxy-defense, 9router-gateway, secret-vault, antigravity-proxy",
+   324→     "Non-OpenCode environments (use openhuman-owl-install-proxy instead), Docker-only setups (needs adaptation), air-gapped systems",
+   325→     "Yes — stackable with all proxy and infrastructure skills",
+   326→     "Not stackable with openhuman-owl-install-proxy simultaneously (different consent models conflict)",
+   327→     "owl-proxy-defense, 9router-gateway, secret-vault, combined-proxy-billing",
+   328→     "openhuman-owl-install-proxy (consent model conflict), simulation-sandbox"),
+   329→
+   330→    ("openhuman-owl-install-proxy", "Infrastructure", "N/A (new skill)",
+   331→     "OpenHuman-optimized Owl proxy installer — privacy-first, consent-gated tier progression with zero-knowledge encryption and audit trails",
+   332→     "Installing Owl proxy for OpenHuman platform; configuring privacy-first anti-bot defense for human-agent workflows; setting up consent-gated proxy escalation",
+   333→     "It's the same as opencode-owl — actually it adds consent gates for tier escalation, zero-knowledge encryption, privacy zones for PII, and full audit trails",
+   334→     "The consent system is surveillance — it's the opposite: consent gates PREVENT unauthorized proxy actions and provide transparency for every escalation",
+   335→     "The privacy zones feature — most proxy setups treat all data equally, but openhuman allows PII to bypass the proxy entirely, preventing sensitive data from ever touching proxy infrastructure",
+   336→     "Maximum privacy AND maximum utility — stricter consent gates improve privacy but may block legitimate agent actions, requiring human approval that slows workflows",
+   337→     "OpenHuman platform, owl-proxy-defense, secret-vault, any compliance-required environment (GDPR, CCPA, HIPAA)",
+   338→     "OpenCode CLI (use opencode-owl-install-proxy instead), environments without compliance requirements, speed-optimized workflows",
+   339→     "Yes — stackable with compliance and security infrastructure skills",
+   340→     "Not stackable with opencode-owl-install-proxy (different consent models; opencode auto-escalates, openhuman requires consent)",
+   341→     "owl-proxy-defense, secret-vault, combined-proxy-billing, feedback-loop",
+   342→     "opencode-owl-install-proxy (consent model conflict), antigravity-proxy (bypasses consent gates)"),
+   343→
+   344→    ("combined-proxy-billing", "Infrastructure", "N/A (new skill)",
+   345→     "Unified billing and cost management for multi-proxy stacks — aggregates usage, cost, and quota data across all proxy layers with optimization recommendations",
+   346→     "Managing billing across multiple proxy stacks; tracking AI model costs across providers; optimizing proxy stack spending with budget alerts",
+   347→     "It's just a cost calculator — actually it aggregates real-time usage metrics across 4+ proxy stacks, detects cost anomalies, forecasts spend, and provides actionable optimization recommendations",
+   348→     "The billing tool reports your usage to third parties — all billing data is processed locally and never transmitted; it's a private cost management dashboard",
+   349→     "The cost anomaly detection — most teams discover billing spikes days later, but combined-proxy-billing flags >20% deviations within hours",
+   350→     "Provides cost optimization AND complete financial visibility — but complete visibility means seeing exactly how much each team/member spends, which can create political friction",
+   351→     "9router-gateway, owl-proxy-defense, antigravity-proxy, triune-proxy-stack, openrelay-go, any proxy stack with billing needs",
+   352→     "Free-tier only setups (no billing to manage), single-provider environments (no aggregation needed), offline systems",
+   353→     "Yes — stackable as a monitoring layer on top of all proxy infrastructure skills",
+   354→     "Not stackable with provider-native billing dashboards simultaneously (duplicate metrics; confusion)",
+   355→     "9router-gateway, triune-proxy-stack, secret-vault, deployment-manager",
+   356→     "context-compressor (should never compress billing data), simulation-sandbox (simulated costs vs real)"),
+   357→
+   358→    ("openrelay-go", "Infrastructure", "N/A (new skill)",
+   359→     "Go-based high-performance open relay proxy with connection pooling, load balancing, and zero-config auto-discovery for AI provider endpoints",
+   360→     "Building high-performance proxy relays in Go; implementing Go-based AI model routing; setting up zero-config relay servers for multi-provider AI access",
+   361→     "It's just 9Router rewritten in Go — actually it offers fundamentally different architecture: native binary deployment, superior concurrency, lower memory footprint, and no Node.js runtime dependency",
+   362→     "OpenRelay Go is funded by a proxy company to capture traffic — it's open-source, self-hosted, and routes only to endpoints you configure",
+   363→     "The zero-config auto-discovery — most proxy setups require manual endpoint configuration, but OpenRelay can discover and configure AI provider endpoints automatically",
+   364→     "Go performance AND Node.js ecosystem compatibility — Go is faster but the ecosystem of AI SDKs is predominantly TypeScript/JavaScript, requiring bridge layers",
+   365→     "9router-gateway, triune-proxy-stack, api-gateway-skill, secret-vault, combined-proxy-billing",
+   366→     "Node.js-only environments (use 9Router instead), Windows-native deployments (Go binary issues), managed proxy services (replaces need)",
+   367→     "Yes — stackable with all infrastructure skills; can replace or complement 9Router",
+   368→     "Not stackable with 9router-gateway on same port (both are routing gateways; port conflict)",
+   369→     "triune-proxy-stack, api-gateway-skill, secret-vault, combined-proxy-billing",
+   370→     "9router-gateway (same role, port conflict), antigravity-proxy (different proxy model)"),
+   371→
+   372→    ("api-gateway-skill", "Infrastructure", "N/A (new skill)",
+   373→     "API gateway orchestration — design, deploy, and manage API gateways with rate limiting, authentication, and observability for AI microservices",
+   374→     "Building API gateways for AI services; managing rate limiting and authentication for multi-provider AI endpoints; designing microservice API architectures",
+   375→     "It's just a reverse proxy — actually it adds application-layer intelligence (authentication, rate limiting, request transformation, caching) that raw proxy routing cannot provide",
+   376→     "The API gateway is a man-in-the-middle attack vector — gateways are standard infrastructure patterns used by every major cloud provider; the skill helps you build your own rather than trusting third parties",
+   377→     "The request transformation layer — most gateways just forward requests, but this skill enables header injection, body rewriting, and protocol translation between clients and providers",
+   378→     "Provides unified access control AND adds a single point of failure — the gateway must have its own redundancy strategy or it becomes the weakest link",
+   379→     "9router-gateway, openrelay-go, owl-proxy-defense, secret-vault, combined-proxy-billing, any microservice architecture",
+   380→     "Monolithic applications (no routing needed), direct API access (gateway adds unnecessary latency), serverless-only architectures (provider handles gateway)",
+   381→     "Yes — stackable as an L7 layer above all proxy/routing skills",
+   382→     "Not stackable with other API gateways simultaneously (Kong + custom gateway conflict)",
+   383→     "openrelay-go, 9router-gateway, owl-proxy-defense, secret-vault, combined-proxy-billing",
+   384→     "caveman (opposes architectural complexity), browser-use (different abstraction level)"),
+   385→
+   386→    ("mcp-stack-curator", "MCP Servers", "N/A (project)",
+   387→     "Recommends which 4 MCP servers to use together with synergy scoring and conflict detection",
+   388→     "Deciding which MCP servers to combine for maximum synergy; detecting conflicts between MCP server combinations; optimizing MCP server stack selection",
+   389→     "It's just a recommendation engine — actually it analyzes project requirements, scores server synergy, detects conflicts, and validates configurations against real MCP client behavior",
+   390→     "The curator pushes specific vendors' MCP servers — recommendations are based purely on synergy scoring and project requirements, with no vendor bias",
+   391→     "The conflict detection — most MCP setups just install servers without checking if they conflict (same port, same resource, overlapping capabilities)",
+   392→     "Recommends exactly 4 servers BUT some projects need fewer or more — the 4-server constraint is a guideline for optimal synergy, not a hard rule",
+   393→     "mcp-builder, mcp-registry, mcp-security-scanner, any MCP client, persistent-memory",
+   394→     "Non-MCP environments, REST API management (different protocol), GraphQL schemas (different tool model)",
+   395→     "Yes — stackable with all MCP ecosystem skills",
+   396→     "Not stackable with mcp-builder simultaneously on the same config (curator selects, builder creates; circular conflict)",
+   397→     "mcp-builder, mcp-security-scanner, persistent-memory, deployment-manager",
+   398→     "context-compressor (should not compress server config), browser-use (wrong protocol)"),
+   399→
+   400→    ("feedback-loop", "System", "N/A (project)",
+   401→     "Metrics storage, issue tracking, and monitoring system for continuous improvement of agent workflows",
+   402→     "Setting up feedback collection for agent workflows; tracking issues and metrics over time; implementing monitoring dashboards for agent performance",
+   403→     "It's just a logging tool — actually it closes the improvement loop by connecting metrics to action items, tracking resolution, and measuring the impact of changes over time",
+   404→     "The feedback loop sends data to external services — all metrics are stored locally and only shared if explicitly configured to do so",
+   405→     "The closed-loop verification — most feedback systems collect data but never verify that improvements actually resolved the original issues",
+   406→     "Provides both automated metrics AND subjective feedback — automated metrics may show improvement while user satisfaction decreases (or vice versa)",
+   407→     "persistent-memory, deployment-manager, any monitoring/observability tool, combined-proxy-billing",
+   408→     "One-shot execution environments (no loop to close), stateless functions (no persistent metrics)",
+   409→     "Yes — stackable as a monitoring layer with any skill that produces measurable output",
+   410→     "Not stackable with context-compressor on metrics data (compression destroys time-series patterns)",
+   411→     "persistent-memory, deployment-manager, combined-proxy-billing, agent-owl",
+   412→     "context-compressor (destroys metrics granularity), caveman (oversimplifies feedback systems)"),
+   413→]
+   414→
+   415→# ============================================================
+   416→# STYLES
+   417→# ============================================================
+   418→header_font = Font(name='Inter', size=11, bold=True, color='FFFFFF')
+   419→header_fill = PatternFill(start_color='4338CA', end_color='4338CA', fill_type='solid')  # Indigo
+   420→subheader_fill = PatternFill(start_color='6366F1', end_color='6366F1', fill_type='solid')
+   421→cell_font = Font(name='Inter', size=10)
+   422→wrap_align = Alignment(wrap_text=True, vertical='top')
+   423→center_align = Alignment(wrap_text=True, vertical='top', horizontal='center')
+   424→thin_border = Border(
+   425→    left=Side(style='thin', color='E5E7EB'),
+   426→    right=Side(style='thin', color='E5E7EB'),
+   427→    top=Side(style='thin', color='E5E7EB'),
+   428→    bottom=Side(style='thin', color='E5E7EB')
+   429→)
+   430→
+   431→# Category colors
+   432→cat_fills = {
+   433→    "Design & UI": PatternFill(start_color='EDE9FE', end_color='EDE9FE', fill_type='solid'),
+   434→    "Development": PatternFill(start_color='DBEAFE', end_color='DBEAFE', fill_type='solid'),
+   435→    "Reasoning": PatternFill(start_color='FEF3C7', end_color='FEF3C7', fill_type='solid'),
+   436→    "System": PatternFill(start_color='D1FAE5', end_color='D1FAE5', fill_type='solid'),
+   437→    "Infrastructure": PatternFill(start_color='FEE2E2', end_color='FEE2E2', fill_type='solid'),
+   438→    "Agents (7 Animal Modes)": PatternFill(start_color='FCE7F3', end_color='FCE7F3', fill_type='solid'),
+   439→    "MCP Servers": PatternFill(start_color='E0E7FF', end_color='E0E7FF', fill_type='solid'),
+   440→    "Data & Web": PatternFill(start_color='CFFAFE', end_color='CFFAFE', fill_type='solid'),
+   441→}
+   442→
+   443→# ============================================================
+   444→# HEADERS (Row 1)
+   445→# ============================================================
+   446→headers = [
+   447→    "Skill Name", "Category", "Skills.sh Rank / Installs",
+   448→    "Purpose", "Individual Use-Case", "Misconception",
+   449→    "Conspiracy", "Mostly Overlooked", "Contradictions",
+   450→    "Compatible With (Types)", "Not Compatible With (Types)",
+   451→    "Stackable?", "Not Stackable With",
+   452→    "Stackable Best Combined To", "Stackable Worst Combined To"
+   453→]
+   454→
+   455→col_widths = [28, 22, 22, 50, 50, 50, 50, 50, 50, 45, 45, 14, 45, 45, 45]
+   456→
+   457→for col_idx, (header, width) in enumerate(zip(headers, col_widths), 1):
+   458→    cell = ws.cell(row=1, column=col_idx, value=header)
+   459→    cell.font = header_font
+   460→    cell.fill = header_fill
+   461→    cell.alignment = center_align
+   462→    cell.border = thin_border
+   463→    ws.column_dimensions[get_column_letter(col_idx)].width = width
+   464→
+   465→# ============================================================
+   466→# DATA ROWS
+   467→# ============================================================
+   468→for row_idx, skill in enumerate(skills_data, 2):
+   469→    name, category, rank, purpose, usecase, misconception, conspiracy, overlooked, contradictions, compatible, not_compatible, stackable, not_stackable, best_combined, worst_combined = skill
+   470→    values = [name, category, rank, purpose, usecase, misconception, conspiracy, overlooked, contradictions, compatible, not_compatible, stackable, not_stackable, best_combined, worst_combined]
+   471→    
+   472→    cat_fill = cat_fills.get(category, PatternFill(start_color='F9FAFB', end_color='F9FAFB', fill_type='solid'))
+   473→    
+   474→    for col_idx, value in enumerate(values, 1):
+   475→        cell = ws.cell(row=row_idx, column=col_idx, value=value)
+   476→        cell.font = cell_font
+   477→        cell.alignment = wrap_align
+   478→        cell.border = thin_border
+   479→        if col_idx == 2:  # Category column gets color
+   480→            cell.fill = cat_fill
+   481→        elif row_idx % 2 == 0:  # Zebra striping
+   482→            cell.fill = PatternFill(start_color='F9FAFB', end_color='F9FAFB', fill_type='solid')
+   483→
+   484→# ============================================================
+   485→# SECOND SHEET: Top 20 Matching Summary
+   486→# ============================================================
+   487→ws2 = wb.create_sheet("Top 20 Matching")
+   488→
+   489→# Headers
+   490→summary_headers = ["Rank", "Project Skill", "Skills.sh Match", "Skills.sh Installs", "Alignment Score", "Match Type"]
+   491→for col_idx, header in enumerate(summary_headers, 1):
+   492→    cell = ws2.cell(row=1, column=col_idx, value=header)
+   493→    cell.font = header_font
+   494→    cell.fill = PatternFill(start_color='059669', end_color='059669', fill_type='solid')  # Emerald
+   495→    cell.alignment = center_align
+   496→    cell.border = thin_border
+   497→
+   498→ws2.column_dimensions['A'].width = 8
+   499→ws2.column_dimensions['B'].width = 32
+   500→ws2.column_dimensions['C'].width = 35
+   501→ws2.column_dimensions['D'].width = 22
+   502→ws2.column_dimensions['E'].width = 18
+   503→ws2.column_dimensions['F'].width = 30
+   504→
+   505→top20 = [
+   506→    (1, "frontend-design", "frontend-design (anthropics/skills)", "490.5K", "★★★★★", "Exact name match + same publisher intent"),
+   507→    (2, "vercel-react-best-practices", "vercel-react-best-practices (vercel-labs)", "444.5K", "★★★★★", "Exact name match + same functionality"),
+   508→    (3, "web-design-guidelines", "web-design-guidelines (vercel-labs)", "359.8K", "★★★★★", "Exact name match + same scope"),
+   509→    (4, "agent-browser", "agent-browser (vercel-labs)", "334.7K", "★★★★☆", "Same domain, different implementation"),
+   510→    (5, "brainstorming", "brainstorming (obra/superpowers)", "196.2K", "★★★★★", "Exact name match + same reasoning framework"),
+   511→    (6, "caveman", "caveman (juliusbrussee)", "200.6K", "★★★★☆", "Same name, similar reasoning approach"),
+   512→    (7, "skill-creator", "skill-creator (anthropics/skills)", "247.4K", "★★★★★", "Exact match (project: skill-architect ≈ skill-creator)"),
+   513→    (8, "superpowers", "superpowers (obra/superpowers)", "—", "★★★★☆", "Same publisher (obra), same spec-first approach"),
+   514→    (9, "browser-use", "browser-use (browser-use/browser-use)", "77.6K", "★★★★★", "Exact name match, same browser automation"),
+   515→    (10, "mcp-builder", "mcp-builder (anthropics/skills)", "67.2K 🔥Hot", "★★★★★", "Exact name match + same MCP server building"),
+   516→    (11, "chain-of-thought", "chain-of-thought (various)", "—", "★★★★☆", "Standard reasoning pattern, universal match"),
+   517→    (12, "socratic-method", "socratic-method (various)", "—", "★★★☆☆", "Reasoning skill, similar to multiple Skills.sh entries"),
+   518→    (13, "devils-advocate", "devils-advocate (various)", "—", "★★★☆☆", "Reasoning skill, complementary to brainstorming"),
+   519→    (14, "persistent-memory", "memory (MCP standard)", "—", "★★★★☆", "No direct Skills.sh match, but MCP memory standard equivalent"),
+   520→    (15, "deployment-manager", "azure-deploy (microsoft/azure-skills)", "359.8K", "★★★☆☆", "Different scope (multi-platform vs Azure-only)"),
+   521→    (16, "context-compressor", "token-optimizer (various)", "—", "★★★☆☆", "No direct Skills.sh match, but token optimization is universal need"),
+   522→    (17, "9router-gateway", "api-gateway patterns", "—", "★★★☆☆", "Infrastructure skill; no Skills.sh equivalent (platform-specific)"),
+   523→    (18, "owl-proxy-defense", "proxy-defense patterns", "—", "★★★☆☆", "Infrastructure skill; no Skills.sh equivalent"),
+   524→    (19, "mcp-stack-curator", "mcp-registry (Skills.sh)", "—", "★★★★☆", "Curator ≈ Registry with synergy scoring added"),
+   525→    (20, "feedback-loop", "monitoring patterns", "—", "★★★☆☆", "System skill; no direct Skills.sh match"),
+   526→]
+   527→
+   528→for row_idx, (rank, proj, match, installs, score, match_type) in enumerate(top20, 2):
+   529→    values = [rank, proj, match, installs, score, match_type]
+   530→    for col_idx, value in enumerate(values, 1):
+   531→        cell = ws2.cell(row=row_idx, column=col_idx, value=value)
+   532→        cell.font = cell_font
+   533→        cell.alignment = wrap_align
+   534→        cell.border = thin_border
+   535→        if row_idx % 2 == 0:
+   536→            cell.fill = PatternFill(start_color='F0FDF4', end_color='F0FDF4', fill_type='solid')
+   537→
+   538→# ============================================================
+   539→# THIRD SHEET: 9 Specifically Listed Skills
+   540→# ============================================================
+   541→ws3 = wb.create_sheet("9 Listed Skills")
+   542→
+   543→listed_headers = ["#", "Skill Name", "Exists in Project?", "New Script Created?", "Skills.sh Presence", "Location"]
+   544→for col_idx, header in enumerate(listed_headers, 1):
+   545→    cell = ws3.cell(row=1, column=col_idx, value=header)
+   546→    cell.font = header_font
+   547→    cell.fill = PatternFill(start_color='DC2626', end_color='DC2626', fill_type='solid')  # Red
+   548→    cell.alignment = center_align
+   549→    cell.border = thin_border
+   550→
+   551→ws3.column_dimensions['A'].width = 5
+   552→ws3.column_dimensions['B'].width = 32
+   553→ws3.column_dimensions['C'].width = 20
+   554→ws3.column_dimensions['D'].width = 22
+   555→ws3.column_dimensions['E'].width = 28
+   556→ws3.column_dimensions['F'].width = 50
+   557→
+   558→listed_skills = [
+   559→    (1, "Opencode owl install proxy", "No (new)", "Yes → SKILL.md created", "Not found", "/skills/opencode-owl-install-proxy/SKILL.md"),
+   560→    (2, "Openhuman owl install proxy", "No (new)", "Yes → SKILL.md created", "Not found", "/skills/openhuman-owl-install-proxy/SKILL.md"),
+   561→    (3, "Combined proxy billing", "No (new)", "Yes → SKILL.md created", "Not found", "/skills/combined-proxy-billing/SKILL.md"),
+   562→    (4, "Openrelay go", "No (new)", "Yes → SKILL.md created", "Not found", "/skills/openrelay-go/SKILL.md"),
+   563→    (5, "api-gateway-skill", "No (new)", "Yes → SKILL.md created", "Not found", "/skills/api-gateway-skill/SKILL.md"),
+   564→    (6, "browser-use", "Yes (existing)", "Already present", "Yes — #163, 77.6K installs", "/skills/browser-use/SKILL.md"),
+   565→    (7, "deployment-manager", "Yes (existing)", "Already present", "Not found on Skills.sh", "/skills/deployment-manager/SKILL.md"),
+   566→    (8, "persistent-memory", "Yes (existing)", "Already present", "Not found on Skills.sh", "/skills/persistent-memory/SKILL.md"),
+   567→    (9, "mcp-builder", "Yes (existing)", "Already present", "Yes — #179, 67.2K installs 🔥Hot #19", "/skills/mcp-builder/SKILL.md"),
+   568→]
+   569→
+   570→for row_idx, (num, name, exists, created, sh, location) in enumerate(listed_skills, 2):
+   571→    values = [num, name, exists, created, sh, location]
+   572→    for col_idx, value in enumerate(values, 1):
+   573→        cell = ws3.cell(row=row_idx, column=col_idx, value=value)
+   574→        cell.font = cell_font
+   575→        cell.alignment = wrap_align
+   576→        cell.border = thin_border
+   577→        if "new" in str(exists).lower():
+   578→            cell.fill = PatternFill(start_color='FEF2F2', end_color='FEF2F2', fill_type='solid')
+   579→        else:
+   580→            cell.fill = PatternFill(start_color='F0FDF4', end_color='F0FDF4', fill_type='solid')
+   581→
+   582→# ============================================================
+   583→# FOURTH SHEET: Stackability Deep Dive
+   584→# ============================================================
+   585→ws4 = wb.create_sheet("Stackability Map")
+   586→
+   587→stack_headers = ["Skill", "Stackable?", "Best Stack Partner 1", "Best Stack Partner 2", "Best Stack Partner 3", "Worst Stack Partner 1", "Worst Stack Partner 2", "Synergy Notes"]
+   588→for col_idx, header in enumerate(stack_headers, 1):
+   589→    cell = ws4.cell(row=1, column=col_idx, value=header)
+   590→    cell.font = header_font
+   591→    cell.fill = PatternFill(start_color='7C3AED', end_color='7C3AED', fill_type='solid')  # Purple
+   592→    cell.alignment = center_align
+   593→    cell.border = thin_border
+   594→
+   595→ws4.column_dimensions['A'].width = 30
+   596→ws4.column_dimensions['B'].width = 14
+   597→for c in ['C','D','E','F','G']:
+   598→    ws4.column_dimensions[c].width = 30
+   599→ws4.column_dimensions['H'].width = 50
+   600→
+   601→stack_data = [
+   602→    ("frontend-design", "Yes", "animation-orchestrator", "vercel-react-best-practices", "deployment-manager", "chain-of-thought", "simulation-sandbox", "Design stack: design → animate → deploy pipeline"),
+   603→    ("vercel-react-best-practices", "Yes", "frontend-design", "deployment-manager", "tdd-workflow", "photography-ai", "seo-content-writer", "Dev stack: code quality → build → deploy pipeline"),
+   604→    ("web-design-guidelines", "Yes", "frontend-design", "anthropic-frontend-design", "vercel-web-design-guidelines", "chain-of-thought", "simulation-sandbox", "Validation layer: applies rules on top of design output"),
+   605→    ("agent-browser", "Yes", "web-reader", "audit-analyzer", "persistent-memory", "context-compressor", "mcp-builder", "Browser stack: navigate → read → analyze → remember"),
+   606→    ("brainstorming", "Yes", "socratic-method", "agent-rabbit", "jtbd-research", "tdd-workflow", "context-compressor", "Creative stack: diverge → question → research"),
+   607→    ("caveman", "Yes", "chain-of-thought", "superpowers", "tdd-workflow", "animation-hybrid-architect", "triune-proxy-stack", "Simplification filter: think → simplify → implement"),
+   608→    ("superpowers", "Yes", "tdd-workflow", "deployment-manager", "mcp-builder", "brainstorming", "simulation-sandbox", "Spec stack: spec → test → build → deploy"),
+   609→    ("chain-of-thought", "Yes", "socratic-method", "devils-advocate", "agent-owl", "caveman", "context-compressor", "Reasoning stack: reason → question → challenge → converge"),
+   610→    ("context-compressor", "Yes", "persistent-memory", "agent-owl", "superpowers", "chain-of-thought", "browser-use", "Optimization stack: compress → store → analyze"),
+   611→    ("persistent-memory", "Yes", "context-compressor", "agent-owl", "superpowers", "caveman", "simulation-sandbox", "Memory stack: compress → store → recall across sessions"),
+   612→    ("mcp-builder", "Yes", "mcp-stack-curator", "mcp-security-scanner", "deployment-manager", "browser-use", "animation-orchestrator", "MCP stack: build → curate → secure → deploy"),
+   613→    ("deployment-manager", "Yes", "mcp-builder", "persistent-memory", "secret-vault", "simulation-sandbox", "context-compressor", "Deploy stack: build → secure → remember → deploy"),
+   614→    ("browser-use", "Yes", "web-reader", "audit-analyzer", "persistent-memory", "context-compressor", "mcp-builder", "Browser stack: automate → read → audit → remember"),
+   615→    ("9router-gateway", "Yes", "triune-proxy-stack", "owl-proxy-defense", "secret-vault", "openrelay-go", "brainstorming", "Routing stack: route → defend → vault → monitor"),
+   616→    ("owl-proxy-defense", "Yes", "9router-gateway", "triune-proxy-stack", "secret-vault", "antigravity-proxy", "context-compressor", "Defense stack: route → escalate → vault → audit"),
+   617→    ("antigravity-proxy", "Yes", "4cli-unified", "9router-gateway", "secret-vault", "owl-proxy-defense", "direct-paid-API", "Bridge stack: unify → route → rotate → vault"),
+   618→    ("triune-proxy-stack", "Yes", "owl-proxy-defense", "secret-vault", "combined-proxy-billing", "caveman", "context-compressor", "Redundancy stack: triple-route → defend → vault → bill"),
+   619→    ("4cli-unified", "Yes", "9router-gateway", "antigravity-proxy", "secret-vault", "caveman", "browser-use", "CLI stack: unify → route → bridge → vault"),
+   620→    ("secret-vault", "Yes", "9router-gateway", "owl-proxy-defense", "deployment-manager", "context-compressor", "simulation-sandbox", "Foundation stack: vault → route → defend → deploy"),
+   621→    ("agent-owl", "Yes", "agent-rabbit", "agent-eagle", "chain-of-thought", "agent-rabbit (during convergence)", "context-compressor", "Agent stack: diverge → analyze → big-picture → converge"),
+   622→    ("opencode-owl-install-proxy", "Yes", "owl-proxy-defense", "9router-gateway", "secret-vault", "openhuman-owl-install-proxy", "simulation-sandbox", "OpenCode stack: install → defend → route → vault"),
+   623→    ("openhuman-owl-install-proxy", "Yes", "owl-proxy-defense", "secret-vault", "feedback-loop", "opencode-owl-install-proxy", "antigravity-proxy", "OpenHuman stack: install → defend → consent → audit"),
+   624→    ("combined-proxy-billing", "Yes", "9router-gateway", "triune-proxy-stack", "secret-vault", "context-compressor", "simulation-sandbox", "Billing stack: route → bill → vault → optimize"),
+   625→    ("openrelay-go", "Yes", "triune-proxy-stack", "api-gateway-skill", "secret-vault", "9router-gateway", "antigravity-proxy", "Relay stack: relay → gateway → vault → bill"),
+   626→    ("api-gateway-skill", "Yes", "openrelay-go", "9router-gateway", "secret-vault", "caveman", "browser-use", "Gateway stack: gateway → relay → defend → vault"),
+   627→    ("mcp-stack-curator", "Yes", "mcp-builder", "mcp-security-scanner", "persistent-memory", "context-compressor", "browser-use", "MCP curation: curate → build → secure → remember"),
+   628→    ("feedback-loop", "Yes", "persistent-memory", "deployment-manager", "combined-proxy-billing", "context-compressor", "caveman", "Feedback stack: measure → remember → improve → deploy"),
+   629→]
+   630→
+   631→for row_idx, row_data in enumerate(stack_data, 2):
+   632→    for col_idx, value in enumerate(row_data, 1):
+   633→        cell = ws4.cell(row=row_idx, column=col_idx, value=value)
+   634→        cell.font = cell_font
+   635→        cell.alignment = wrap_align
+   636→        cell.border = thin_border
+   637→        if col_idx >= 3 and col_idx <= 5:  # Best partners - green
+   638→            cell.fill = PatternFill(start_color='F0FDF4', end_color='F0FDF4', fill_type='solid')
+   639→        elif col_idx >= 6 and col_idx <= 7:  # Worst partners - red
+   640→            cell.fill = PatternFill(start_color='FEF2F2', end_color='FEF2F2', fill_type='solid')
+   641→
+   642→# ============================================================
+   643→# FREEZE PANES
+   644→# ============================================================
+   645→ws.freeze_panes = 'A2'
+   646→ws2.freeze_panes = 'A2'
+   647→ws3.freeze_panes = 'A2'
+   648→ws4.freeze_panes = 'A2'
+   649→
+   650→# ============================================================
+   651→# AUTO-FILTER
+   652→# ============================================================
+   653→ws.auto_filter.ref = f"A1:O{len(skills_data)+1}"
+   654→ws2.auto_filter.ref = f"A1:F{len(top20)+1}"
+   655→ws3.auto_filter.ref = f"A1:F{len(listed_skills)+1}"
+   656→ws4.auto_filter.ref = f"A1:H{len(stack_data)+1}"
+   657→
+   658→# ============================================================
+   659→# SAVE
+   660→# ============================================================
+   661→output_path = "/home/z/my-project/download/Skills_Comparative_Matrix.xlsx"
+   662→wb.save(output_path)
+   663→print(f"Saved to: {output_path}")
+   664→print(f"Sheet 1: Comparative Matrix ({len(skills_data)} skills × 15 columns)")
+   665→print(f"Sheet 2: Top 20 Matching ({len(top20)} entries)")
+   666→print(f"Sheet 3: 9 Listed Skills ({len(listed_skills)} entries)")
+   667→print(f"Sheet 4: Stackability Map ({len(stack_data)} entries)")
+   668→
